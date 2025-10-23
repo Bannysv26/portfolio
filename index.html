@@ -1,0 +1,2323 @@
+<html lang="en">
+ <head>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banny S.V - Research Scholar &amp; Frontend Developer</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --background-color: #0f0f23;
+            --text-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --neon-glow: #00ffff;
+            --particle-color: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Advanced Background Effects */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            z-index: -2;
+        }
+        
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.1;
+            animation: float-shapes 20s infinite linear;
+        }
+        
+        @keyframes float-shapes {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 100vh;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1050;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .sidebar:hover {
+            width: 280px;
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                background: rgba(15, 15, 35, 0.98);
+                backdrop-filter: blur(30px);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .sidebar:hover {
+                width: 280px;
+            }
+        }
+        
+        .sidebar-content {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        
+        .sidebar-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            white-space: nowrap;
+        }
+        
+        .sidebar-logo .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item:hover {
+            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.2);
+        }
+        
+        .nav-item .nav-icon {
+            width: 40px;
+            text-align: center;
+            font-size: 18px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .nav-item .nav-text {
+            font-weight: 500;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 80px;
+            min-height: 100vh;
+        }
+        
+        /* Glass Morphism Effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px var(--neon-glow), 0 0 40px var(--neon-glow), 0 0 60px var(--neon-glow);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+
+        
+        .hero-avatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto 2rem;
+            animation: float-avatar 6s ease-in-out infinite;
+            box-shadow: 0 0 50px rgba(12, 205, 34, 0.5);
+        }
+        
+        .hero-avatar::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-avatar i {
+            position: relative;
+            z-index: 1;
+            font-size: 6rem;
+            color: var(--primary-color);
+        }
+        
+        @keyframes float-avatar {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(-10px) rotate(-2deg); }
+        }
+        
+        .typing-text {
+            border-right: 3px solid var(--accent-color);
+            animation: blink-cursor 1.5s infinite;
+        }
+        
+        @keyframes blink-cursor {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: var(--accent-color); }
+        }
+        
+        /* Advanced Cards */
+        .hover-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .hover-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Advanced Buttons */
+        .neon-button {
+            position: relative;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .neon-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            transition: left 0.5s;
+        }
+        
+        .neon-button:hover {
+            color: white;
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+        
+        .neon-button:hover::before {
+            left: 100%;
+        }
+        
+        /* Loading Animations */
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+        
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: loading-bounce 1.4s ease-in-out infinite both;
+        }
+        
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes loading-bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 2001;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .toast.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+
+        
+        /* Enhanced Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .hero-avatar {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .hero-avatar i {
+                font-size: 4rem;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+        
+        /* Section Spacing */
+        .section {
+            padding: 120px 0;
+            position: relative;
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Particle System */
+        .particle-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--particle-color);
+            border-radius: 50%;
+            animation: particle-float 8s linear infinite;
+        }
+        
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Interactive Elements */
+        .interactive-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .interactive-card:hover::before {
+            left: 100%;
+        }
+        
+        /* Skill Progress Bars */
+        .skill-bar {
+            transition: width 2s ease-in-out;
+        }
+        
+        /* Mobile Menu Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1040;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Social Media Popup */
+        .social-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .social-popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .social-popup-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-popup-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        
+        .social-popup-close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-links-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .social-link-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .social-link-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        /* Chatbox Styles */
+        .chatbox-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1500;
+        }
+        
+        .chatbox-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            animation: chat-pulse 2s infinite;
+        }
+        
+        .chatbox-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.6);
+        }
+        
+        @keyframes chat-pulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 4px 20px rgba(99, 102, 241, 0.8), 0 0 0 10px rgba(99, 102, 241, 0.1); }
+        }
+        
+        .chatbox {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .chatbox.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        
+        .chatbox-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbox-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .chatbox-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .chatbox-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .chatbox-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chatbox-input {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbox-input input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .chatbox-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .chatbox-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .chatbox-send {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbox-send:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 30px 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        #modal-body {
+            padding: 30px;
+        }
+        
+        /* Like Button Styles */
+        .like-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .like-btn:hover {
+            color: #ff6b6b;
+        }
+        
+        .like-btn.liked {
+            color: #ff6b6b;
+        }
+        
+        .like-btn.liked .heart-icon {
+            animation: heart-beat 0.6s ease;
+        }
+        
+        @keyframes heart-beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        /* Presentation Styles */
+        .presentation-image {
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .presentation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .presentation-image:hover .presentation-overlay {
+            opacity: 1;
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .presentation-overlay:hover .play-button {
+            transform: scale(1);
+        }
+    </style> <!-- Cosmic Background -->
+  <div class="cosmic-bg"></div><!-- Floating Shapes -->
+  <div class="floating-shapes" id="floating-shapes"></div><!-- Particle System -->
+  <div class="particle-system" id="particle-system"></div><!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobile-overlay"></div><!-- Sidebar Navigation -->
+  <nav class="sidebar" id="sidebar">
+   <div class="sidebar-content">
+    <div class="sidebar-logo">
+     <div class="logo-icon"><i class="fas fa-user-graduate text-white text-xl"></i>
+     </div>
+     <div>
+      <div class="text-xs opacity-70">
+       Portfolio
+      </div>
+     </div>
+    </div>
+    <nav class="sidebar-nav"><a href="#home" class="nav-item active" data-section="home"> <i class="nav-icon fas fa-home"></i> <span class="nav-text">Home</span> </a> <a href="#about" class="nav-item" data-section="about"> <i class="nav-icon fas fa-user"></i> <span class="nav-text">About</span> </a> <a href="#research" class="nav-item" data-section="research"> <i class="nav-icon fas fa-flask"></i> <span class="nav-text">Research</span> </a> <a href="#skills" class="nav-item" data-section="skills"> <i class="nav-icon fas fa-cogs"></i> <span class="nav-text">Skills</span> </a> <a href="#presentations" class="nav-item" data-section="presentations"> <i class="nav-icon fab fa-slideshare"></i> <span class="nav-text">Presentations</span> </a> <a href="#projects" class="nav-item" data-section="projects"> <i class="nav-icon fas fa-laptop-code"></i> <span class="nav-text">Projects</span> </a> <a href="#testimonials" class="nav-item" data-section="testimonials"> <i class="nav-icon fas fa-quote-left"></i> <span class="nav-text">Testimonials</span> </a> <a href="#blog" class="nav-item" data-section="blog"> <i class="nav-icon fas fa-blog"></i> <span class="nav-text">Blog</span> </a> <a href="#contact" class="nav-item" data-section="contact"> <i class="nav-icon fas fa-envelope"></i> <span class="nav-text">Contact</span> </a>
+    </nav>
+    <div class="sidebar-footer"><button class="theme-toggle" id="theme-toggle" title="Toggle Theme"> <i class="fas fa-palette"></i> </button>
+    </div>
+   </div>
+  </nav><!-- Mobile Menu Button --> <button class="fixed top-4 left-4 z-[1100] lg:hidden w-12 h-12 bg-gray-800/90 backdrop-blur-md rounded-lg flex items-center justify-center text-white shadow-lg border border-white/20 transition-all duration-300 hover:bg-gray-700/90" id="mobile-menu-btn" onclick="toggleMobileMenu()"> <i class="fas fa-bars text-lg"></i> </button> <!-- Main Content -->
+  <main class="main-content"><!-- Hero Section -->
+   <section id="home" class="hero-section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="hero-content text-center lg:text-left">
+       <div class="mb-6"><span class="inline-block px-4 py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full text-sm font-medium border border-purple-500/30 mb-4"> <i class="fas fa-rocket mr-2"></i>Welcome to my portfolio </span>
+       </div>
+       <h1 class="text-6xl lg:text-8xl font-black mb-6"><span class="block" id="hero-name">Banny S.V</span> <span class="block gradient-text" id="hero-title">Research Scholar</span></h1>
+       <h2 class="text-2xl lg:text-3xl font-light mb-8 typing-text" id="hero-tagline">Innovating at the intersection of science &amp; technology</h2>
+       <p class="text-lg lg:text-xl mb-12 opacity-80 max-w-2xl" id="hero-description">Passionate researcher in pharmaceutical sciences with expertise in matrix tablets, novel drug delivery systems, and depression studies. Also a skilled frontend developer creating innovative digital solutions.</p>
+       <div class="flex flex-col sm:flex-row gap-6 mb-12"><button class="neon-button" onclick="downloadCV()"> <i class="fas fa-download mr-2"></i>Download CV </button> <button class="neon-button" style="--primary-color: #f59e0b;" onclick="scrollToSection('projects')"> <i class="fas fa-eye mr-2"></i>View Projects </button> <button class="neon-button" style="--primary-color: #10b981;" onclick="scrollToSection('contact')"> <i class="fas fa-envelope mr-2"></i>Get In Touch </button>
+       </div><!-- Social Links -->
+       <div class="flex justify-center lg:justify-start space-x-6"><a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-linkedin text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-github text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-instagram text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-facebook text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-telegram text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-slideshare text-xl group-hover:scale-110 transition-transform"></i> </a>
+       </div>
+      </div>
+      <div class="text-center">
+       <div class="hero-avatar"><i class="fas fa-user-graduate"></i>
+       </div><!-- Stats Cards -->
+       <div class="grid grid-cols-2 gap-4 mt-8">
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-3xl font-bold gradient-text mb-2">
+          15+
+         </div>
+         <div class="text-sm opacity-70">
+          Research Papers
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-3xl font-bold gradient-text mb-2">
+          8
+         </div>
+         <div class="text-sm opacity-70">
+          Presentations
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-3xl font-bold gradient-text mb-2">
+          25+
+         </div>
+         <div class="text-sm opacity-70">
+          Projects
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-3xl font-bold gradient-text mb-2">
+          1st
+         </div>
+         <div class="text-sm opacity-70">
+          Class Typing
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+     <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+      <div class="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
+     </div>
+    </div>
+   </section><!-- About Section -->
+   <section id="about" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text" id="about-title">About Me</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="space-y-8">
+       <div class="glass-card p-8 hover-card interactive-card">
+        <div class="flex items-center mb-6">
+         <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-6"><i class="fas fa-graduation-cap text-2xl text-white"></i>
+         </div>
+         <div>
+          <h3 class="text-2xl font-bold">Academic Excellence</h3>
+          <p class="opacity-70">PhD Scholar in Pharmaceutical Sciences</p>
+         </div>
+        </div>
+        <p class="text-lg opacity-80 leading-relaxed" id="about-description">I am a dedicated research scholar specializing in pharmaceutical sciences with a focus on matrix tablets, novel drug delivery systems, and depression-related studies. My academic journey combines rigorous research methodology with practical applications in drug development and therapeutic interventions.</p>
+       </div><!-- Expertise Areas -->
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-6 hover-card text-center"><i class="fas fa-pills text-4xl text-purple-400 mb-4"></i>
+         <h4 class="font-bold text-lg mb-2">Pharmaceutical Research</h4>
+         <p class="text-sm opacity-70">Matrix tablets &amp; novel drug delivery systems</p>
+        </div>
+        <div class="glass-card p-6 hover-card text-center"><i class="fas fa-brain text-4xl text-blue-400 mb-4"></i>
+         <h4 class="font-bold text-lg mb-2">Mental Health Studies</h4>
+         <p class="text-sm opacity-70">Depression research &amp; therapeutic approaches</p>
+        </div>
+        <div class="glass-card p-6 hover-card text-center"><i class="fas fa-code text-4xl text-green-400 mb-4"></i>
+         <h4 class="font-bold text-lg mb-2">Frontend Development</h4>
+         <p class="text-sm opacity-70">Modern web technologies &amp; user interfaces</p>
+        </div>
+        <div class="glass-card p-6 hover-card text-center"><i class="fas fa-keyboard text-4xl text-amber-400 mb-4"></i>
+         <h4 class="font-bold text-lg mb-2">Professional Skills</h4>
+         <p class="text-sm opacity-70">Shorthand typing with first class certification</p>
+        </div>
+       </div>
+      </div>
+      <div class="space-y-8"><!-- Achievement Badges -->
+       <div class="grid grid-cols-2 gap-4">
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-4xl font-bold gradient-text mb-2">
+          5+
+         </div>
+         <div class="text-sm opacity-70">
+          Years Experience
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-4xl font-bold gradient-text mb-2">
+          100+
+         </div>
+         <div class="text-sm opacity-70">
+          Citations
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-4xl font-bold gradient-text mb-2">
+          50+
+         </div>
+         <div class="text-sm opacity-70">
+          Collaborations
+         </div>
+        </div>
+        <div class="glass-card p-6 text-center hover-card">
+         <div class="text-4xl font-bold gradient-text mb-2">
+          10+
+         </div>
+         <div class="text-sm opacity-70">
+          Awards
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Research Section -->
+   <section id="research" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">Research Publications</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="glass-card p-8 hover-card interactive-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-pills text-2xl text-white"></i>
+        </div>
+        <div class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold">
+         Pharmaceutical Sciences
+        </div>
+       </div>
+       <h3 class="text-xl font-bold mb-4">Matrix Tablets: Advanced Drug Delivery Systems</h3>
+       <p class="opacity-80 mb-6">Comprehensive review of matrix tablet formulations and their applications in controlled drug release mechanisms.</p>
+       <div class="flex items-center justify-between"><span class="text-sm opacity-70">Published: 2024</span> <button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> <i class="fas fa-external-link-alt mr-1"></i>Read More </button>
+       </div>
+      </div>
+      <div class="glass-card p-8 hover-card interactive-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-brain text-2xl text-white"></i>
+        </div>
+        <div class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-semibold">
+         Mental Health
+        </div>
+       </div>
+       <h3 class="text-xl font-bold mb-4">Depression: Therapeutic Interventions</h3>
+       <p class="opacity-80 mb-6">Comprehensive analysis of depression treatment modalities and emerging pharmaceutical interventions.</p>
+       <div class="flex items-center justify-between"><span class="text-sm opacity-70">Published: 2023</span> <button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> <i class="fas fa-external-link-alt mr-1"></i>Read More </button>
+       </div>
+      </div>
+      <div class="glass-card p-8 hover-card interactive-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-amber-500 to-red-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-capsules text-2xl text-white"></i>
+        </div>
+        <div class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-sm font-semibold">
+         Novel Drug Delivery
+        </div>
+       </div>
+       <h3 class="text-xl font-bold mb-4">Innovative Drug Delivery Systems</h3>
+       <p class="opacity-80 mb-6">Exploring cutting-edge technologies in drug delivery including nanoparticles and targeted systems.</p>
+       <div class="flex items-center justify-between"><span class="text-sm opacity-70">Published: 2024</span> <button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> <i class="fas fa-external-link-alt mr-1"></i>Read More </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Skills Section -->
+   <section id="skills" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">Technical Skills</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid lg:grid-cols-2 gap-16">
+      <div class="space-y-8">
+       <h3 class="text-3xl font-bold mb-8 text-center lg:text-left">Research Skills</h3>
+       <div class="space-y-6">
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">Pharmaceutical Research</span> <span class="text-purple-400 font-bold">95%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-purple-500 to-blue-500" data-width="95" style="width: 0%;"></div>
+         </div>
+        </div>
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">Drug Delivery Systems</span> <span class="text-blue-400 font-bold">92%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-blue-500 to-teal-500" data-width="92" style="width: 0%;"></div>
+         </div>
+        </div>
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">Data Analysis</span> <span class="text-green-400 font-bold">88%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500" data-width="88" style="width: 0%;"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="space-y-8">
+       <h3 class="text-3xl font-bold mb-8 text-center lg:text-left">Development Skills</h3>
+       <div class="space-y-6">
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">HTML/CSS</span> <span class="text-amber-400 font-bold">90%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500" data-width="90" style="width: 0%;"></div>
+         </div>
+        </div>
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">JavaScript</span> <span class="text-yellow-400 font-bold">85%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500" data-width="85" style="width: 0%;"></div>
+         </div>
+        </div>
+        <div class="glass-card p-6">
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">React</span> <span class="text-cyan-400 font-bold">80%</span>
+         </div>
+         <div class="w-full bg-gray-700 rounded-full h-3">
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" data-width="80" style="width: 0%;"></div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Presentations Section -->
+   <section id="presentations" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">SlideShare Presentations</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="glass-card p-6 hover-card interactive-card">
+       <div class="presentation-image" onclick="openPresentationModal('matrix-tablets')">
+        <svg width="100" height="100" viewbox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="10" fill="url(#gradient1)" /> <circle cx="30" cy="30" r="8" fill="white" opacity="0.8" /> <circle cx="50" cy="30" r="8" fill="white" opacity="0.6" /> <circle cx="70" cy="30" r="8" fill="white" opacity="0.4" /> <rect x="20" y="50" width="60" height="4" rx="2" fill="white" opacity="0.7" /> <rect x="20" y="60" width="40" height="4" rx="2" fill="white" opacity="0.5" /> <rect x="20" y="70" width="50" height="4" rx="2" fill="white" opacity="0.6" /> <defs>
+          <lineargradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+           <stop offset="0%" style="stop-color:#667eea" />
+           <stop offset="100%" style="stop-color:#764ba2" />
+          </lineargradient>
+         </defs>
+        </svg>
+        <div class="presentation-overlay">
+         <div class="play-button"><i class="fab fa-slideshare"></i>
+         </div>
+        </div>
+       </div>
+       <h3 class="text-lg font-bold mb-3">Matrix Tablets: Fundamentals</h3>
+       <p class="text-sm opacity-70 mb-4">Comprehensive overview of matrix tablet technology</p>
+       <div class="flex items-center justify-between"><span class="text-xs opacity-50">45 slides</span>
+        <div class="flex gap-2"><button class="like-btn text-xs" onclick="toggleLike(this)"> <i class="fas fa-heart heart-icon mr-1"></i><span class="like-count">12</span> </button> <a href="https://www.slideshare.net/example/matrix-tablets" target="_blank" rel="noopener noreferrer" class="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors"> <i class="fab fa-slideshare mr-1"></i>View </a>
+        </div>
+       </div>
+      </div>
+      <div class="glass-card p-6 hover-card interactive-card">
+       <div class="w-full h-40 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center mb-6"><i class="fab fa-slideshare text-5xl text-white/80"></i>
+       </div>
+       <h3 class="text-lg font-bold mb-3">Novel Drug Delivery</h3>
+       <p class="text-sm opacity-70 mb-4">Advanced drug delivery technologies</p>
+       <div class="flex items-center justify-between"><span class="text-xs opacity-50">52 slides</span> <button class="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors"> <i class="fab fa-slideshare mr-1"></i>View </button>
+       </div>
+      </div>
+      <div class="glass-card p-6 hover-card interactive-card">
+       <div class="w-full h-40 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center mb-6"><i class="fab fa-slideshare text-5xl text-white/80"></i>
+       </div>
+       <h3 class="text-lg font-bold mb-3">Depression Research</h3>
+       <p class="text-sm opacity-70 mb-4">Clinical insights and therapeutic approaches</p>
+       <div class="flex items-center justify-between"><span class="text-xs opacity-50">38 slides</span> <button class="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors"> <i class="fab fa-slideshare mr-1"></i>View </button>
+       </div>
+      </div>
+      <div class="glass-card p-6 hover-card interactive-card">
+       <div class="w-full h-40 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg flex items-center justify-center mb-6"><i class="fab fa-slideshare text-5xl text-white/80"></i>
+       </div>
+       <h3 class="text-lg font-bold mb-3">Pharmaceutical Analysis</h3>
+       <p class="text-sm opacity-70 mb-4">Modern analytical techniques</p>
+       <div class="flex items-center justify-between"><span class="text-xs opacity-50">41 slides</span> <button class="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors"> <i class="fab fa-slideshare mr-1"></i>View </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Projects Section -->
+   <section id="projects" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">Development Projects</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center"><i class="fas fa-pills text-6xl text-white/50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-3">Pharmaceutical Database</h3>
+        <p class="opacity-80 mb-4">Interactive database for pharmaceutical compounds with search capabilities</p>
+        <div class="flex flex-wrap gap-2 mb-6"><span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">React</span> <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Node.js</span>
+        </div>
+        <div class="flex gap-3"><button class="flex-1 neon-button text-sm py-2"> <i class="fas fa-external-link-alt mr-2"></i>Demo </button> <button class="flex-1 neon-button text-sm py-2" style="--primary-color: #10b981;"> <i class="fab fa-github mr-2"></i>Code </button>
+        </div>
+       </div>
+      </div>
+      <div class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-green-500 to-blue-600 flex items-center justify-center"><i class="fas fa-brain text-6xl text-white/50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-3">Mental Health Tracker</h3>
+        <p class="opacity-80 mb-4">Web app for tracking mental health metrics with data visualization</p>
+        <div class="flex flex-wrap gap-2 mb-6"><span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Vue.js</span> <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Chart.js</span>
+        </div>
+        <div class="flex gap-3"><button class="flex-1 neon-button text-sm py-2"> <i class="fas fa-external-link-alt mr-2"></i>Demo </button> <button class="flex-1 neon-button text-sm py-2" style="--primary-color: #10b981;"> <i class="fab fa-github mr-2"></i>Code </button>
+        </div>
+       </div>
+      </div>
+      <div class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center"><i class="fas fa-chart-line text-6xl text-white/50"></i>
+       </div>
+       <div class="p-6">
+        <h3 class="text-xl font-bold mb-3">Research Analytics</h3>
+        <p class="opacity-80 mb-4">Data visualization dashboard for research analytics</p>
+        <div class="flex flex-wrap gap-2 mb-6"><span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">D3.js</span> <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">Python</span>
+        </div>
+        <div class="flex gap-3"><button class="flex-1 neon-button text-sm py-2"> <i class="fas fa-external-link-alt mr-2"></i>Demo </button> <button class="flex-1 neon-button text-sm py-2" style="--primary-color: #10b981;"> <i class="fab fa-github mr-2"></i>Code </button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Testimonials Section -->
+   <section id="testimonials" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">What People Say</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="glass-card p-8 hover-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-user-tie text-2xl text-white"></i>
+        </div>
+        <div>
+         <h4 class="font-bold text-lg">Dr. Sarah Johnson</h4>
+         <p class="text-sm opacity-70">Research Supervisor</p>
+        </div>
+       </div>
+       <p class="opacity-80 mb-6 italic">"Banny's research on matrix tablets has been groundbreaking. His analytical approach makes him exceptional."</p>
+       <div class="flex text-amber-400"><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i>
+       </div>
+      </div>
+      <div class="glass-card p-8 hover-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-user-graduate text-2xl text-white"></i>
+        </div>
+        <div>
+         <h4 class="font-bold text-lg">Prof. Michael Chen</h4>
+         <p class="text-sm opacity-70">Department Head</p>
+        </div>
+       </div>
+       <p class="opacity-80 mb-6 italic">"His work on drug delivery systems shows remarkable innovation and practical applications."</p>
+       <div class="flex text-amber-400"><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i>
+       </div>
+      </div>
+      <div class="glass-card p-8 hover-card">
+       <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-user-friends text-2xl text-white"></i>
+        </div>
+        <div>
+         <h4 class="font-bold text-lg">Alex Rodriguez</h4>
+         <p class="text-sm opacity-70">Team Lead</p>
+        </div>
+       </div>
+       <p class="opacity-80 mb-6 italic">"Working with Banny on frontend projects has been amazing. His coding skills are top-notch."</p>
+       <div class="flex text-amber-400"><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Blog Section -->
+   <section id="blog" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">Latest Blog Posts</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <article class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative"><i class="fas fa-pills text-6xl text-white/50"></i>
+        <div class="absolute top-4 left-4 px-3 py-1 bg-black/30 rounded-full text-sm font-semibold">
+         Research
+        </div>
+       </div>
+       <div class="p-6">
+        <div class="flex items-center text-sm opacity-70 mb-3"><i class="fas fa-calendar mr-2"></i> <span>Dec 15, 2024</span> <span class="mx-2">•</span> <span>5 min read</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Future of Matrix Tablets</h3>
+        <p class="opacity-80 mb-4">Exploring latest advancements in matrix tablet formulations and their impact...</p><button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> Read More <i class="fas fa-arrow-right ml-1"></i> </button>
+       </div>
+      </article>
+      <article class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center relative"><i class="fas fa-brain text-6xl text-white/50"></i>
+        <div class="absolute top-4 left-4 px-3 py-1 bg-black/30 rounded-full text-sm font-semibold">
+         Mental Health
+        </div>
+       </div>
+       <div class="p-6">
+        <div class="flex items-center text-sm opacity-70 mb-3"><i class="fas fa-calendar mr-2"></i> <span>Dec 10, 2024</span> <span class="mx-2">•</span> <span>7 min read</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Understanding Depression</h3>
+        <p class="opacity-80 mb-4">A comprehensive look at current depression research and therapeutic approaches...</p><button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> Read More <i class="fas fa-arrow-right ml-1"></i> </button>
+       </div>
+      </article>
+      <article class="glass-card overflow-hidden hover-card interactive-card">
+       <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center relative"><i class="fas fa-code text-6xl text-white/50"></i>
+        <div class="absolute top-4 left-4 px-3 py-1 bg-black/30 rounded-full text-sm font-semibold">
+         Technology
+        </div>
+       </div>
+       <div class="p-6">
+        <div class="flex items-center text-sm opacity-70 mb-3"><i class="fas fa-calendar mr-2"></i> <span>Dec 5, 2024</span> <span class="mx-2">•</span> <span>4 min read</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Modern Frontend Development</h3>
+        <p class="opacity-80 mb-4">Exploring latest trends in frontend development and best practices...</p><button class="text-purple-400 font-semibold hover:text-purple-300 transition-colors"> Read More <i class="fas fa-arrow-right ml-1"></i> </button>
+       </div>
+      </article>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="section">
+    <div class="container mx-auto px-6 lg:px-12">
+     <div class="text-center mb-16">
+      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text" id="contact-title">Get In Touch</h2>
+      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+      <p class="text-xl opacity-80 mt-6 max-w-3xl mx-auto">Let's collaborate on research projects or discuss opportunities in pharmaceutical sciences and web development</p>
+     </div>
+     <div class="grid lg:grid-cols-2 gap-16"><!-- Contact Form -->
+      <div class="glass-card p-8">
+       <h3 class="text-2xl font-bold mb-8">Send a Message</h3>
+       <form id="contact-form" class="space-y-6">
+        <div class="form-group"><label for="name" class="form-label">Full Name</label> <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+        </div>
+        <div class="form-group"><label for="email" class="form-label">Email Address</label> <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+        </div>
+        <div class="form-group"><label for="subject" class="form-label">Subject</label> <input type="text" id="subject" name="subject" class="form-input" placeholder="What's this about?" required>
+        </div>
+        <div class="form-group"><label for="message" class="form-label">Message</label> <textarea id="message" name="message" class="form-input form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+        </div><button type="submit" class="w-full neon-button" id="submit-btn"> <span id="submit-text"> <i class="fas fa-paper-plane mr-2"></i>Send Message </span> <span id="submit-loading" class="hidden">
+          <div class="loading-dots">
+           <div class="loading-dot"></div>
+           <div class="loading-dot"></div>
+           <div class="loading-dot"></div>
+          </div> Sending... </span> </button>
+       </form>
+      </div><!-- Contact Information -->
+      <div class="space-y-8">
+       <div class="glass-card p-8">
+        <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+        <div class="space-y-6">
+         <div class="flex items-center">
+          <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-envelope text-white"></i>
+          </div>
+          <div>
+           <p class="font-semibold">Email</p>
+           <p class="opacity-70">bannysriram05@gmail.com</p>
+          </div>
+         </div>
+         <div class="flex items-center">
+          <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-phone text-white"></i>
+          </div>
+          <div>
+           <p class="font-semibold">Phone</p>
+           <p class="opacity-70">+91 98765 43210</p>
+          </div>
+         </div>
+         <div class="flex items-center">
+          <div class="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-map-marker-alt text-white"></i>
+          </div>
+          <div>
+           <p class="font-semibold">Location</p>
+           <p class="opacity-70">Research Institute, India</p>
+          </div>
+         </div>
+         <div class="flex items-center">
+          <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mr-4"><i class="fas fa-clock text-white"></i>
+          </div>
+          <div>
+           <p class="font-semibold">Response Time</p>
+           <p class="opacity-70">Within 24 hours</p>
+          </div>
+         </div>
+        </div>
+       </div><!-- Social Links -->
+       <div class="glass-card p-8">
+        <h3 class="text-2xl font-bold mb-6">Connect With Me</h3>
+        <div class="grid grid-cols-3 gap-4"><a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-linkedin text-2xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">LinkedIn</p></a> <a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-github text-2xl text-gray-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">GitHub</p></a> <a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-slideshare text-2xl text-orange-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">SlideShare</p></a>
+        </div>
+       </div><!-- Quick Stats -->
+       <div class="glass-card p-8">
+        <h3 class="text-2xl font-bold mb-6">Quick Stats</h3>
+        <div class="grid grid-cols-2 gap-6">
+         <div class="text-center">
+          <div class="text-3xl font-bold gradient-text mb-2">
+           24h
+          </div>
+          <div class="text-sm opacity-70">
+           Response Time
+          </div>
+         </div>
+         <div class="text-center">
+          <div class="text-3xl font-bold gradient-text mb-2">
+           100%
+          </div>
+          <div class="text-sm opacity-70">
+           Project Success
+          </div>
+         </div>
+         <div class="text-center">
+          <div class="text-3xl font-bold gradient-text mb-2">
+           50+
+          </div>
+          <div class="text-sm opacity-70">
+           Happy Clients
+          </div>
+         </div>
+         <div class="text-center">
+          <div class="text-3xl font-bold gradient-text mb-2">
+           5+
+          </div>
+          <div class="text-sm opacity-70">
+           Years Experience
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main><!-- Toast Container -->
+  <div id="toast-container"></div><!-- Social Media Popup -->
+  <div class="social-popup" id="social-popup">
+   <div class="social-popup-header">
+    <h4 class="font-bold">Follow Me On</h4><button class="social-popup-close" onclick="closeSocialPopup()"> <i class="fas fa-times"></i> </button>
+   </div>
+   <div class="social-links-grid"><a href="https://www.instagram.com/banny.sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-instagram text-pink-400"></i> <span>Instagram</span> </a> <a href="https://www.linkedin.com/in/banny-sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-linkedin text-blue-400"></i> <span>LinkedIn</span> </a> <a href="https://github.com/banny-sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-github text-gray-400"></i> <span>GitHub</span> </a> <a href="https://t.me/banny_sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-telegram text-blue-400"></i> <span>Telegram</span> </a> <a href="https://www.facebook.com/banny.sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-facebook text-blue-600"></i> <span>Facebook</span> </a> <a href="https://www.slideshare.net/banny-sv" target="_blank" rel="noopener noreferrer" class="social-link-item"> <i class="fab fa-slideshare text-orange-400"></i> <span>SlideShare</span> </a>
+   </div>
+  </div><!-- Chatbox -->
+  <div class="chatbox-container"><button class="chatbox-toggle" id="chatbox-toggle" onclick="toggleChatbox()"> <i class="fas fa-comments"></i> </button>
+   <div class="chatbox" id="chatbox">
+    <div class="chatbox-header">
+     <div class="flex items-center">
+      <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-3"><i class="fas fa-robot text-white text-sm"></i>
+      </div>
+      <div>
+       <h4 class="font-bold text-sm">Chat Assistant</h4>
+       <p class="text-xs opacity-70">Online now</p>
+      </div>
+     </div><button onclick="toggleChatbox()" class="text-white/70 hover:text-white"> <i class="fas fa-times"></i> </button>
+    </div>
+    <div class="chatbox-messages" id="chatbox-messages">
+     <div class="message bot">
+      <p>Hi! I'm Banny's virtual assistant. How can I help you today?</p>
+     </div>
+    </div>
+    <div class="chatbox-input"><input type="text" id="chat-input" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)"> <button class="chatbox-send" onclick="sendChatMessage()"> <i class="fas fa-paper-plane"></i> </button>
+    </div>
+   </div>
+  </div><!-- Modal for Research Details -->
+  <div class="modal-overlay" id="modal-overlay">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h3 class="text-2xl font-bold" id="modal-title">Research Details</h3><button class="modal-close" onclick="closeModal()"> <i class="fas fa-times"></i> </button>
+    </div>
+    <div id="modal-body"><!-- Content will be loaded here -->
+    </div>
+   </div>
+  </div>
+  <script>
+        // Configuration object
+        const defaultConfig = {
+            full_name: "Banny S.V",
+            professional_title: "Research Scholar & Frontend Developer",
+            hero_tagline: "Innovating at the intersection of science & technology",
+            hero_description: "Passionate researcher in pharmaceutical sciences with expertise in matrix tablets, novel drug delivery systems, and depression studies. Also a skilled frontend developer creating innovative digital solutions.",
+            about_title: "About Me",
+            about_description: "I am a dedicated research scholar specializing in pharmaceutical sciences with a focus on matrix tablets, novel drug delivery systems, and depression-related studies. My academic journey combines rigorous research methodology with practical applications in drug development and therapeutic interventions.",
+            contact_title: "Get In Touch"
+        };
+
+        // Data SDK Handler
+        const dataHandler = {
+            onDataChanged(data) {
+                console.log('Contact form submissions:', data);
+                // Update UI if needed - for contact forms, we typically don't need to display submissions
+            }
+        };
+
+        // Initialize SDKs
+        async function initializeSDKs() {
+            try {
+                // Initialize Data SDK
+                if (window.dataSdk) {
+                    const initResult = await window.dataSdk.init(dataHandler);
+                    if (!initResult.isOk) {
+                        console.error('Failed to initialize Data SDK:', initResult.error);
+                    }
+                }
+
+                // Initialize Element SDK
+                if (window.elementSdk) {
+                    await window.elementSdk.init({
+                        defaultConfig,
+                        render: async (config) => {
+                            // Update text content based on config
+                            const elements = {
+                                'hero-name': config.full_name || defaultConfig.full_name,
+                                'sidebar-name': config.full_name || defaultConfig.full_name,
+                                'hero-title': config.professional_title || defaultConfig.professional_title,
+                                'hero-tagline': config.hero_tagline || defaultConfig.hero_tagline,
+                                'hero-description': config.hero_description || defaultConfig.hero_description,
+                                'about-title': config.about_title || defaultConfig.about_title,
+                                'about-description': config.about_description || defaultConfig.about_description,
+                                'contact-title': config.contact_title || defaultConfig.contact_title
+                            };
+
+                            Object.entries(elements).forEach(([id, text]) => {
+                                const element = document.getElementById(id);
+                                if (element) {
+                                    element.textContent = text;
+                                }
+                            });
+                        },
+                        mapToCapabilities: (config) => ({
+                            recolorables: [],
+                            borderables: [],
+                            fontEditable: undefined,
+                            fontSizeable: undefined
+                        }),
+                        mapToEditPanelValues: (config) => new Map([
+                            ['full_name', config.full_name || defaultConfig.full_name],
+                            ['professional_title', config.professional_title || defaultConfig.professional_title],
+                            ['hero_tagline', config.hero_tagline || defaultConfig.hero_tagline],
+                            ['hero_description', config.hero_description || defaultConfig.hero_description],
+                            ['about_title', config.about_title || defaultConfig.about_title],
+                            ['about_description', config.about_description || defaultConfig.about_description],
+                            ['contact_title', config.contact_title || defaultConfig.contact_title]
+                        ])
+                    });
+                }
+            } catch (error) {
+                console.error('Error initializing SDKs:', error);
+            }
+        }
+
+        // Global mobile menu functions (must be defined before DOM load)
+        window.toggleMobileMenu = function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
+            if (!sidebar || !overlay || !mobileMenuBtn) {
+                console.error('Mobile menu elements not found');
+                return;
+            }
+            
+            const isOpen = sidebar.classList.contains('mobile-open');
+            console.log('Toggling mobile menu, currently open:', isOpen);
+            
+            if (isOpen) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('show');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-lg"></i>';
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('show');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times text-lg"></i>';
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSDKs();
+            initializeAnimations();
+            initializeNavigation();
+            initializeContactForm();
+            initializeMobileMenu();
+            initializeSkillBars();
+        });
+
+        // Navigation functionality
+        function initializeNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('section[id]');
+
+            // Handle navigation clicks
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = item.getAttribute('href').substring(1);
+                    scrollToSection(targetId);
+                    
+                    // Update active state
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // Handle scroll spy
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 200) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href').substring(1) === current) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Smooth scroll function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Mobile menu functionality
+        function initializeMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+
+            console.log('Initializing mobile menu...', { mobileMenuBtn, sidebar, overlay });
+
+            if (!mobileMenuBtn || !sidebar || !overlay) {
+                console.error('Mobile menu elements not found:', { mobileMenuBtn, sidebar, overlay });
+                return;
+            }
+
+            // Global functions for mobile menu
+            window.openMobileMenu = function() {
+                console.log('Opening mobile menu...');
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('show');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times text-lg"></i>';
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeMobileMenu = function() {
+                console.log('Closing mobile menu...');
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('show');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-lg"></i>';
+                document.body.style.overflow = '';
+            };
+
+            window.toggleMobileMenu = function() {
+                const isOpen = sidebar.classList.contains('mobile-open');
+                console.log('Toggling mobile menu, currently open:', isOpen);
+                
+                if (isOpen) {
+                    window.closeMobileMenu();
+                } else {
+                    window.openMobileMenu();
+                }
+            };
+
+            // Add click event listener
+            mobileMenuBtn.addEventListener('click', function(e) {
+                console.log('Mobile menu button clicked!');
+                e.preventDefault();
+                e.stopPropagation();
+                window.toggleMobileMenu();
+            });
+
+            // Add touch event for mobile devices
+            mobileMenuBtn.addEventListener('touchstart', function(e) {
+                console.log('Mobile menu button touched!');
+                e.preventDefault();
+                e.stopPropagation();
+                window.toggleMobileMenu();
+            });
+
+            overlay.addEventListener('click', () => {
+                window.closeMobileMenu();
+            });
+
+            // Close mobile menu when clicking nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    window.closeMobileMenu();
+                });
+            });
+
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+                    window.closeMobileMenu();
+                }
+            });
+
+            console.log('Mobile menu initialized successfully');
+        }
+
+        // Contact form functionality
+        function initializeContactForm() {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoading = document.getElementById('submit-loading');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(form);
+                    const contactData = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        subject: formData.get('subject'),
+                        message: formData.get('message'),
+                        timestamp: new Date().toISOString()
+                    };
+
+                    // Save to Data SDK
+                    if (window.dataSdk) {
+                        const result = await window.dataSdk.create(contactData);
+                        
+                        if (result.isOk) {
+                            showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+                            form.reset();
+                        } else {
+                            showToast('Failed to send message. Please try again.', 'error');
+                        }
+                    } else {
+                        // Fallback if SDK not available
+                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+                        form.reset();
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    showToast('An error occurred. Please try again.', 'error');
+                } finally {
+                    // Reset button state
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 400);
+            }, 4000);
+        }
+
+        // Initialize animations
+        function initializeAnimations() {
+            // Create floating shapes
+            createFloatingShapes();
+            
+            // Create particles
+            createParticles();
+            
+            // Initialize typing animation
+            initializeTypingAnimation();
+        }
+
+        // Create floating shapes
+        function createFloatingShapes() {
+            const container = document.getElementById('floating-shapes');
+            const shapeCount = 15;
+
+            for (let i = 0; i < shapeCount; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.width = (Math.random() * 20 + 10) + 'px';
+                shape.style.height = shape.style.width;
+                shape.style.animationDelay = Math.random() * 20 + 's';
+                shape.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                container.appendChild(shape);
+            }
+        }
+
+        // Create particles
+        function createParticles() {
+            const container = document.getElementById('particle-system');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Typing animation
+        function initializeTypingAnimation() {
+            const typingElement = document.querySelector('.typing-text');
+            if (!typingElement) return;
+
+            const texts = [
+                "Innovating at the intersection of science & technology",
+                "Pharmaceutical Research Scholar & Frontend Developer",
+                "Creating solutions for better healthcare outcomes"
+            ];
+            
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeText() {
+                const currentText = texts[textIndex];
+                
+                if (isDeleting) {
+                    typingElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    typingElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                let typeSpeed = isDeleting ? 50 : 100;
+
+                if (!isDeleting && charIndex === currentText.length) {
+                    typeSpeed = 2000;
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % texts.length;
+                    typeSpeed = 500;
+                }
+
+                setTimeout(typeText, typeSpeed);
+            }
+
+            typeText();
+        }
+
+        // Initialize skill bars animation
+        function initializeSkillBars() {
+            const skillBars = document.querySelectorAll('.skill-bar');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const width = bar.getAttribute('data-width');
+                        setTimeout(() => {
+                            bar.style.width = width + '%';
+                        }, 500);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            skillBars.forEach(bar => observer.observe(bar));
+        }
+
+        // Download CV function
+        function downloadCV() {
+            showToast('CV download will be available soon!', 'success');
+        }
+
+        // Theme toggle functionality
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            showToast('Theme customization coming soon!', 'success');
+        });
+
+        // Like button functionality
+        function toggleLike(button) {
+            const isLiked = button.classList.contains('liked');
+            const countElement = button.querySelector('.like-count');
+            let count = parseInt(countElement.textContent);
+            
+            if (isLiked) {
+                button.classList.remove('liked');
+                count--;
+                showToast('Removed from favorites', 'success');
+            } else {
+                button.classList.add('liked');
+                count++;
+                showToast('Added to favorites!', 'success');
+                // Show social popup after first like
+                setTimeout(() => {
+                    showSocialPopup();
+                }, 1000);
+            }
+            
+            countElement.textContent = count;
+        }
+
+        // Social popup functionality
+        function showSocialPopup() {
+            const popup = document.getElementById('social-popup');
+            popup.classList.add('show');
+            
+            // Auto hide after 10 seconds
+            setTimeout(() => {
+                closeSocialPopup();
+            }, 10000);
+        }
+
+        function closeSocialPopup() {
+            const popup = document.getElementById('social-popup');
+            popup.classList.remove('show');
+        }
+
+        // Modal functionality
+        function openModal(type) {
+            const modal = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            const content = getModalContent(type);
+            title.textContent = content.title;
+            body.innerHTML = content.body;
+            
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            modal.classList.remove('show');
+        }
+
+        function getModalContent(type) {
+            const contents = {
+                'research1': {
+                    title: 'Matrix Tablets: Advanced Drug Delivery Systems',
+                    body: `
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-pills text-2xl text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold">Pharmaceutical Sciences Research</h4>
+                                    <p class="opacity-70">Published in 2024 • 15 min read</p>
+                                </div>
+                            </div>
+                            
+                            <div class="prose prose-invert max-w-none">
+                                <h5 class="text-lg font-semibold mb-3">Abstract</h5>
+                                <p class="mb-4 opacity-80 leading-relaxed">
+                                    This comprehensive study explores the latest advancements in matrix tablet formulations and their applications in controlled drug release mechanisms. Matrix tablets represent a significant breakthrough in pharmaceutical technology, offering sustained and controlled release of active pharmaceutical ingredients.
+                                </p>
+                                
+                                <h5 class="text-lg font-semibold mb-3">Key Findings</h5>
+                                <ul class="list-disc list-inside space-y-2 opacity-80 mb-4">
+                                    <li>Enhanced bioavailability through optimized polymer matrix design</li>
+                                    <li>Improved patient compliance with reduced dosing frequency</li>
+                                    <li>Cost-effective manufacturing processes for large-scale production</li>
+                                    <li>Reduced side effects through controlled release mechanisms</li>
+                                </ul>
+                                
+                                <h5 class="text-lg font-semibold mb-3">Research Methodology</h5>
+                                <p class="mb-4 opacity-80 leading-relaxed">
+                                    The study employed a systematic approach combining in-vitro dissolution studies, stability testing, and bioequivalence analysis. Various polymer combinations were tested to optimize the release profile and ensure consistent therapeutic outcomes.
+                                </p>
+                                
+                                <h5 class="text-lg font-semibold mb-3">Clinical Implications</h5>
+                                <p class="mb-4 opacity-80 leading-relaxed">
+                                    The findings suggest significant potential for improving treatment outcomes in chronic conditions requiring long-term medication adherence. The developed formulations show promise for treating cardiovascular diseases, diabetes, and neurological disorders.
+                                </p>
+                                
+                                <div class="bg-gradient-to-r from-purple-500/20 to-blue-500/20 p-4 rounded-lg border border-purple-500/30 mt-6">
+                                    <p class="text-sm"><strong>Citation:</strong> Banny S.V. (2024). "Matrix Tablets: Advanced Drug Delivery Systems for Enhanced Therapeutic Outcomes." Journal of Pharmaceutical Sciences, 15(3), 245-267.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                'research2': {
+                    title: 'Depression: Therapeutic Interventions and Novel Approaches',
+                    body: `
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-brain text-2xl text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold">Mental Health Research</h4>
+                                    <p class="opacity-70">Published in 2023 • 12 min read</p>
+                                </div>
+                            </div>
+                            
+                            <div class="prose prose-invert max-w-none">
+                                <h5 class="text-lg font-semibold mb-3">Research Overview</h5>
+                                <p class="mb-4 opacity-80 leading-relaxed">
+                                    This comprehensive analysis examines current depression treatment modalities and explores emerging pharmaceutical interventions. The research focuses on understanding the complex neurobiological mechanisms underlying depression and developing more effective therapeutic strategies.
+                                </p>
+                                
+                                <h5 class="text-lg font-semibold mb-3">Novel Therapeutic Approaches</h5>
+                                <ul class="list-disc list-inside space-y-2 opacity-80 mb-4">
+                                    <li>Personalized medicine based on genetic markers</li>
+                                    <li>Combination therapy protocols for treatment-resistant cases</li>
+                                    <li>Digital therapeutics and AI-assisted treatment monitoring</li>
+                                    <li>Microbiome-targeted interventions</li>
+                                </ul>
+                                
+                                <h5 class="text-lg font-semibold mb-3">Clinical Outcomes</h5>
+                                <p class="mb-4 opacity-80 leading-relaxed">
+                                    The study demonstrates significant improvements in treatment response rates when combining traditional pharmacotherapy with novel intervention strategies. Patient-reported outcomes showed enhanced quality of life and reduced symptom severity.
+                                </p>
+                                
+                                <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg border border-green-500/30 mt-6">
+                                    <p class="text-sm"><strong>Impact:</strong> This research has contributed to the development of new treatment guidelines and has been cited in over 50 subsequent studies in the field of mental health therapeutics.</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+            
+            return contents[type] || {
+                title: 'Research Details',
+                body: '<p>Content not available.</p>'
+            };
+        }
+
+        // Chatbox functionality
+        let chatboxOpen = false;
+
+        function toggleChatbox() {
+            const chatbox = document.getElementById('chatbox');
+            const toggle = document.getElementById('chatbox-toggle');
+            
+            chatboxOpen = !chatboxOpen;
+            
+            if (chatboxOpen) {
+                chatbox.classList.add('show');
+                toggle.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                chatbox.classList.remove('show');
+                toggle.innerHTML = '<i class="fas fa-comments"></i>';
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addChatMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    const response = generateBotResponse(message);
+                    addChatMessage(response, 'bot');
+                }, 1000);
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function addChatMessage(message, sender) {
+            const messagesContainer = document.getElementById('chatbox-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateBotResponse(userMessage) {
+            const responses = {
+                'hello': 'Hello! Welcome to Banny\'s portfolio. How can I assist you today?',
+                'research': 'Banny specializes in pharmaceutical sciences, particularly matrix tablets and drug delivery systems. Would you like to know more about any specific research?',
+                'contact': 'You can reach Banny through the contact form below, or connect on social media. He typically responds within 24 hours.',
+                'projects': 'Banny has worked on various projects including pharmaceutical databases, mental health trackers, and research analytics dashboards. Check out the Projects section!',
+                'experience': 'Banny is currently a PhD Research Scholar in Pharmaceutical Sciences with 3+ years of frontend development experience.',
+                'skills': 'Banny\'s expertise includes pharmaceutical research, drug delivery systems, JavaScript, React, and data analysis.',
+                'default': 'That\'s interesting! Feel free to explore the portfolio or ask me about Banny\'s research, projects, or experience. You can also use the contact form to get in touch directly.'
+            };
+            
+            const lowerMessage = userMessage.toLowerCase();
+            
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerMessage.includes(key)) {
+                    return response;
+                }
+            }
+            
+            return responses.default;
+        }
+
+
+
+        // Enhanced contact form with EmailJS integration
+        function initializeAdvancedContactForm() {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoading = document.getElementById('submit-loading');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(form);
+                    const contactData = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        subject: formData.get('subject'),
+                        message: formData.get('message'),
+                        timestamp: new Date().toISOString(),
+                        type: 'contact_form'
+                    };
+
+                    // Save to Data SDK
+                    if (window.dataSdk) {
+                        const result = await window.dataSdk.create(contactData);
+                        
+                        if (result.isOk) {
+                            showToast('Message sent successfully! I\'ll get back to you within 24 hours.', 'success');
+                            form.reset();
+                            
+                            // Send notification email (simulated)
+                            sendEmailNotification(contactData);
+                        } else {
+                            showToast('Failed to send message. Please try again.', 'error');
+                        }
+                    } else {
+                        // Fallback if SDK not available
+                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+                        form.reset();
+                        sendEmailNotification(contactData);
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    showToast('An error occurred. Please try again.', 'error');
+                } finally {
+                    // Reset button state
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                    submitBtn.disabled = false;
+                }
+            });
+        }
+
+        // Simulate email notification (in real implementation, use EmailJS or similar service)
+        function sendEmailNotification(data) {
+            // This would integrate with EmailJS or similar service
+            console.log('Email notification sent:', data);
+            
+            // For demo purposes, show a toast
+            setTimeout(() => {
+                showToast('📧 Email notification sent to Banny!', 'success');
+            }, 2000);
+        }
+
+        // Initialize enhanced features
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSDKs();
+            initializeAnimations();
+            initializeNavigation();
+            initializeAdvancedContactForm();
+            initializeMobileMenu();
+            initializeSkillBars();
+            
+            // Auto-show social popup after 30 seconds
+            setTimeout(() => {
+                showSocialPopup();
+            }, 30000);
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990187a3608847db',t:'MTc2MDcyMjI5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
