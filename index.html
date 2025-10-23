@@ -1851,53 +1851,33 @@
             console.log('Mobile menu initialized successfully');
         }
 
-      // ----------------------------
-// Contact Form + Toast + Animations
-// ----------------------------
-document.addEventListener('DOMContentLoaded', function () {
-
+      document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
     const submitText = document.getElementById('submit-text');
     const submitLoading = document.getElementById('submit-loading');
 
     form.addEventListener('submit', function (e) {
+        // Remove e.preventDefault()! Let Netlify handle the form submission.
+
         // Show loading animation
         submitText.classList.add('hidden');
         submitLoading.classList.remove('hidden');
         submitBtn.disabled = true;
 
-        // Let the form submit naturally to Netlify
-        // Add a small delay to show animation
-        setTimeout(() => {
-            submitText.classList.remove('hidden');
-            submitLoading.classList.add('hidden');
-            submitBtn.disabled = false;
-        }, 1000);
-    });
-
-    // ----------------------------
-    // Toast notification function
-    // ----------------------------
-    function showToast(msg, type = "success") {
-        const toast = document.createElement("div");
-        toast.className = "toast " + type;
-        toast.textContent = msg;
+        // Simple toast for UX
+        const toast = document.createElement('div');
+        toast.className = 'toast success';
+        toast.textContent = 'Message sent! Thank you.';
         document.body.appendChild(toast);
 
-        // Show toast
-        setTimeout(() => toast.classList.add("show"), 100);
-
-        // Hide and remove toast
+        setTimeout(() => toast.classList.add('show'), 100);
         setTimeout(() => {
-            toast.classList.remove("show");
+            toast.classList.remove('show');
             setTimeout(() => document.body.removeChild(toast), 400);
         }, 4000);
-    }
 
-    // Optional: show toast on page unload if needed
-    window.addEventListener('beforeunload', function () {
-        showToast("Form submitted! Thank you.", "success");
+        // The form will submit normally to Netlify
     });
 });
 
