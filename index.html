@@ -1851,38 +1851,54 @@
             console.log('Mobile menu initialized successfully');
         }
 
-      document.addEventListener('DOMContentLoaded', function () {
+      // ----------------------------
+// Contact Form + Toast + Animations
+// ----------------------------
+document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
     const submitText = document.getElementById('submit-text');
     const submitLoading = document.getElementById('submit-loading');
 
-    form.addEventListener('submit', function () {
+    form.addEventListener('submit', function (e) {
         // Show loading animation
         submitText.classList.add('hidden');
         submitLoading.classList.remove('hidden');
         submitBtn.disabled = true;
 
-        // Reset button and form after short delay
-        setTimeout(function () {
+        // Let the form submit naturally to Netlify
+        // Add a small delay to show animation
+        setTimeout(() => {
             submitText.classList.remove('hidden');
             submitLoading.classList.add('hidden');
             submitBtn.disabled = false;
-            form.reset();
-            showToast("Message sent successfully!");
         }, 1000);
     });
 
-    function showToast(msg) {
+    // ----------------------------
+    // Toast notification function
+    // ----------------------------
+    function showToast(msg, type = "success") {
         const toast = document.createElement("div");
-        toast.className = "toast";
+        toast.className = "toast " + type;
         toast.textContent = msg;
         document.body.appendChild(toast);
 
-        setTimeout(function () { toast.classList.add("show"); }, 100);
-        setTimeout(function () { toast.remove(); }, 4000);
+        // Show toast
+        setTimeout(() => toast.classList.add("show"), 100);
+
+        // Hide and remove toast
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => document.body.removeChild(toast), 400);
+        }, 4000);
     }
+
+    // Optional: show toast on page unload if needed
+    window.addEventListener('beforeunload', function () {
+        showToast("Form submitted! Thank you.", "success");
+    });
 });
 
 
