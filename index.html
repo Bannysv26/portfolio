@@ -1849,26 +1849,57 @@
             });
 
             console.log('Mobile menu initialized successfully');
-        }
-
-      document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contact-form');
     const submitBtn = document.getElementById('submit-btn');
     const submitText = document.getElementById('submit-text');
     const submitLoading = document.getElementById('submit-loading');
 
+    // 1. FORM SUBMISSION LISTENER
     form.addEventListener('submit', function (e) {
-        // Remove e.preventDefault()! Let Netlify handle the form submission.
+        // Stop the browser from submitting the form normally
+        e.preventDefault();
 
-        // Show loading animation
+        // Show loading state
         submitText.classList.add('hidden');
         submitLoading.classList.remove('hidden');
         submitBtn.disabled = true;
 
-        // Simple toast for UX
+        // Gather form data
+        const formData = new FormData(form);
+
+        // Use fetch to send data to Netlify
+        fetch('/', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            // Check if the submission was accepted (200 OK or 204 No Content)
+            if (response.ok) {
+                showToast('Message sent! Thank you. ✅', 'success');
+                form.reset(); // Clear the form fields
+            } else {
+                showToast('Oops! Submission failed. Please try again. ❌', 'error');
+            }
+        })
+        .catch(error => {
+            // Handle network errors
+            showToast('Network error! Check your connection. 🌐', 'error');
+            console.error('Form submission error:', error);
+        })
+        .finally(() => { 
+            // Always run this to hide the spinner and re-enable the button
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+            submitBtn.disabled = false;
+        });
+    });
+
+    // 2. TOAST HELPER FUNCTION
+    function showToast(message, type) {
         const toast = document.createElement('div');
-        toast.className = 'toast success';
-        toast.textContent = 'Message sent! Thank you.';
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
         document.body.appendChild(toast);
 
         setTimeout(() => toast.classList.add('show'), 100);
@@ -1876,12 +1907,10 @@
             toast.classList.remove('show');
             setTimeout(() => document.body.removeChild(toast), 400);
         }, 4000);
-
-        // The form will submit normally to Netlify
-    });
+    }
 });
 
-
+        }
         // Initialize animations
         function initializeAnimations() {
             // Create floating shapes
