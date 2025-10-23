@@ -1,0 +1,2038 @@
+best looks see this    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banny SV - Professional Pharmacy Portfolio</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --secondary-color: #2563eb;
+            --accent-color: #60a5fa;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="ocean"] {
+            --primary-color: #0891b2;
+            --secondary-color: #0e7490;
+            --accent-color: #06b6d4;
+            --text-primary: #164e63;
+            --text-secondary: #0891b2;
+            --bg-primary: #f0f9ff;
+            --bg-secondary: #e0f7fa;
+        }
+
+        [data-theme="sunset"] {
+            --primary-color: #dc2626;
+            --secondary-color: #b91c1c;
+            --accent-color: #ef4444;
+            --text-primary: #7f1d1d;
+            --text-secondary: #dc2626;
+            --bg-primary: #fef2f2;
+            --bg-secondary: #fee2e2;
+        }
+
+        [data-theme="forest"] {
+            --primary-color: #059669;
+            --secondary-color: #047857;
+            --accent-color: #10b981;
+            --text-primary: #064e3b;
+            --text-secondary: #059669;
+            --bg-primary: #f0fdf4;
+            --bg-secondary: #dcfce7;
+        }
+
+        [data-theme="royal"] {
+            --primary-color: #7c3aed;
+            --secondary-color: #6d28d9;
+            --accent-color: #8b5cf6;
+            --text-primary: #581c87;
+            --text-secondary: #7c3aed;
+            --bg-primary: #faf5ff;
+            --bg-secondary: #f3e8ff;
+        }
+        
+        .inter { font-family: 'Inter', sans-serif; }
+        .playfair { font-family: 'Playfair Display', serif; }
+        .poppins { font-family: 'Poppins', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .professional-card {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .professional-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 80px;
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+            backdrop-filter: blur(20px);
+        }
+        
+        .sidebar.expanded {
+            width: 320px;
+        }
+        
+        .sidebar:hover:not(.mobile-expanded) {
+            width: 280px;
+        }
+        
+        .main-content {
+            margin-left: 80px;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-content.expanded {
+            margin-left: 320px;
+        }
+        
+        .welcome-intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        
+        .welcome-intro.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .theme-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .social-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-heavy);
+            z-index: 9998;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9997;
+        }
+        
+        .skill-progress {
+            transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-medium);
+            z-index: 9999;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .typing-animation::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            0% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            0% { transform: translateX(50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Enhanced Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 999;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 80px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header.sidebar-expanded {
+            left: 320px;
+        }
+        
+        .header.sidebar-collapsed {
+            left: 80px;
+        }
+        
+        /* Enhanced Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 70px;
+            }
+            .sidebar.expanded {
+                width: 300px;
+            }
+            .sidebar:hover:not(.mobile-expanded) {
+                width: 260px;
+            }
+            .main-content {
+                margin-left: 70px;
+            }
+            .main-content.expanded {
+                margin-left: 300px;
+            }
+            .header.sidebar-collapsed {
+                left: 70px;
+            }
+            .header.sidebar-expanded {
+                left: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+                box-shadow: none;
+            }
+            .sidebar.expanded {
+                width: 100%;
+                transform: translateX(0);
+                box-shadow: var(--shadow-heavy);
+            }
+            .sidebar.mobile-expanded {
+                width: 100%;
+                transform: translateX(0);
+            }
+            .sidebar:hover:not(.mobile-expanded) {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.expanded {
+                margin-left: 0;
+            }
+            .header {
+                left: 0 !important;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .sidebar {
+                width: 0;
+                transform: translateX(-100%);
+            }
+            .sidebar.expanded {
+                width: 100%;
+                transform: translateX(0);
+            }
+            .sidebar:hover:not(.mobile-expanded) {
+                width: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .theme-selector {
+                top: 10px;
+                right: 10px;
+            }
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body style="background-color: var(--bg-primary); color: var(--text-primary);" class="transition-all duration-300 inter">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Professional Portfolio Data
+        const portfolioData = {
+            personal: {
+                name: "Banny SV",
+                title: "B.Pharmacy Final Year Student",
+                subtitle: "Pharmaceutical Research Excellence & Innovation",
+                bio: "Passionate B.Pharmacy final year student specializing in novel drug delivery systems and pharmaceutical research. Dedicated to advancing healthcare through innovative pharmaceutical solutions with a focus on matrix tablets, controlled release systems, and evidence-based research methodologies.",
+                email: "banny.pharma@university.edu",
+                phone: "+91 98765 43210",
+                location: "India",
+                avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=400&fit=crop&crop=face",
+                university: "Pharmacy College",
+                year: "Final Year (2024)",
+                socialLinks: {
+                    linkedin: "https://linkedin.com/in/banny-pharma",
+                    github: "https://github.com/banny79",
+                    twitter: "https://twitter.com/banny_pharma",
+                    researchgate: "https://researchgate.net/profile/banny",
+                    instagram: "https://instagram.com/banny_pharma",
+                    facebook: "https://facebook.com/banny.pharma"
+                }
+            },
+            skills: {
+                pharmaceutical: [
+                    { name: "Drug Delivery Systems", level: 98, category: "Specialization" },
+                    { name: "Matrix Tablets", level: 96, category: "Specialization" },
+                    { name: "Pharmaceutical Chemistry", level: 95, category: "Core" },
+                    { name: "Pharmacology", level: 92, category: "Core" },
+                    { name: "Clinical Research", level: 88, category: "Research" },
+                    { name: "Pharmaceutical Analysis", level: 90, category: "Core" },
+                    { name: "Formulation Development", level: 93, category: "Specialization" },
+                    { name: "Quality Control", level: 87, category: "Industry" }
+                ],
+                technical: [
+                    { name: "Research Writing", level: 98, category: "Academic" },
+                    { name: "Shorthand Typing", level: 100, category: "Professional" },
+                    { name: "Data Analysis", level: 85, category: "Research" },
+                    { name: "Literature Review", level: 95, category: "Academic" },
+                    { name: "Statistical Analysis", level: 82, category: "Research" },
+                    { name: "Scientific Presentation", level: 88, category: "Academic" }
+                ],
+                soft: ["Research Excellence", "Critical Thinking", "Problem Solving", "Team Leadership"]
+            },
+            research: [
+                {
+                    id: 1,
+                    title: "Matrix Tablets: A Comprehensive Review of Controlled Release Systems",
+                    type: "Review Article",
+                    journal: "International Journal of Pharmaceutical Sciences",
+                    status: "Published",
+                    year: "2024",
+                    description: "Comprehensive review on matrix tablet technology, exploring various polymers, manufacturing techniques, and release mechanisms for sustained drug delivery with focus on patient compliance and therapeutic efficacy.",
+                    keywords: ["Matrix Tablets", "Controlled Release", "Drug Delivery", "Pharmaceutical Technology"],
+                    impact: "Cited by 25+ researchers, Downloaded 800+ times",
+                    doi: "10.1234/ijps.2024.001"
+                },
+                {
+                    id: 2,
+                    title: "Novel Drug Delivery Systems: Innovations and Future Perspectives",
+                    type: "Review Article",
+                    journal: "Advanced Drug Delivery Reviews",
+                    status: "Published",
+                    year: "2024",
+                    description: "In-depth analysis of emerging drug delivery technologies including nanoparticles, liposomes, targeted delivery systems, and their applications in modern therapeutics.",
+                    keywords: ["Novel Drug Delivery", "Nanotechnology", "Targeted Therapy", "Innovation"],
+                    impact: "Featured in international conference, 40+ citations",
+                    doi: "10.1234/addr.2024.002"
+                },
+                {
+                    id: 3,
+                    title: "Pharmaceutical Approaches to Depression Management: A Systematic Review",
+                    type: "Review Article",
+                    journal: "Journal of Clinical Pharmacy",
+                    status: "Published",
+                    year: "2024",
+                    description: "Systematic review of pharmaceutical interventions in depression treatment, analyzing efficacy, safety profiles, and emerging therapeutic approaches.",
+                    keywords: ["Depression", "Antidepressants", "Mental Health", "Clinical Outcomes"],
+                    impact: "Presented at National Conference, 30+ citations",
+                    doi: "10.1234/jcp.2024.003"
+                }
+            ],
+            achievements: [
+                {
+                    title: "First Class Shorthand Typing Certification",
+                    year: "2024",
+                    description: "Achieved first class certification with 100% accuracy at 120+ WPM",
+                    icon: "fas fa-keyboard"
+                },
+                {
+                    title: "Research Publication Excellence",
+                    year: "2024",
+                    description: "Published 3 high-impact review articles in prestigious journals",
+                    icon: "fas fa-file-alt"
+                },
+                {
+                    title: "Academic Excellence Award",
+                    year: "2023-2024",
+                    description: "Recognized for outstanding academic performance",
+                    icon: "fas fa-trophy"
+                },
+                {
+                    title: "Best Student Researcher",
+                    year: "2023",
+                    description: "Awarded for exceptional contribution to pharmaceutical research",
+                    icon: "fas fa-microscope"
+                }
+            ],
+            projects: [
+                {
+                    id: 1,
+                    title: "Advanced Matrix Tablet Formulation",
+                    description: "Development and optimization of sustained-release matrix tablets using various polymers for improved drug delivery.",
+                    image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=400&fit=crop",
+                    technologies: ["HPMC", "Carbopol", "Dissolution Testing", "Quality Control"],
+                    status: "Completed",
+                    type: "Research Project"
+                },
+                {
+                    id: 2,
+                    title: "Antidepressant Drug Analysis",
+                    description: "Comprehensive analysis of antidepressant medications and their therapeutic outcomes.",
+                    image: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=600&h=400&fit=crop",
+                    technologies: ["HPLC", "Clinical Data Analysis", "Literature Review"],
+                    status: "Completed",
+                    type: "Academic Project"
+                },
+                {
+                    id: 3,
+                    title: "Novel Drug Delivery System Design",
+                    description: "Design and evaluation of innovative drug delivery systems for enhanced bioavailability.",
+                    image: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=400&fit=crop",
+                    technologies: ["Nanotechnology", "Formulation", "Characterization"],
+                    status: "Ongoing",
+                    type: "Final Year Project"
+                }
+            ]
+        };
+
+        // Theme configurations
+        const themes = {
+            light: { name: "Light", icon: "fas fa-sun", color: "#2563eb" },
+            dark: { name: "Dark", icon: "fas fa-moon", color: "#111827" },
+            ocean: { name: "Ocean", icon: "fas fa-water", color: "#0891b2" },
+            sunset: { name: "Sunset", icon: "fas fa-sun", color: "#dc2626" },
+            forest: { name: "Forest", icon: "fas fa-tree", color: "#059669" },
+            royal: { name: "Royal", icon: "fas fa-crown", color: "#7c3aed" }
+        };
+
+        // Main App Component
+        function App() {
+            const [currentTheme, setCurrentTheme] = useState('light');
+            const [sidebarExpanded, setSidebarExpanded] = useState(false);
+            const [activeSection, setActiveSection] = useState('hero');
+            const [showWelcome, setShowWelcome] = useState(true);
+            const [showSocialPopup, setShowSocialPopup] = useState(false);
+            const [showThemeSelector, setShowThemeSelector] = useState(false);
+            const [notification, setNotification] = useState('');
+            const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+            useEffect(() => {
+                // Welcome intro timeout
+                setTimeout(() => {
+                    setShowWelcome(false);
+                }, 3000);
+
+                // Apply theme
+                document.documentElement.setAttribute('data-theme', currentTheme);
+
+                // Handle resize
+                const handleResize = () => {
+                    setIsMobile(window.innerWidth <= 768);
+                };
+                window.addEventListener('resize', handleResize);
+
+                // Scroll handling for active section
+                const handleScroll = () => {
+                    const sections = ['hero', 'about', 'research', 'skills', 'projects', 'achievements', 'contact'];
+                    const current = sections.find(section => {
+                        const element = document.getElementById(section);
+                        if (element) {
+                            const rect = element.getBoundingClientRect();
+                            return rect.top <= 100 && rect.bottom >= 100;
+                        }
+                        return false;
+                    });
+                    if (current) setActiveSection(current);
+
+                    // Scroll reveal animation
+                    const reveals = document.querySelectorAll('.scroll-reveal');
+                    reveals.forEach(reveal => {
+                        const windowHeight = window.innerHeight;
+                        const elementTop = reveal.getBoundingClientRect().top;
+                        const elementVisible = 150;
+                        
+                        if (elementTop < windowHeight - elementVisible) {
+                            reveal.classList.add('revealed');
+                        }
+                    });
+                };
+
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('resize', handleResize);
+                handleScroll(); // Initial call
+
+                return () => {
+                    window.removeEventListener('scroll', handleScroll);
+                    window.removeEventListener('resize', handleResize);
+                };
+            }, [currentTheme]);
+
+            const showNotification = (message) => {
+                setNotification(message);
+                setTimeout(() => setNotification(''), 3000);
+            };
+
+            const changeTheme = (theme) => {
+                setCurrentTheme(theme);
+                setShowThemeSelector(false);
+                showNotification(`Theme changed to ${themes[theme].name}`);
+            };
+
+            const toggleSidebar = () => {
+                setSidebarExpanded(!sidebarExpanded);
+            };
+
+            if (showWelcome) {
+                return <WelcomeIntro />;
+            }
+
+            return (
+                <div className="relative">
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={toggleSidebar}
+                        className="mobile-menu-btn"
+                    >
+                        <i className={`fas ${sidebarExpanded ? 'fa-times' : 'fa-bars'} text-xl`}></i>
+                    </button>
+
+                    {/* Enhanced Header */}
+                    <Header 
+                        sidebarExpanded={sidebarExpanded}
+                        onMenuToggle={toggleSidebar}
+                        activeSection={activeSection}
+                        isMobile={isMobile}
+                    />
+
+                    {/* Theme Selector */}
+                    <div className="theme-selector">
+                        <button
+                            onClick={() => setShowThemeSelector(!showThemeSelector)}
+                            className="w-14 h-14 glass-effect rounded-2xl flex items-center justify-center text-white hover:scale-110 transition-all duration-300 pulse-glow"
+                            style={{ background: `linear-gradient(135deg, var(--primary-color), var(--secondary-color))` }}
+                        >
+                            <i className="fas fa-palette text-lg"></i>
+                        </button>
+                        
+                        {showThemeSelector && (
+                            <div className="absolute top-20 right-0 glass-effect rounded-2xl p-6 min-w-[250px] border border-white border-opacity-20">
+                                <h3 className="font-semibold mb-4 text-lg" style={{ color: 'var(--text-primary)' }}>Choose Theme</h3>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {Object.entries(themes).map(([key, theme]) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => changeTheme(key)}
+                                            className={`p-4 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
+                                                currentTheme === key ? 'ring-2 ring-offset-2' : 'hover:scale-105'
+                                            }`}
+                                            style={{ 
+                                                backgroundColor: theme.color + '20',
+                                                color: theme.color,
+                                                ringColor: currentTheme === key ? theme.color : 'transparent'
+                                            }}
+                                        >
+                                            <i className={theme.icon}></i>
+                                            <span className="font-medium">{theme.name}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Notification */}
+                    {notification && (
+                        <div className={`notification ${notification ? 'show' : ''}`}>
+                            <div className="flex items-center space-x-3">
+                                <i className="fas fa-check-circle" style={{ color: 'var(--accent-color)' }}></i>
+                                <span className="font-medium">{notification}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Social Media Popup */}
+                    {showSocialPopup && (
+                        <>
+                            <div className="modal-overlay" onClick={() => setShowSocialPopup(false)}></div>
+                            <SocialMediaPopup onClose={() => setShowSocialPopup(false)} />
+                        </>
+                    )}
+
+                    <Sidebar 
+                        expanded={sidebarExpanded}
+                        onToggle={toggleSidebar}
+                        activeSection={activeSection}
+                        onSocialClick={() => setShowSocialPopup(true)}
+                        isMobile={isMobile}
+                    />
+                    
+                    <div className={`main-content ${sidebarExpanded ? 'expanded' : ''}`}>
+                        <HeroSection onSocialClick={() => setShowSocialPopup(true)} />
+                        <AboutSection />
+                        <ResearchSection />
+                        <SkillsSection />
+                        <ProjectsSection />
+                        <AchievementsSection />
+                        <ContactSection />
+                        <Footer />
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Header Component
+        function Header({ sidebarExpanded, onMenuToggle, activeSection, isMobile }) {
+            const [scrolled, setScrolled] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => {
+                    setScrolled(window.scrollY > 50);
+                };
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const getSectionTitle = () => {
+                const titles = {
+                    hero: 'Home',
+                    about: 'About Me', 
+                    research: 'Research Publications',
+                    skills: 'Skills & Expertise',
+                    projects: 'Academic Projects',
+                    achievements: 'Achievements',
+                    contact: 'Get In Touch'
+                };
+                return titles[activeSection] || 'Banny SV Portfolio';
+            };
+
+            return (
+                <header 
+                    className={`header ${
+                        isMobile ? '' : (sidebarExpanded ? 'sidebar-expanded' : 'sidebar-collapsed')
+                    } ${scrolled ? 'backdrop-blur-lg shadow-lg' : ''}`}
+                    style={{ 
+                        backgroundColor: scrolled ? 'var(--glass-bg)' : 'transparent',
+                        borderBottom: scrolled ? '1px solid var(--glass-border)' : 'none'
+                    }}
+                >
+                    <div className="flex items-center justify-between px-6 py-4">
+                        <div className="flex items-center space-x-4">
+                            {!isMobile && (
+                                <button
+                                    onClick={onMenuToggle}
+                                    className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110"
+                                    style={{ 
+                                        backgroundColor: 'var(--primary-color)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    <i className={`fas ${sidebarExpanded ? 'fa-chevron-left' : 'fa-chevron-right'} text-lg`}></i>
+                                </button>
+                            )}
+                            
+                            <div>
+                                <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                                    {getSectionTitle()}
+                                </h1>
+                                <p className="text-sm opacity-70" style={{ color: 'var(--text-secondary)' }}>
+                                    B.Pharmacy Final Year • 3 Publications
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                            <div className="hidden md:flex items-center space-x-2 px-4 py-2 rounded-full"
+                                 style={{ backgroundColor: 'var(--primary-color)' + '20' }}>
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <span className="text-sm font-medium" style={{ color: 'var(--primary-color)' }}>
+                                    Available for Research
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        }
+
+        // Welcome Intro Component
+        function WelcomeIntro() {
+            return (
+                <div className="welcome-intro">
+                    <div className="text-center text-white">
+                        <div className="text-8xl mb-8 floating-animation">🧬</div>
+                        <h1 className="text-6xl md:text-8xl font-bold playfair mb-6">
+                            Welcome to Banny SV Portfolio
+                        </h1>
+                        <p className="text-2xl md:text-3xl mb-8 opacity-90">
+                            Author of 3 Published Review Articles
+                        </p>
+                        <div className="flex justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            <div className="w-2 h-2 bg-white rounded-full animate-pulse mx-2" style={{ animationDelay: '0.2s' }}></div>
+                            <div className="w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Professional Sidebar Component
+        function Sidebar({ expanded, onToggle, activeSection, onSocialClick, isMobile }) {
+            const navItems = [
+                { id: 'hero', label: 'Home', icon: 'fas fa-home', color: '#3b82f6' },
+                { id: 'about', label: 'About', icon: 'fas fa-user-graduate', color: '#10b981' },
+                { id: 'research', label: 'Research', icon: 'fas fa-flask', color: '#f59e0b' },
+                { id: 'skills', label: 'Skills', icon: 'fas fa-pills', color: '#ef4444' },
+                { id: 'projects', label: 'Projects', icon: 'fas fa-microscope', color: '#8b5cf6' },
+                { id: 'achievements', label: 'Achievements', icon: 'fas fa-trophy', color: '#f97316' },
+                { id: 'contact', label: 'Contact', icon: 'fas fa-envelope', color: '#06b6d4' }
+            ];
+
+            const scrollToSection = (sectionId) => {
+                document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                // Auto-close sidebar after navigation (especially for mobile)
+                if (isMobile) {
+                    setTimeout(() => {
+                        onToggle();
+                    }, 300);
+                }
+            };
+
+            return (
+                <div className={`sidebar ${expanded ? 'expanded' : ''} ${isMobile && expanded ? 'mobile-expanded' : ''}`}>
+                    <div className="p-6 h-full flex flex-col">
+                        {/* Header */}
+                        <div className="flex items-center mb-8">
+                            <button
+                                onClick={onToggle}
+                                className="w-12 h-12 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center text-white hover:bg-opacity-30 transition-all duration-300"
+                            >
+                                <i className={`fas ${expanded ? 'fa-times' : 'fa-bars'} text-lg`}></i>
+                            </button>
+                            {expanded && (
+                                <div className="ml-4 text-white slide-in-right">
+                                    <h3 className="font-bold text-2xl playfair">Banny SV</h3>
+                                    <p className="text-sm opacity-80">Pharmaceutical Excellence</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Profile Section */}
+                        {expanded && (
+                            <div className="mb-8 text-center slide-in-right">
+                                <img
+                                    src={portfolioData.personal.avatar}
+                                    alt="Banny SV Profile"
+                                    className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white border-opacity-30"
+                                />
+                                <div className="text-white">
+                                    <p className="font-semibold text-lg">{portfolioData.personal.name}</p>
+                                    <p className="text-sm opacity-80">{portfolioData.personal.year}</p>
+                                    <p className="text-sm opacity-80">📚 3 Publications</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Enhanced Navigation */}
+                        <nav className="flex-1">
+                            <ul className="space-y-3">
+                                {navItems.map((item, index) => (
+                                    <li key={item.id}>
+                                        <button
+                                            onClick={() => scrollToSection(item.id)}
+                                            className={`w-full flex items-center p-4 rounded-2xl transition-all duration-300 group relative overflow-hidden ${
+                                                activeSection === item.id
+                                                    ? 'bg-white bg-opacity-25 text-white shadow-lg transform scale-105'
+                                                    : 'text-white text-opacity-70 hover:bg-white hover:bg-opacity-20 hover:text-white hover:transform hover:scale-105'
+                                            }`}
+                                            title={!expanded ? item.label : ''}
+                                        >
+                                            {/* Active indicator */}
+                                            {activeSection === item.id && (
+                                                <div 
+                                                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-full"
+                                                    style={{ backgroundColor: item.color }}
+                                                ></div>
+                                            )}
+                                            
+                                            {/* Icon with color coding */}
+                                            <div className={`${expanded ? 'mr-4' : 'mx-auto'} relative`}>
+                                                <i 
+                                                    className={`${item.icon} text-lg transition-all duration-300`}
+                                                    style={{ 
+                                                        color: activeSection === item.id ? item.color : 'inherit'
+                                                    }}
+                                                ></i>
+                                                {activeSection === item.id && (
+                                                    <div 
+                                                        className="absolute -inset-2 rounded-full opacity-30 animate-pulse"
+                                                        style={{ backgroundColor: item.color }}
+                                                    ></div>
+                                                )}
+                                            </div>
+                                            
+                                            {expanded && (
+                                                <div className="flex-1 text-left">
+                                                    <span className="font-medium text-lg">{item.label}</span>
+                                                    {activeSection === item.id && (
+                                                        <div className="text-xs opacity-80 mt-1">Currently viewing</div>
+                                                    )}
+                                                </div>
+                                            )}
+                                            
+                                            {expanded && (
+                                                <i className="fas fa-chevron-right text-sm opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                                            )}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+
+                        {/* Enhanced Social Media Button */}
+                        <div className="mt-4">
+                            <button
+                                onClick={onSocialClick}
+                                className="w-full flex items-center p-4 rounded-2xl text-white text-opacity-70 hover:bg-white hover:bg-opacity-15 hover:text-white transition-all duration-300 group"
+                                title={!expanded ? 'Social Media' : ''}
+                            >
+                                <i className={`fas fa-share-alt ${expanded ? 'mr-4' : 'mx-auto'} text-lg`}></i>
+                                {expanded && (
+                                    <div className="flex-1 text-left">
+                                        <span className="font-medium">Social Media</span>
+                                        <div className="text-xs opacity-80 mt-1">Connect with me</div>
+                                    </div>
+                                )}
+                                {expanded && (
+                                    <i className="fas fa-external-link-alt text-sm opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                                )}
+                            </button>
+                        </div>
+
+                        {/* Footer */}
+                        {expanded && (
+                            <div className="text-center text-white text-opacity-60 text-xs pt-4 border-t border-white border-opacity-20 slide-in-right">
+                                <p>© 2024 Banny SV</p>
+                                <p>Pharmaceutical Excellence</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // Social Media Popup Component
+        function SocialMediaPopup({ onClose }) {
+            return (
+                <div className="social-popup">
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-3xl font-bold playfair" style={{ color: 'var(--text-primary)' }}>
+                            Connect With Me
+                        </h3>
+                        <button
+                            onClick={onClose}
+                            className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                            style={{ color: 'var(--text-secondary)' }}
+                        >
+                            <i className="fas fa-times text-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <p className="mb-8 text-lg" style={{ color: 'var(--text-secondary)' }}>
+                        Follow my pharmaceutical research journey and connect with me!
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                        {Object.entries(portfolioData.personal.socialLinks).map(([platform, url]) => (
+                            <a
+                                key={platform}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-4 p-4 rounded-2xl hover:scale-105 transition-all duration-300 professional-card"
+                            >
+                                <div className="w-14 h-14 rounded-full flex items-center justify-center text-white"
+                                     style={{ background: `linear-gradient(135deg, var(--primary-color), var(--secondary-color))` }}>
+                                    <i className={`fab fa-${platform} text-xl`}></i>
+                                </div>
+                                <div>
+                                    <p className="font-semibold capitalize text-lg" style={{ color: 'var(--text-primary)' }}>
+                                        {platform}
+                                    </p>
+                                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                        Connect & Follow
+                                    </p>
+                                </div>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Enhanced Professional Hero Section
+        function HeroSection({ onSocialClick }) {
+            const [typedText, setTypedText] = useState('');
+            const [currentRole, setCurrentRole] = useState(0);
+            const roles = [
+                'Pharmaceutical Research Pioneer',
+                'Drug Delivery Expert', 
+                'Academic Excellence Achiever',
+                'Scientific Writing Specialist'
+            ];
+
+            useEffect(() => {
+                let timeout;
+                const currentRoleText = roles[currentRole];
+                
+                if (typedText.length < currentRoleText.length) {
+                    timeout = setTimeout(() => {
+                        setTypedText(currentRoleText.slice(0, typedText.length + 1));
+                    }, 100);
+                } else {
+                    timeout = setTimeout(() => {
+                        setTypedText('');
+                        setCurrentRole((prev) => (prev + 1) % roles.length);
+                    }, 2000);
+                }
+
+                return () => clearTimeout(timeout);
+            }, [typedText, currentRole]);
+
+            return (
+                <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ paddingTop: '80px' }}>
+                    {/* Background Elements */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        <div className="absolute top-20 left-20 w-72 h-72 rounded-full opacity-10"
+                             style={{ background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))` }}></div>
+                        <div className="absolute bottom-20 right-20 w-96 h-96 rounded-full opacity-10"
+                             style={{ background: `linear-gradient(135deg, var(--secondary-color), var(--primary-color))` }}></div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+                        <div className="floating-animation mb-12 fade-in-up">
+                            <div className="relative">
+                                <img
+                                    src={portfolioData.personal.avatar}
+                                    alt="Banny SV Professional Photo"
+                                    className="w-64 h-64 rounded-full mx-auto shadow-2xl border-8 border-white"
+                                />
+                                <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl"
+                                     style={{ background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))` }}>
+                                    🧬
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1 className="text-5xl md:text-8xl font-bold playfair mb-8 slide-in-left" style={{ color: 'var(--text-primary)' }}>
+                            Hello, I'm <span className="gradient-text">{portfolioData.personal.name}</span>
+                        </h1>
+
+                        <div className="text-2xl md:text-4xl mb-8 h-16 flex items-center justify-center slide-in-right">
+                            <span className="typing-animation gradient-text font-semibold">{typedText}</span>
+                        </div>
+
+                        <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed fade-in-up" style={{ color: 'var(--text-secondary)' }}>
+                            {portfolioData.personal.bio}
+                        </p>
+
+                        <div className="flex flex-wrap justify-center gap-8 mb-16 fade-in-up">
+                            <div className="professional-card px-8 py-6 hover:shadow-xl transition-all duration-300">
+                                <i className="fas fa-graduation-cap gradient-text mr-3 text-2xl"></i>
+                                <span style={{ color: 'var(--text-primary)' }} className="font-semibold text-lg">{portfolioData.personal.year}</span>
+                            </div>
+                            <div className="professional-card px-8 py-6 hover:shadow-xl transition-all duration-300">
+                                <i className="fas fa-file-alt gradient-text mr-3 text-2xl"></i>
+                                <span style={{ color: 'var(--text-primary)' }} className="font-semibold text-lg">3 Publications</span>
+                            </div>
+                            <div className="professional-card px-8 py-6 hover:shadow-xl transition-all duration-300">
+                                <i className="fas fa-keyboard gradient-text mr-3 text-2xl"></i>
+                                <span style={{ color: 'var(--text-primary)' }} className="font-semibold text-lg">First Class Typing</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 fade-in-up">
+                            <button
+                                onClick={() => document.getElementById('research').scrollIntoView({ behavior: 'smooth' })}
+                                className="px-12 py-6 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg text-white text-lg pulse-glow"
+                                style={{ background: `linear-gradient(135deg, var(--primary-color), var(--secondary-color))` }}
+                            >
+                                <i className="fas fa-flask mr-3"></i>
+                                Explore My Research
+                            </button>
+                            
+                            <button
+                                onClick={onSocialClick}
+                                className="px-12 py-6 border-2 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300 professional-card text-lg"
+                                style={{ 
+                                    borderColor: 'var(--primary-color)',
+                                    color: 'var(--primary-color)'
+                                }}
+                            >
+                                <i className="fas fa-share-alt mr-3"></i>
+                                Connect With Me
+                            </button>
+                        </div>
+
+                        <div className="flex justify-center space-x-6 fade-in-up">
+                            {Object.entries(portfolioData.personal.socialLinks).slice(0, 4).map(([platform, url]) => (
+                                <a
+                                    key={platform}
+                                    href={url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-16 h-16 professional-card rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
+                                >
+                                    <i className={`fab fa-${platform} text-2xl gradient-text`}></i>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                        <i className="fas fa-chevron-down text-3xl" style={{ color: 'var(--text-secondary)' }}></i>
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional About Section
+        function AboutSection() {
+            return (
+                <section id="about" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>About Me</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Passionate about pharmaceutical innovation and research excellence</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                            <div>
+                                <h3 className="text-3xl md:text-4xl font-bold playfair mb-8" style={{ color: 'var(--text-primary)' }}>My Pharmaceutical Journey</h3>
+                                <p className="mb-6 leading-relaxed text-lg" style={{ color: 'var(--text-secondary)' }}>
+                                    As a final year B.Pharmacy student, I am deeply passionate about advancing healthcare through 
+                                    innovative pharmaceutical research. My journey has been marked by academic excellence, 
+                                    groundbreaking research publications, and a commitment to improving patient outcomes.
+                                </p>
+                                <p className="mb-8 leading-relaxed text-lg" style={{ color: 'var(--text-secondary)' }}>
+                                    I specialize in novel drug delivery systems, with particular expertise in matrix tablets 
+                                    and controlled release formulations. My research has been published in prestigious 
+                                    pharmaceutical journals, contributing to the advancement of pharmaceutical science globally.
+                                </p>
+
+                                <div className="grid grid-cols-2 gap-6 mb-8">
+                                    <div className="text-center professional-card p-8">
+                                        <div className="text-4xl font-bold gradient-text">3</div>
+                                        <div className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>Published Articles</div>
+                                    </div>
+                                    <div className="text-center professional-card p-8">
+                                        <div className="text-4xl font-bold gradient-text">100%</div>
+                                        <div className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>Typing Accuracy</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-8">
+                                <div className="professional-card p-10">
+                                    <h4 className="text-2xl font-semibold mb-8" style={{ color: 'var(--text-primary)' }}>
+                                        <i className="fas fa-graduation-cap gradient-text mr-4"></i>
+                                        Educational Excellence
+                                    </h4>
+                                    <div className="border-l-4 pl-8" style={{ borderColor: 'var(--primary-color)' }}>
+                                        <h5 className="font-semibold text-xl mb-2" style={{ color: 'var(--text-primary)' }}>Bachelor of Pharmacy (B.Pharm)</h5>
+                                        <p className="font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>{portfolioData.personal.university}</p>
+                                        <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>2021 - 2025 • Final Year • Academic Excellence</p>
+                                        
+                                        <div className="mb-6">
+                                            <p className="text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>Key Specializations:</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {["Drug Delivery Systems", "Matrix Tablets", "Pharmaceutical Research", "Clinical Analysis"].map((subject, i) => (
+                                                    <span key={i} className="px-3 py-1 rounded-full text-xs font-medium"
+                                                          style={{ 
+                                                              backgroundColor: 'var(--primary-color)' + '20',
+                                                              color: 'var(--primary-color)'
+                                                          }}>
+                                                        {subject}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="professional-card p-10">
+                                    <h4 className="text-2xl font-semibold mb-8" style={{ color: 'var(--text-primary)' }}>
+                                        <i className="fas fa-target gradient-text mr-4"></i>
+                                        Future Vision
+                                    </h4>
+                                    <div className="space-y-6">
+                                        {[
+                                            "Advance pharmaceutical research methodologies",
+                                            "Develop innovative drug delivery technologies",
+                                            "Contribute to global healthcare improvement",
+                                            "Lead pharmaceutical innovation initiatives"
+                                        ].map((goal, index) => (
+                                            <div key={index} className="flex items-start space-x-4">
+                                                <div className="w-3 h-3 rounded-full mt-2" 
+                                                     style={{ backgroundColor: 'var(--accent-color)' }}></div>
+                                                <p style={{ color: 'var(--text-secondary)' }} className="leading-relaxed">{goal}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Research Section
+        function ResearchSection() {
+            const [selectedResearch, setSelectedResearch] = useState(null);
+
+            return (
+                <section id="research" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-primary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>Research Publications</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Contributing to pharmaceutical science and innovation</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {portfolioData.research.map((paper, index) => (
+                                <div
+                                    key={paper.id}
+                                    className="professional-card cursor-pointer p-8"
+                                    onClick={() => setSelectedResearch(paper)}
+                                >
+                                    <div className="flex items-center justify-between mb-6">
+                                        <span className="px-4 py-2 rounded-full text-sm font-medium"
+                                              style={{ 
+                                                  backgroundColor: 'var(--primary-color)' + '20',
+                                                  color: 'var(--primary-color)'
+                                              }}>
+                                            {paper.type}
+                                        </span>
+                                        <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                            {paper.status}
+                                        </span>
+                                    </div>
+
+                                    <h3 className="text-2xl font-bold mb-4 leading-tight" style={{ color: 'var(--text-primary)' }}>
+                                        {paper.title}
+                                    </h3>
+                                    <p className="mb-6 line-clamp-3 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                                        {paper.description}
+                                    </p>
+                                    
+                                    <div className="mb-6">
+                                        <p className="text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>Journal:</p>
+                                        <p className="text-sm font-medium" style={{ color: 'var(--primary-color)' }}>{paper.journal}</p>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 mb-6">
+                                        {paper.keywords.slice(0, 3).map((keyword, index) => (
+                                            <span
+                                                key={index}
+                                                className="px-3 py-1 rounded text-xs font-medium"
+                                                style={{ 
+                                                    backgroundColor: 'var(--bg-secondary)',
+                                                    color: 'var(--text-secondary)'
+                                                }}
+                                            >
+                                                {keyword}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{paper.year}</span>
+                                        <button className="font-medium text-sm hover:underline" style={{ color: 'var(--primary-color)' }}>
+                                            Read More →
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Research Modal */}
+                        {selectedResearch && (
+                            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                                <div className="professional-card max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+                                    <div className="p-10">
+                                        <div className="flex items-start justify-between mb-8">
+                                            <div className="flex-1">
+                                                <div className="flex items-center space-x-4 mb-6">
+                                                    <span className="px-4 py-2 rounded-full text-sm font-medium"
+                                                          style={{ 
+                                                              backgroundColor: 'var(--primary-color)' + '20',
+                                                              color: 'var(--primary-color)'
+                                                          }}>
+                                                        {selectedResearch.type}
+                                                    </span>
+                                                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                        {selectedResearch.status}
+                                                    </span>
+                                                </div>
+                                                <h3 className="text-4xl font-bold playfair mb-4" style={{ color: 'var(--text-primary)' }}>
+                                                    {selectedResearch.title}
+                                                </h3>
+                                                <p className="font-semibold text-lg" style={{ color: 'var(--primary-color)' }}>
+                                                    {selectedResearch.journal} • {selectedResearch.year}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setSelectedResearch(null)}
+                                                className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                                                style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-secondary)' }}
+                                            >
+                                                <i className="fas fa-times"></i>
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                                            <div className="md:col-span-2">
+                                                <h4 className="text-2xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Description</h4>
+                                                <p className="mb-8 leading-relaxed text-lg" style={{ color: 'var(--text-secondary)' }}>
+                                                    {selectedResearch.description}
+                                                </p>
+                                                
+                                                <h4 className="text-2xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Keywords</h4>
+                                                <div className="flex flex-wrap gap-3 mb-8">
+                                                    {selectedResearch.keywords.map((keyword, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className="px-4 py-2 rounded-full text-sm font-medium"
+                                                            style={{ 
+                                                                backgroundColor: 'var(--primary-color)' + '20',
+                                                                color: 'var(--primary-color)'
+                                                            }}
+                                                        >
+                                                            {keyword}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div className="professional-card p-8 mb-8">
+                                                    <h4 className="text-xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>Publication Details</h4>
+                                                    <div className="space-y-4 text-sm">
+                                                        <div>
+                                                            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>DOI:</span>
+                                                            <p style={{ color: 'var(--primary-color)' }}>{selectedResearch.doi}</p>
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>Year:</span>
+                                                            <p style={{ color: 'var(--text-secondary)' }}>{selectedResearch.year}</p>
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>Status:</span>
+                                                            <p style={{ color: 'var(--text-secondary)' }}>{selectedResearch.status}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="professional-card p-8">
+                                                    <h4 className="text-xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>Impact</h4>
+                                                    <p style={{ color: 'var(--text-secondary)' }} className="text-sm leading-relaxed">
+                                                        {selectedResearch.impact}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Skills Section
+        function SkillsSection() {
+            const [skillsVisible, setSkillsVisible] = useState(false);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            setSkillsVisible(true);
+                        }
+                    },
+                    { threshold: 0.3 }
+                );
+
+                const skillsElement = document.getElementById('skills');
+                if (skillsElement) {
+                    observer.observe(skillsElement);
+                }
+
+                return () => observer.disconnect();
+            }, []);
+
+            return (
+                <section id="skills" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>Skills & Expertise</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Comprehensive pharmaceutical and technical competencies</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                            {/* Pharmaceutical Skills */}
+                            <div>
+                                <h3 className="text-3xl md:text-4xl font-bold playfair mb-10" style={{ color: 'var(--text-primary)' }}>
+                                    <i className="fas fa-pills gradient-text mr-4"></i>
+                                    Pharmaceutical Excellence
+                                </h3>
+                                
+                                <div className="space-y-6">
+                                    {portfolioData.skills.pharmaceutical.map((skill, index) => (
+                                        <div key={index} className="professional-card p-6">
+                                            <div className="flex justify-between mb-3">
+                                                <span className="font-medium text-lg" style={{ color: 'var(--text-primary)' }}>{skill.name}</span>
+                                                <span className="font-bold" style={{ color: 'var(--primary-color)' }}>{skill.level}%</span>
+                                            </div>
+                                            <div className="w-full h-4 rounded-full" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                                                <div
+                                                    className="skill-progress h-4 rounded-full"
+                                                    style={{
+                                                        width: skillsVisible ? `${skill.level}%` : '0%',
+                                                        background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))`
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Technical Skills */}
+                            <div>
+                                <h3 className="text-3xl md:text-4xl font-bold playfair mb-10" style={{ color: 'var(--text-primary)' }}>
+                                    <i className="fas fa-laptop-code gradient-text mr-4"></i>
+                                    Technical Proficiency
+                                </h3>
+                                
+                                <div className="space-y-6 mb-12">
+                                    {portfolioData.skills.technical.map((skill, index) => (
+                                        <div key={index} className="professional-card p-6">
+                                            <div className="flex justify-between mb-3">
+                                                <span className="font-medium text-lg" style={{ color: 'var(--text-primary)' }}>{skill.name}</span>
+                                                <span className="font-bold" style={{ color: 'var(--secondary-color)' }}>{skill.level}%</span>
+                                            </div>
+                                            <div className="w-full h-4 rounded-full" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                                                <div
+                                                    className="skill-progress h-4 rounded-full"
+                                                    style={{
+                                                        width: skillsVisible ? `${skill.level}%` : '0%',
+                                                        background: `linear-gradient(135deg, var(--secondary-color), var(--accent-color))`
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Professional Skills */}
+                                <div>
+                                    <h4 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>Professional Competencies</h4>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {portfolioData.skills.soft.map((skill, index) => (
+                                            <div key={index} className="professional-card p-6">
+                                                <div className="flex items-center space-x-4">
+                                                    <div className="w-4 h-4 rounded-full" 
+                                                         style={{ background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))` }}></div>
+                                                    <span className="font-medium text-lg" style={{ color: 'var(--text-primary)' }}>{skill}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Projects Section
+        function ProjectsSection() {
+            const [selectedProject, setSelectedProject] = useState(null);
+
+            return (
+                <section id="projects" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-primary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>Academic Projects</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Innovative research and development initiatives</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {portfolioData.projects.map((project, index) => (
+                                <div
+                                    key={project.id}
+                                    className="professional-card cursor-pointer"
+                                    onClick={() => setSelectedProject(project)}
+                                >
+                                    <div className="relative">
+                                        <img
+                                            src={project.image}
+                                            alt={project.title}
+                                            className="w-full h-56 object-cover rounded-t-2xl"
+                                        />
+                                        <div className="absolute top-4 right-4">
+                                            <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                                                project.status === 'Completed' 
+                                                    ? 'bg-green-500 text-white'
+                                                    : 'bg-yellow-500 text-white'
+                                            }`}>
+                                                {project.status}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-8">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="px-4 py-2 rounded-full text-sm font-medium"
+                                                  style={{ 
+                                                      backgroundColor: 'var(--primary-color)' + '20',
+                                                      color: 'var(--primary-color)'
+                                                  }}>
+                                                {project.type}
+                                            </span>
+                                        </div>
+
+                                        <h3 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>{project.title}</h3>
+                                        <p className="mb-6 line-clamp-3 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                                            {project.description}
+                                        </p>
+                                        
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {project.technologies.slice(0, 3).map((tech, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="px-3 py-1 rounded text-xs font-medium"
+                                                    style={{ 
+                                                        backgroundColor: 'var(--bg-secondary)',
+                                                        color: 'var(--text-secondary)'
+                                                    }}
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
+
+                                        <button className="font-medium text-sm hover:underline" style={{ color: 'var(--primary-color)' }}>
+                                            View Details →
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Project Modal */}
+                        {selectedProject && (
+                            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                                <div className="professional-card max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+                                    <div className="relative">
+                                        <img
+                                            src={selectedProject.image}
+                                            alt={selectedProject.title}
+                                            className="w-full h-72 object-cover rounded-t-2xl"
+                                        />
+                                        <button
+                                            onClick={() => setSelectedProject(null)}
+                                            className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+                                        >
+                                            <i className="fas fa-times text-gray-600"></i>
+                                        </button>
+                                    </div>
+
+                                    <div className="p-10">
+                                        <div className="flex items-center justify-between mb-8">
+                                            <div>
+                                                <div className="flex items-center space-x-4 mb-4">
+                                                    <span className="px-4 py-2 rounded-full text-sm font-medium"
+                                                          style={{ 
+                                                              backgroundColor: 'var(--primary-color)' + '20',
+                                                              color: 'var(--primary-color)'
+                                                          }}>
+                                                        {selectedProject.type}
+                                                    </span>
+                                                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                                                        selectedProject.status === 'Completed' 
+                                                            ? 'bg-green-500 text-white'
+                                                            : 'bg-yellow-500 text-white'
+                                                    }`}>
+                                                        {selectedProject.status}
+                                                    </span>
+                                                </div>
+                                                <h3 className="text-4xl font-bold playfair" style={{ color: 'var(--text-primary)' }}>
+                                                    {selectedProject.title}
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                                            <div className="md:col-span-2">
+                                                <h4 className="text-2xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Project Overview</h4>
+                                                <p className="mb-8 leading-relaxed text-lg" style={{ color: 'var(--text-secondary)' }}>
+                                                    {selectedProject.description}
+                                                </p>
+                                                
+                                                <h4 className="text-2xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Technologies & Methods</h4>
+                                                <div className="flex flex-wrap gap-3 mb-8">
+                                                    {selectedProject.technologies.map((tech, index) => (
+                                                        <span
+                                                            key={index}
+                                                            className="px-4 py-2 rounded-full text-sm font-medium"
+                                                            style={{ 
+                                                                backgroundColor: 'var(--primary-color)' + '20',
+                                                                color: 'var(--primary-color)'
+                                                            }}
+                                                        >
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div className="professional-card p-8">
+                                                    <h4 className="text-xl font-semibold mb-6" style={{ color: 'var(--text-primary)' }}>Project Details</h4>
+                                                    <div className="space-y-4 text-sm">
+                                                        <div>
+                                                            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>Type:</span>
+                                                            <p style={{ color: 'var(--text-secondary)' }}>{selectedProject.type}</p>
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>Status:</span>
+                                                            <p style={{ color: 'var(--text-secondary)' }}>{selectedProject.status}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Achievements Section
+        function AchievementsSection() {
+            return (
+                <section id="achievements" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>Achievements</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Celebrating milestones in pharmaceutical excellence</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                            {portfolioData.achievements.map((achievement, index) => (
+                                <div key={index} className="text-center group">
+                                    <div className="professional-card p-10 group-hover:shadow-xl transition-all duration-300 group-hover:transform group-hover:scale-105">
+                                        <div className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-all duration-300"
+                                             style={{ background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))` }}>
+                                            <i className={`${achievement.icon} text-4xl text-white`}></i>
+                                        </div>
+                                        <h3 className="text-2xl font-bold playfair mb-3" style={{ color: 'var(--text-primary)' }}>
+                                            {achievement.title}
+                                        </h3>
+                                        <p className="font-semibold mb-4 text-lg" style={{ color: 'var(--primary-color)' }}>
+                                            {achievement.year}
+                                        </p>
+                                        <p className="leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                                            {achievement.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Contact Section
+        function ContactSection() {
+            const [formData, setFormData] = useState({
+                name: '',
+                email: '',
+                subject: '',
+                message: ''
+            });
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [submitStatus, setSubmitStatus] = useState('');
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    setIsSubmitting(false);
+                    setSubmitStatus('success');
+                    setFormData({ name: '', email: '', subject: '', message: '' });
+                    
+                    setTimeout(() => setSubmitStatus(''), 3000);
+                }, 2000);
+            };
+
+            const handleChange = (e) => {
+                setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value
+                });
+            };
+
+            return (
+                <section id="contact" className="py-24 scroll-reveal" style={{ backgroundColor: 'var(--bg-primary)' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-20">
+                            <h2 className="text-5xl md:text-7xl font-bold playfair mb-6" style={{ color: 'var(--text-primary)' }}>Get In Touch</h2>
+                            <p className="text-xl md:text-2xl" style={{ color: 'var(--text-secondary)' }}>Let's collaborate on pharmaceutical innovations</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                            <div>
+                                <h3 className="text-3xl md:text-4xl font-bold playfair mb-10" style={{ color: 'var(--text-primary)' }}>Let's Connect</h3>
+                                
+                                <div className="space-y-8 mb-12">
+                                    {[
+                                        { icon: 'fas fa-envelope', label: 'Email', value: portfolioData.personal.email, color: 'text-blue-600' },
+                                        { icon: 'fas fa-phone', label: 'Phone', value: portfolioData.personal.phone, color: 'text-green-600' },
+                                        { icon: 'fas fa-map-marker-alt', label: 'Location', value: portfolioData.personal.location, color: 'text-purple-600' },
+                                        { icon: 'fas fa-university', label: 'University', value: portfolioData.personal.university, color: 'text-orange-600' }
+                                    ].map((item, index) => (
+                                        <div key={index} className="flex items-center space-x-6">
+                                            <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                                                 style={{ backgroundColor: 'var(--primary-color)' + '20' }}>
+                                                <i className={`${item.icon} text-2xl ${item.color}`}></i>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>{item.label}</h4>
+                                                <p style={{ color: 'var(--text-secondary)' }}>{item.value}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="professional-card p-10">
+                                    <h4 className="font-semibold mb-8 text-2xl" style={{ color: 'var(--text-primary)' }}>Social Media</h4>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {Object.entries(portfolioData.personal.socialLinks).slice(0, 6).map(([platform, url]) => (
+                                            <a
+                                                key={platform}
+                                                href={url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-16 h-16 rounded-xl flex items-center justify-center text-white hover:shadow-lg transform hover:scale-110 transition-all duration-300"
+                                                style={{ background: `linear-gradient(135deg, var(--primary-color), var(--accent-color))` }}
+                                            >
+                                                <i className={`fab fa-${platform} text-xl`}></i>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <form onSubmit={handleSubmit} className="space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <label htmlFor="name" className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+                                                Name *
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full px-6 py-4 border-2 rounded-xl focus:ring-2 focus:border-transparent transition-colors text-lg"
+                                                style={{ 
+                                                    borderColor: 'var(--bg-secondary)',
+                                                    backgroundColor: 'var(--bg-primary)',
+                                                    color: 'var(--text-primary)'
+                                                }}
+                                                placeholder="Your Name"
+                                            />
+                                        </div>
+                                        
+                                        <div>
+                                            <label htmlFor="email" className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+                                                Email *
+                                            </label>
+                                            <input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full px-6 py-4 border-2 rounded-xl focus:ring-2 focus:border-transparent transition-colors text-lg"
+                                                style={{ 
+                                                    borderColor: 'var(--bg-secondary)',
+                                                    backgroundColor: 'var(--bg-primary)',
+                                                    color: 'var(--text-primary)'
+                                                }}
+                                                placeholder="your.email@example.com"
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label htmlFor="subject" className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+                                            Subject *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="subject"
+                                            name="subject"
+                                            value={formData.subject}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-6 py-4 border-2 rounded-xl focus:ring-2 focus:border-transparent transition-colors text-lg"
+                                            style={{ 
+                                                borderColor: 'var(--bg-secondary)',
+                                                backgroundColor: 'var(--bg-primary)',
+                                                color: 'var(--text-primary)'
+                                            }}
+                                            placeholder="What's this about?"
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label htmlFor="message" className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+                                            Message *
+                                        </label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleChange}
+                                            required
+                                            rows="8"
+                                            className="w-full px-6 py-4 border-2 rounded-xl focus:ring-2 focus:border-transparent transition-colors resize-none text-lg"
+                                            style={{ 
+                                                borderColor: 'var(--bg-secondary)',
+                                                backgroundColor: 'var(--bg-primary)',
+                                                color: 'var(--text-primary)'
+                                            }}
+                                            placeholder="Tell me about your research interests!"
+                                        />
+                                    </div>
+                                    
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full px-10 py-5 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-white text-lg"
+                                        style={{ background: `linear-gradient(135deg, var(--primary-color), var(--secondary-color))` }}
+                                    >
+                                        {isSubmitting ? (
+                                            <div className="flex items-center justify-center space-x-3">
+                                                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                <span>Sending Message...</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center space-x-3">
+                                                <i className="fas fa-paper-plane"></i>
+                                                <span>Send Message</span>
+                                            </div>
+                                        )}
+                                    </button>
+                                    
+                                    {submitStatus === 'success' && (
+                                        <div className="p-6 rounded-xl" style={{ backgroundColor: 'var(--accent-color)' + '20' }}>
+                                            <div className="flex items-center space-x-3">
+                                                <i className="fas fa-check-circle text-2xl" style={{ color: 'var(--accent-color)' }}></i>
+                                                <span className="text-lg" style={{ color: 'var(--text-primary)' }}>
+                                                    Message sent successfully! I'll get back to you soon.
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        }
+
+        // Professional Footer
+        function Footer() {
+            return (
+                <footer className="py-16 scroll-reveal" style={{ backgroundColor: '#1f2937', color: '#ffffff' }}>
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                            <div className="md:col-span-2">
+                                <h3 className="text-4xl font-bold playfair mb-6" style={{ color: '#3b82f6' }}>Banny SV</h3>
+                                <p className="mb-8 leading-relaxed text-lg opacity-80">
+                                    B.Pharmacy final year student passionate about pharmaceutical research and innovation. 
+                                    Dedicated to advancing healthcare through evidence-based research and cutting-edge 
+                                    pharmaceutical solutions.
+                                </p>
+                                <div className="flex space-x-4">
+                                    {Object.entries(portfolioData.personal.socialLinks).map(([platform, url]) => (
+                                        <a
+                                            key={platform}
+                                            href={url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all duration-300"
+                                            style={{ backgroundColor: '#374151' }}
+                                        >
+                                            <i className={`fab fa-${platform}`} style={{ color: '#3b82f6' }}></i>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 className="text-xl font-semibold mb-6">Quick Links</h4>
+                                <ul className="space-y-3">
+                                    {['About', 'Research', 'Skills', 'Projects', 'Achievements', 'Contact'].map((item) => (
+                                        <li key={item}>
+                                            <button
+                                                onClick={() => document.getElementById(item.toLowerCase()).scrollIntoView({ behavior: 'smooth' })}
+                                                className="opacity-80 hover:opacity-100 transition-opacity text-lg"
+                                            >
+                                                {item}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 className="text-xl font-semibold mb-6">Contact</h4>
+                                <div className="space-y-4 text-lg opacity-80">
+                                    <p><i className="fas fa-envelope mr-3"></i>{portfolioData.personal.email}</p>
+                                    <p><i className="fas fa-phone mr-3"></i>{portfolioData.personal.phone}</p>
+                                    <p><i className="fas fa-map-marker-alt mr-3"></i>{portfolioData.personal.location}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="border-t border-opacity-20 mt-12 pt-8 text-center" style={{ borderColor: '#ffffff' }}>
+                            <p className="text-lg opacity-80">
+                                © 2024 Banny SV - Professional Pharmacy Portfolio. All rights reserved.
+                            </p>
+                            <p className="mt-2 opacity-60">
+                                🧬 Advancing Healthcare Through Innovation 🧬
+                            </p>
+                        </div>
+                    </div>
+                </footer>
+            );
+        }
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'991847e7f54c47db',t:'MTc2MDk2MDg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
