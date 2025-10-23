@@ -1851,57 +1851,90 @@
             console.log('Mobile menu initialized successfully');
         }
 
-        // Contact form functionality
-        function initializeContactForm() {
-            const form = document.getElementById('contact-form');
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
+       // Contact form functionality
+function initializeContactForm() {
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                // Show loading state
-                submitText.classList.add('hidden');
-                submitLoading.classList.remove('hidden');
-                submitBtn.disabled = true;
+    form.addEventListener('submit', async (e) => {
+        // Remove e.preventDefault() to allow Netlify to capture the submission
+        // e.preventDefault(); 
 
-                try {
-                    const formData = new FormData(form);
-                    const contactData = {
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        subject: formData.get('subject'),
-                        message: formData.get('message'),
-                        timestamp: new Date().toISOString()
-                    };
+        // Show loading state
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+        submitBtn.disabled = true;
 
-                    // Save to Data SDK
-                    if (window.dataSdk) {
-                        const result = await window.dataSdk.create(contactData);
-                        
-                        if (result.isOk) {
-                            showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                            form.reset();
-                        } else {
-                            showToast('Failed to send message. Please try again.', 'error');
-                        }
-                    } else {
-                        // Fallback if SDK not available
-                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                        form.reset();
-                    }
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                    showToast('An error occurred. Please try again.', 'error');
-                } finally {
-                    // Reset button state
-                    submitText.classList.remove('hidden');
-                    submitLoading.classList.add('hidden');
-                    submitBtn.disabled = false;
+        try {
+            const formData = new FormData(form);
+
+            // Optional: Save to your Data SDK if available
+            if (window.dataSdk) {
+                const contactData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message'),
+                    timestamp: new Date().toISOString()
+                };
+                const result = await window.dataSdk.create(contactData);
+                if (result.isOk) {
+                    showToast("Message sent successfully! I'll get back to you soon.", "success");
+                } else {
+                    showToast("Failed to send message. Please try again.", "error");
                 }
-            });
+            } else {
+                // Fallback if SDK not available
+                showToast("Message sent successfully! I'll get back to you soon.", "success");
+            }
+            
+            form.reset();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            showToast("An error occurred. Please try again.", "error");
+        } finally {
+            // Reset button state after short delay for animation effect
+            setTimeout(() => {
+                submitText.classList.remove('hidden');
+                submitLoading.classList.add('hidden');
+                submitBtn.disabled = false;
+            }, 500);
         }
+    });
+}
+
+// Toast notification function
+function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // Show toast
+    setTimeout(() => toast.classList.add("show"), 100);
+
+    // Hide and remove toast
+    setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => document.body.removeChild(toast), 400);
+    }, 4000);
+}
+
+// Initialize animations
+function initializeAnimations() {
+    // Create floating shapes
+    createFloatingShapes();
+
+    // Create particles
+    createParticles();
+
+    // Initialize typing animation
+    initializeTypingAnimation();
+}
+
 
         // Toast notification function
         function showToast(message, type = 'success') {
