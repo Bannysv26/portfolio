@@ -1436,7 +1436,8 @@
       </article>
      </div>
     </div>
-   </section><!-- Contact Section -->
+   </section>
+   <!-- Contact Section -->
    <section id="contact" class="section">
     <div class="container mx-auto px-6 lg:px-12">
      <div class="text-center mb-16">
@@ -1444,25 +1445,51 @@
       <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
       <p class="text-xl opacity-80 mt-6 max-w-3xl mx-auto">Let's collaborate on research projects or discuss opportunities in pharmaceutical sciences and web development</p>
      </div>
-     <div class="grid lg:grid-cols-2 gap-16"><!-- Contact Form -->
-      <div class="glass-card p-8">
-       <h3 class="text-2xl font-bold mb-8">Send a Message</h3>
-       <form id="contact-form" class="space-y-6">
-        <div class="form-group"><label for="name" class="form-label">Full Name</label> <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
-        </div>
-        <div class="form-group"><label for="email" class="form-label">Email Address</label> <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
-        </div>
-        <div class="form-group"><label for="subject" class="form-label">Subject</label> <input type="text" id="subject" name="subject" class="form-input" placeholder="What's this about?" required>
-        </div>
-        <div class="form-group"><label for="message" class="form-label">Message</label> <textarea id="message" name="message" class="form-input form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
-        </div><button type="submit" class="w-full neon-button" id="submit-btn"> <span id="submit-text"> <i class="fas fa-paper-plane mr-2"></i>Send Message </span> <span id="submit-loading" class="hidden">
-          <div class="loading-dots">
-           <div class="loading-dot"></div>
-           <div class="loading-dot"></div>
-           <div class="loading-dot"></div>
-          </div> Sending... </span> </button>
-       </form>
-      </div><!-- Contact Information -->
+     <div class="grid lg:grid-cols-2 gap-16">
+        <!-- Contact Form -->
+      <!-- Contact Form -->
+<div class="glass-card p-8">
+  <h3 class="text-2xl font-bold mb-8">Send a Message</h3>
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contact-form" class="space-y-6">
+    <input type="hidden" name="form-name" value="contact">
+    <p hidden>
+      <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+    </p>
+
+    <div class="form-group">
+      <label for="name" class="form-label">Full Name</label>
+      <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="form-label">Email Address</label>
+      <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+    </div>
+
+    <div class="form-group">
+      <label for="subject" class="form-label">Subject</label>
+      <input type="text" id="subject" name="subject" class="form-input" placeholder="What's this about?" required>
+    </div>
+
+    <div class="form-group">
+      <label for="message" class="form-label">Message</label>
+      <textarea id="message" name="message" class="form-input form-textarea" placeholder="Tell me about your project or inquiry..." required></textarea>
+    </div>
+
+    <button type="submit" class="w-full neon-button" id="submit-btn">
+      <span id="submit-text"><i class="fas fa-paper-plane mr-2"></i>Send Message</span>
+      <span id="submit-loading" class="hidden">
+        <div class="loading-dots">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+        </div> Sending...
+      </span>
+    </button>
+  </form>
+</div>
+
+      <!-- Contact Information -->
       <div class="space-y-8">
        <div class="glass-card p-8">
         <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
