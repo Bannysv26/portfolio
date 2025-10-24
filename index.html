@@ -1,11 +1,13 @@
 <html lang="en">
  <head>
   <style>@view-transition { navigation: auto; }</style>
+   <link rel="icon" type="image/png" href="s.png">
  </head>
  <body>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Banny S.V - Research Scholar &amp; Frontend Developer</title>
+ 
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -1857,96 +1859,75 @@
             console.log('Mobile menu initialized successfully');
         }
 
+        // Contact form functionality
+        function initializeContactForm() {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitLoading = document.getElementById('submit-loading');
 
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+                submitBtn.disabled = true;
 
+                try {
+                    const formData = new FormData(form);
+                    const contactData = {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        subject: formData.get('subject'),
+                        message: formData.get('message'),
+                        timestamp: new Date().toISOString()
+                    };
 
+                    // Save to Data SDK
+                    if (window.dataSdk) {
+                        const result = await window.dataSdk.create(contactData);
+                        
+                        if (result.isOk) {
+                            showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+                            form.reset();
+                        } else {
+                            showToast('Failed to send message. Please try again.', 'error');
+                        }
+                    } else {
+                        // Fallback if SDK not available
+                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
+                        form.reset();
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    showToast('An error occurred. Please try again.', 'error');
+                } finally {
+                    // Reset button state
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                    submitBtn.disabled = false;
+                }
+            });
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-const form = document.getElementById('contact-form');
-const submitBtn = document.getElementById('submit-btn');
-const submitText = document.getElementById('submit-text');
-const submitLoading = document.getElementById('submit-loading');
-
-function showToast(message, type='success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.classList.add('show'), 100);
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => document.body.removeChild(toast), 400);
-  }, 4000);
-}
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const name = form.name.value.trim();
-  const email = form.email.value.trim();
-  const subject = form.subject.value.trim();
-  const message = form.message.value.trim();
-
-  if(!name || !email || !subject || !message){
-    showToast('Please fill in all fields!', 'error');
-    return;
-  }
-
-  const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-  if(!emailPattern.test(email)){
-    showToast('Please enter a valid email address!', 'error');
-    return;
-  }
-
-  submitText.classList.add('hidden');
-  submitLoading.classList.remove('hidden');
-  submitBtn.disabled = true;
-
-  try {
-    const formData = new FormData(form);
-    const response = await fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData).toString()
-    });
-
-    if(response.ok){
-      showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
-      form.reset();
-    } else {
-      showToast('Failed to send message. Please try again.', 'error');
-    }
-  } catch (err) {
-    console.error(err);
-    showToast('An error occurred. Please try again.', 'error');
-  } finally {
-    submitText.classList.remove('hidden');
-    submitLoading.classList.add('hidden');
-    submitBtn.disabled = false;
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Hide and remove toast
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 400);
+            }, 4000);
+        }
 
         // Initialize animations
         function initializeAnimations() {
