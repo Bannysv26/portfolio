@@ -378,71 +378,51 @@
             40% { transform: scale(1); }
         }
         
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            z-index: 2001;
-            transform: translateX(400px);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-        
-        .toast.success {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-        
-        .toast.error {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-        
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            color: var(--text-color);
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
+       /* Toast Notifications */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  z-index: 2001;
+  transform: translateX(400px);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.toast.show { transform: translateX(0); }
+.toast.success { background: linear-gradient(135deg, #10b981, #059669); }
+.toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+/* Form Styles */
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color); }
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  color: var(--text-color);
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+.form-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.form-input::placeholder { color: rgba(255,255,255,0.5); }
+.form-textarea { min-height: 120px; resize: vertical; }
+
+/* Button & Loading Dots */
+.neon-button { width: 100%; padding: 14px; background: var(--primary-color); color: #fff; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+.neon-button:hover { box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color); }
+.hidden { display: none; }
+.loading-dots { display: inline-flex; gap: 4px; }
+.loading-dot { width:6px; height:6px; background:#fff; border-radius:50%; animation:blink 1s infinite; }
+.loading-dot:nth-child(2){ animation-delay:0.2s; }
+.loading-dot:nth-child(3){ animation-delay:0.4s; }
+@keyframes blink { 0%,80%,100%{opacity:0;}40%{opacity:1;} }
 
         
         /* Enhanced Glassmorphism */
@@ -1453,7 +1433,7 @@
      </div>
      <div class="grid lg:grid-cols-2 gap-16">
         <!-- Contact Form -->
-      <!-- Contact Form -->
+     <!-- Contact Form -->
 <div class="glass-card p-8">
   <h3 class="text-2xl font-bold mb-8">Send a Message</h3>
   <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contact-form" class="space-y-6">
@@ -1494,6 +1474,7 @@
     </button>
   </form>
 </div>
+
 
       <!-- Contact Information -->
       <div class="space-y-8">
@@ -1857,75 +1838,63 @@
             console.log('Mobile menu initialized successfully');
         }
 
-        // Contact form functionality
-        function initializeContactForm() {
-            const form = document.getElementById('contact-form');
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
+       // Contact form functionality
+function initializeContactForm() {
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const submitText = document.getElementById('submit-text');
+  const submitLoading = document.getElementById('submit-loading');
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                // Show loading state
-                submitText.classList.add('hidden');
-                submitLoading.classList.remove('hidden');
-                submitBtn.disabled = true;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-                try {
-                    const formData = new FormData(form);
-                    const contactData = {
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        subject: formData.get('subject'),
-                        message: formData.get('message'),
-                        timestamp: new Date().toISOString()
-                    };
+    submitText.classList.add('hidden');
+    submitLoading.classList.remove('hidden');
+    submitBtn.disabled = true;
 
-                    // Save to Data SDK
-                    if (window.dataSdk) {
-                        const result = await window.dataSdk.create(contactData);
-                        
-                        if (result.isOk) {
-                            showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                            form.reset();
-                        } else {
-                            showToast('Failed to send message. Please try again.', 'error');
-                        }
-                    } else {
-                        // Fallback if SDK not available
-                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                        form.reset();
-                    }
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                    showToast('An error occurred. Please try again.', 'error');
-                } finally {
-                    // Reset button state
-                    submitText.classList.remove('hidden');
-                    submitLoading.classList.add('hidden');
-                    submitBtn.disabled = false;
-                }
-            });
-        }
+    try {
+      const formData = new FormData(form);
+      const encodedData = new URLSearchParams(formData).toString();
 
-        // Toast notification function
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            
-            document.body.appendChild(toast);
-            
-            // Show toast
-            setTimeout(() => toast.classList.add('show'), 100);
-            
-            // Hide and remove toast
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => document.body.removeChild(toast), 400);
-            }, 4000);
-        }
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodedData
+      });
+
+      if (response.ok) {
+        showToast('Message sent successfully!', 'success');
+        form.reset();
+      } else {
+        showToast('Failed to send message.', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('An error occurred.', 'error');
+    } finally {
+      submitText.classList.remove('hidden');
+      submitLoading.classList.add('hidden');
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+// Toast notification function
+function showToast(message, type='success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(() => toast.classList.add('show'), 100);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => document.body.removeChild(toast), 400);
+  }, 4000);
+}
+
+document.addEventListener('DOMContentLoaded', initializeContactForm);
+
 
         // Initialize animations
         function initializeAnimations() {
