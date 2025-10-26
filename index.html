@@ -1455,10 +1455,18 @@
      </div>
      <div class="grid lg:grid-cols-2 gap-16">
         <!-- Contact Form -->
-      <!-- Contact Form -->
+     <!-- Contact Form -->
 <div class="glass-card p-8">
   <h3 class="text-2xl font-bold mb-8">Send a Message</h3>
-  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contact-form" class="space-y-6">
+
+  <form 
+    name="contact"
+    method="POST"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    id="contact-form"
+    class="space-y-6"
+  >
     <input type="hidden" name="form-name" value="contact">
     <p hidden>
       <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
@@ -1496,7 +1504,6 @@
     </button>
   </form>
 </div>
-
       <!-- Contact Information -->
       <div class="space-y-8">
        <div class="glass-card p-8">
@@ -1858,77 +1865,67 @@
 
             console.log('Mobile menu initialized successfully');
         }
-<!-- force Netlify detection -->
 
-        // Contact form functionality
-        function initializeContactForm() {
-            const form = document.getElementById('contact-form');
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                // Show loading state
-                submitText.classList.add('hidden');
-                submitLoading.classList.remove('hidden');
-                submitBtn.disabled = true;
+document.addEventListener('DOMContentLoaded', () => {
+    initializeContactForm();
+});
 
-                try {
-                    const formData = new FormData(form);
-                    const contactData = {
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        subject: formData.get('subject'),
-                        message: formData.get('message'),
-                        timestamp: new Date().toISOString()
-                    };
+// Initialize Contact Form
+function initializeContactForm() {
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
 
-                    // Save to Data SDK
-                    if (window.dataSdk) {
-                        const result = await window.dataSdk.create(contactData);
-                        
-                        if (result.isOk) {
-                            showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                            form.reset();
-                        } else {
-                            showToast('Failed to send message. Please try again.', 'error');
-                        }
-                    } else {
-                        // Fallback if SDK not available
-                        showToast('Message sent successfully! I\'ll get back to you soon.', 'success');
-                        form.reset();
-                    }
-                } catch (error) {
-                    console.error('Error submitting form:', error);
-                    showToast('An error occurred. Please try again.', 'error');
-                } finally {
-                    // Reset button state
-                    submitText.classList.remove('hidden');
-                    submitLoading.classList.add('hidden');
-                    submitBtn.disabled = false;
-                }
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Show loading state
+        submitText.classList.add('hidden');
+        submitLoading.classList.remove('hidden');
+        submitBtn.disabled = true;
+
+        const formData = new FormData(form);
+
+        try {
+            // ✅ Send data to Netlify
+            await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(Object.fromEntries(formData)).toString(),
             });
-        }
 
-        // Toast notification function
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            
-            document.body.appendChild(toast);
-            
-            // Show toast
-            setTimeout(() => toast.classList.add('show'), 100);
-            
-            // Hide and remove toast
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => document.body.removeChild(toast), 400);
-            }, 4000);
+            showToast("Message sent successfully! I'll get back to you soon.", "success");
+            form.reset();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            showToast("An error occurred. Please try again.", "error");
+        } finally {
+            // Reset button state
+            submitText.classList.remove('hidden');
+            submitLoading.classList.add('hidden');
+            submitBtn.disabled = false;
         }
+    });
+}
+
+// Toast Notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Show toast
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    // Hide toast
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => document.body.removeChild(toast), 400);
+    }, 4000);
+}
 
         // Initialize animations
         function initializeAnimations() {
