@@ -969,6 +969,69 @@
         .presentation-overlay:hover .play-button {
             transform: scale(1);
         }
+
+/* === Premium Neon-Glassy Store Link === */
+.store-premium {
+  position: relative;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  box-shadow: 0 0 10px rgba(99,102,241,0.1);
+}
+
+.store-premium:hover {
+  background: rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 15px rgba(99,102,241,0.6),
+    0 0 30px rgba(255,99,71,0.4);
+  transform: translateX(8px);
+}
+
+/* moving glassy highlight */
+.glassy-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(115deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.4) 50%,
+      rgba(255,255,255,0) 100%);
+  transform: skewX(-25deg);
+  animation: glassyMove 3.5s infinite;
+}
+
+@keyframes glassyMove {
+  0% { left: -100%; }
+  50% { left: 130%; }
+  100% { left: 130%; }
+}
+
+/* “NEW” badge */
+.new-badge {
+  background: linear-gradient(90deg, #6d5dfc, #ff3b3b);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: 8px;
+  letter-spacing: 0.5px;
+  animation: badgePulse 1.5s infinite;
+  box-shadow: 0 0 6px rgba(109,93,252,0.8);
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.85; }
+}
+
+
+
     </style> <!-- Cosmic Background -->
   <div class="cosmic-bg"></div><!-- Floating Shapes -->
   <div class="floating-shapes" id="floating-shapes"></div><!-- Particle System -->
@@ -1027,11 +1090,15 @@
   <i class="nav-icon fas fa-store"></i>
   <span class="nav-text">Store</span>
 </a>
-
-
-
- 
- 
+<a href="store.html"
+   class="nav-item store-premium"
+   data-section="none"
+   onclick="window.location.href='store.html'; return false;">
+  <i class="nav-icon fas fa-store"></i>
+  <span class="nav-text">Store</span>
+  <span class="new-badge">NEW</span>
+  <span class="glassy-shine"></span>
+</a>
 </nav>
 
 
