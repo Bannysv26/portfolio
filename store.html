@@ -1,0 +1,1809 @@
+<!doctype html>
+<html lang="en" class="h-full scroll-smooth">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PharmEdu - Advanced Pharmaceutical Learning Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .theme-color {
+            color: var(--primary-color);
+        }
+        
+        .theme-bg {
+            background-color: var(--primary-color);
+        }
+        
+        .drug-card {
+            transition: all 0.3s ease;
+        }
+        
+        .drug-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(103, 126, 234, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #667eea;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
+        .toast.info { background: #3b82f6; }
+        
+        .category-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .pill-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .syrup-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .injection-icon { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .cream-icon { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .capsule-icon { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        
+        .search-suggestions {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .tab-btn.active {
+            background: #374151;
+            color: #60a5fa;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500"><!-- Navigation Header -->
+  <nav class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-xl border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4">
+     <div class="flex items-center space-x-4">
+      <div class="gradient-bg p-3 rounded-xl shadow-lg"><i class="fas fa-pills text-white text-2xl"></i>
+      </div>
+      <div>
+       <h1 id="site-title" class="text-2xl font-bold gradient-text">Banny SV Pharmaceutical Learning Platform</h1>
+       <p id="tagline" class="text-sm text-gray-600 dark:text-gray-300">Created by Banny SV - Your gateway to pharmaceutical knowledge</p>
+      </div>
+     </div>
+     <div class="flex items-center space-x-4"><!-- Theme Controls -->
+      <div class="flex items-center space-x-2"><!-- Color Theme Selector -->
+       <div class="relative"><button onclick="toggleColorPicker()" class="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"> <i class="fas fa-palette text-gray-600 dark:text-gray-300"></i> </button>
+        <div id="color-picker" class="hidden absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 z-50">
+         <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Choose Theme Color</h4>
+         <div class="grid grid-cols-4 gap-2"><button onclick="changeThemeColor('#667eea')" class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#10b981')" class="w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#f59e0b')" class="w-8 h-8 rounded-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#ef4444')" class="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-pink-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#8b5cf6')" class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#06b6d4')" class="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#84cc16')" class="w-8 h-8 rounded-full bg-gradient-to-r from-lime-500 to-green-600 hover:scale-110 transition-transform"></button> <button onclick="changeThemeColor('#f97316')" class="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-600 hover:scale-110 transition-transform"></button>
+         </div>
+        </div>
+       </div><!-- Dark Mode Toggle --> <button onclick="toggleDarkMode()" class="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"> <i id="theme-icon" class="fas fa-moon text-gray-600 dark:text-gray-300"></i> </button>
+      </div><!-- Favorites Button --> <button onclick="showFavorites()" class="relative p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"> <i class="fas fa-heart text-red-500"></i> <span id="favorites-count" class="ml-1 text-sm font-medium text-gray-600 dark:text-gray-300">0</span> </button> <!-- Navigation Menu -->
+      <div class="hidden md:flex space-x-6"><button onclick="showSection('home')" class="nav-btn text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors px-3 py-2 rounded-lg">Home</button> <button onclick="showSection('categories')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2 rounded-lg">Categories</button> <button onclick="showSection('compare')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2 rounded-lg">Compare</button> <button onclick="showSection('learning')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2 rounded-lg">Learning</button> <button onclick="showSection('about')" class="nav-btn text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors px-3 py-2 rounded-lg">About</button>
+      </div><!-- Mobile Menu Button --> <button onclick="toggleMobileMenu()" class="md:hidden p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"> <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i> </button>
+     </div>
+    </div><!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4">
+     <div class="flex flex-col space-y-2"><button onclick="showSection('home')" class="nav-btn text-left px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors">Home</button> <button onclick="showSection('categories')" class="nav-btn text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">Categories</button> <button onclick="showSection('compare')" class="nav-btn text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">Compare</button> <button onclick="showSection('learning')" class="nav-btn text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">Learning</button> <button onclick="showSection('about')" class="nav-btn text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">About</button>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><!-- Home Section -->
+   <section id="home-section" class="fade-in"><!-- Hero Section -->
+    <div class="py-20 text-center mb-16 rounded-3xl mt-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+     <div class="max-w-4xl mx-auto">
+      <h2 id="hero-title" class="text-6xl font-bold gradient-text mb-6">Master Pharmaceutical Knowledge</h2>
+      <p id="hero-subtitle" class="text-xl text-gray-600 dark:text-gray-300 mb-4">Comprehensive drug education platform designed for non-pharmacy students to understand medications with confidence</p>
+      <div class="bg-white/20 dark:bg-gray-800/20 backdrop-blur-sm rounded-2xl p-4 mb-8 border border-white/30 dark:border-gray-700/30">
+       <p class="text-lg font-semibold gradient-text">🏆 Created &amp; Developed by Banny SV</p>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Innovative pharmaceutical education solutions</p>
+      </div><!-- Key Features Preview -->
+      <div class="grid md:grid-cols-3 gap-6 mb-12">
+       <div class="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm">
+        <div class="gradient-bg w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-search text-white text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Smart Search</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">AI-powered search with auto-suggestions and intelligent filtering</p>
+       </div>
+       <div class="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm">
+        <div class="gradient-bg w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-graduation-cap text-white text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Learn &amp; Practice</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Interactive quizzes and learning modules for better understanding</p>
+       </div>
+       <div class="bg-white/50 dark:bg-gray-800/50 rounded-2xl p-6 text-center backdrop-blur-sm">
+        <div class="gradient-bg w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-chart-line text-white text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Track Progress</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Monitor your learning journey with detailed analytics</p>
+       </div>
+      </div>
+     </div>
+    </div><!-- Advanced Search Section -->
+    <div class="mb-16">
+     <div class="max-w-4xl mx-auto">
+      <div class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+       <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center"><i class="fas fa-search mr-3 text-blue-500"></i>Advanced Drug Search</h3><!-- Main Search Bar -->
+       <div class="relative mb-6">
+        <div class="flex items-center">
+         <div class="flex-1 relative"><i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10"></i> <input type="text" id="search-input" placeholder="Search drugs by name, condition, symptoms, or category..." class="w-full pl-12 pr-4 py-4 border-2 border-gray-300 dark:border-gray-600 rounded-2xl focus:border-blue-500 focus:outline-none text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-300" oninput="handleSearchInput()" onkeypress="handleSearchKeypress(event)"> <!-- Search Suggestions -->
+          <div id="search-suggestions" class="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl mt-2 shadow-2xl hidden search-suggestions z-50"><!-- Suggestions will be populated here -->
+          </div>
+         </div><button onclick="performAdvancedSearch()" class="ml-4 gradient-bg hover:shadow-xl text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105"> <i class="fas fa-search mr-2"></i>Search </button>
+        </div>
+       </div><!-- Advanced Filters -->
+       <div class="grid md:grid-cols-4 gap-4 mb-6"><select id="filter-category" class="px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-300"> <option value="">All Categories</option> <option value="painkillers">Pain Relief</option> <option value="antibiotics">Antibiotics</option> <option value="cardiovascular">Heart Health</option> <option value="diabetes">Diabetes</option> <option value="vitamins">Vitamins &amp; Supplements</option> <option value="gastrointestinal">Digestive Health</option> </select> <select id="filter-type" class="px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-300"> <option value="">All Types</option> <option value="otc">Over-the-Counter</option> <option value="prescription">Prescription Only</option> </select> <select id="filter-form" class="px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-300"> <option value="">All Forms</option> <option value="tablet">Tablets</option> <option value="capsule">Capsules</option> <option value="syrup">Syrups</option> <option value="injection">Injections</option> <option value="cream">Creams/Ointments</option> </select> <button onclick="clearSearch()" class="px-4 py-3 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"> <i class="fas fa-times mr-2"></i>Clear </button>
+       </div><!-- Quick Search Tags -->
+       <div class="flex flex-wrap gap-2"><span class="text-sm text-gray-600 dark:text-gray-400 mr-2">Quick searches:</span> <button onclick="quickSearch('paracetamol')" class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">Paracetamol</button> <button onclick="quickSearch('antibiotics')" class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors">Antibiotics</button> <button onclick="quickSearch('blood pressure')" class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full text-sm hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors">Blood Pressure</button> <button onclick="quickSearch('vitamins')" class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-full text-sm hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors">Vitamins</button>
+       </div>
+      </div>
+     </div>
+    </div><!-- Quick Categories Grid -->
+    <div class="mb-16">
+     <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Explore by Category</h3>
+     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div class="category-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700" onclick="filterByCategory('painkillers')">
+       <div class="pill-icon w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fas fa-pills text-white text-3xl"></i>
+       </div>
+       <h4 class="font-bold text-gray-900 dark:text-white mb-2">Pain Relief</h4>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Analgesics &amp; NSAIDs</p>
+       <div class="mt-3 text-xs text-blue-600 dark:text-blue-400 font-medium">
+        25+ medications
+       </div>
+      </div>
+      <div class="category-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700" onclick="filterByCategory('antibiotics')">
+       <div class="syrup-icon w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fas fa-shield-virus text-white text-3xl"></i>
+       </div>
+       <h4 class="font-bold text-gray-900 dark:text-white mb-2">Antibiotics</h4>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Infection fighters</p>
+       <div class="mt-3 text-xs text-green-600 dark:text-green-400 font-medium">
+        18+ medications
+       </div>
+      </div>
+      <div class="category-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700" onclick="filterByCategory('cardiovascular')">
+       <div class="injection-icon w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fas fa-heartbeat text-white text-3xl"></i>
+       </div>
+       <h4 class="font-bold text-gray-900 dark:text-white mb-2">Heart Health</h4>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Cardiovascular care</p>
+       <div class="mt-3 text-xs text-red-600 dark:text-red-400 font-medium">
+        22+ medications
+       </div>
+      </div>
+      <div class="category-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700" onclick="filterByCategory('diabetes')">
+       <div class="cream-icon w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fas fa-syringe text-white text-3xl"></i>
+       </div>
+       <h4 class="font-bold text-gray-900 dark:text-white mb-2">Diabetes</h4>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Blood sugar control</p>
+       <div class="mt-3 text-xs text-purple-600 dark:text-purple-400 font-medium">
+        15+ medications
+       </div>
+      </div>
+      <div class="category-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700" onclick="filterByCategory('vitamins')">
+       <div class="category-icon w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fas fa-leaf text-white text-3xl"></i>
+       </div>
+       <h4 class="font-bold text-gray-900 dark:text-white mb-2">Vitamins</h4>
+       <p class="text-sm text-gray-600 dark:text-gray-400">Supplements &amp; nutrition</p>
+       <div class="mt-3 text-xs text-yellow-600 dark:text-yellow-400 font-medium">
+        30+ supplements
+       </div>
+      </div>
+     </div>
+    </div><!-- Featured Drugs Section -->
+    <div class="mb-16">
+     <div class="flex justify-between items-center mb-8">
+      <div>
+       <h3 class="text-3xl font-bold text-gray-900 dark:text-white">Featured Medications</h3>
+       <p class="text-gray-600 dark:text-gray-400 mt-2">Most searched and essential medications for students</p>
+      </div><button onclick="showAllDrugs()" class="gradient-bg text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-300 transform hover:scale-105"> View All Medications → </button>
+     </div>
+     <div id="featured-drugs" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Featured drugs will be populated here -->
+     </div>
+    </div><!-- Search Results -->
+    <div id="search-results" class="hidden mb-16">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Search Results</h3><button onclick="clearSearch()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"> <i class="fas fa-times mr-2"></i>Clear Search </button>
+     </div>
+     <div id="results-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Search results will be populated here -->
+     </div>
+    </div>
+   </section><!-- Categories Section -->
+   <section id="categories-section" class="hidden fade-in py-8">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+     <h2 class="text-4xl font-bold gradient-text mb-8 text-center">Comprehensive Drug Categories</h2>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Pain Relief Category -->
+      <div class="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl p-8 border border-red-200 dark:border-red-800 hover:shadow-xl transition-all duration-300">
+       <div class="flex items-center mb-6">
+        <div class="pill-icon w-16 h-16 rounded-2xl flex items-center justify-center mr-4 shadow-lg"><i class="fas fa-pills text-white text-2xl"></i>
+        </div>
+        <div>
+         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Pain Relief</h3>
+         <p class="text-red-600 dark:text-red-400 font-medium">25+ Medications</p>
+        </div>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-6">Comprehensive pain management solutions including analgesics, NSAIDs, and specialized pain medications for various conditions.</p>
+       <div class="mb-6">
+        <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Common Medications:</h4>
+        <div class="flex flex-wrap gap-2"><span class="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-3 py-1 rounded-full text-sm">Paracetamol</span> <span class="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-3 py-1 rounded-full text-sm">Ibuprofen</span> <span class="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-3 py-1 rounded-full text-sm">Aspirin</span>
+        </div>
+       </div><button onclick="filterByCategory('painkillers')" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"> Explore Pain Relief Medications → </button>
+      </div><!-- Antibiotics Category -->
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800 hover:shadow-xl transition-all duration-300">
+       <div class="flex items-center mb-6">
+        <div class="syrup-icon w-16 h-16 rounded-2xl flex items-center justify-center mr-4 shadow-lg"><i class="fas fa-shield-virus text-white text-2xl"></i>
+        </div>
+        <div>
+         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Antibiotics</h3>
+         <p class="text-blue-600 dark:text-blue-400 font-medium">18+ Medications</p>
+        </div>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-6">Essential antibiotics for treating bacterial infections, including broad-spectrum and targeted antimicrobial agents.</p>
+       <div class="mb-6">
+        <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Common Medications:</h4>
+        <div class="flex flex-wrap gap-2"><span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm">Amoxicillin</span> <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm">Azithromycin</span>
+        </div>
+       </div><button onclick="filterByCategory('antibiotics')" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"> Explore Antibiotics → </button>
+      </div><!-- Cardiovascular Category -->
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-800 hover:shadow-xl transition-all duration-300">
+       <div class="flex items-center mb-6">
+        <div class="injection-icon w-16 h-16 rounded-2xl flex items-center justify-center mr-4 shadow-lg"><i class="fas fa-heartbeat text-white text-2xl"></i>
+        </div>
+        <div>
+         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Cardiovascular</h3>
+         <p class="text-green-600 dark:text-green-400 font-medium">22+ Medications</p>
+        </div>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 mb-6">Heart health medications including blood pressure controllers, cholesterol management, and cardiac support drugs.</p>
+       <div class="mb-6">
+        <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Common Medications:</h4>
+        <div class="flex flex-wrap gap-2"><span class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm">Lisinopril</span> <span class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm">Atorvastatin</span>
+        </div>
+       </div><button onclick="filterByCategory('cardiovascular')" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"> Explore Heart Medications → </button>
+      </div>
+     </div>
+    </div>
+   </section><!-- Compare Section -->
+   <section id="compare-section" class="hidden fade-in py-8">
+    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+     <div class="text-center mb-8">
+      <h2 class="text-4xl font-bold gradient-text mb-4">Advanced Drug Comparison</h2>
+      <p class="text-xl text-gray-600 dark:text-gray-400">Compare medications side-by-side to understand differences and similarities</p>
+     </div>
+     <div class="mb-8">
+      <div class="grid md:grid-cols-2 gap-8">
+       <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800"><label class="block text-lg font-semibold text-gray-900 dark:text-white mb-4"> <i class="fas fa-pills mr-2 text-blue-500"></i>Select First Medication </label> <select id="compare-drug-1" class="w-full px-4 py-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg"> <option value="">Choose a medication...</option> </select>
+       </div>
+       <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800"><label class="block text-lg font-semibold text-gray-900 dark:text-white mb-4"> <i class="fas fa-capsules mr-2 text-purple-500"></i>Select Second Medication </label> <select id="compare-drug-2" class="w-full px-4 py-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:border-purple-500 focus:outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-lg"> <option value="">Choose a medication...</option> </select>
+       </div>
+      </div>
+      <div class="text-center mt-8"><button onclick="compareDrugs()" class="gradient-bg hover:shadow-2xl text-white px-12 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105"> <i class="fas fa-balance-scale mr-3"></i>Compare Medications </button>
+      </div>
+     </div>
+     <div id="comparison-results" class="hidden">
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-6 mb-8 border border-gray-200 dark:border-gray-700">
+       <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center"><i class="fas fa-chart-bar mr-2"></i>Detailed Comparison Results</h3>
+       <div class="overflow-x-auto">
+        <table class="w-full border-collapse rounded-2xl overflow-hidden shadow-lg">
+         <thead class="gradient-bg text-white">
+          <tr>
+           <th class="px-6 py-4 text-left font-bold text-lg">Comparison Aspect</th>
+           <th id="drug1-header" class="px-6 py-4 text-left font-bold text-lg">Drug 1</th>
+           <th id="drug2-header" class="px-6 py-4 text-left font-bold text-lg">Drug 2</th>
+          </tr>
+         </thead>
+         <tbody id="comparison-table-body" class="bg-white dark:bg-gray-800"><!-- Comparison data will be populated here -->
+         </tbody>
+        </table>
+       </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 mb-8"><button id="pdf-export-btn" onclick="exportComparison('pdf')" class="w-full gradient-bg text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"> <i class="fas fa-file-pdf mr-2"></i>Download PDF </button> <button id="excel-export-btn" onclick="exportComparison('excel')" class="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"> <i class="fas fa-file-excel mr-2"></i>Download Excel </button> <button id="image-export-btn" onclick="exportComparison('image')" class="w-full bg-purple-500 hover:bg-purple-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"> <i class="fas fa-image mr-2"></i>Download Image </button>
+      </div>
+     </div>
+    </div>
+   </section><!-- Learning Section -->
+   <section id="learning-section" class="hidden fade-in py-8">
+    <div class="space-y-8">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold gradient-text mb-4">Interactive Learning Hub</h2>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Master pharmaceutical knowledge through interactive quizzes, case studies, and comprehensive learning modules</p>
+     </div><!-- Learning Progress -->
+     <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6"><i class="fas fa-chart-line mr-3 text-blue-500"></i>Your Learning Progress</h3>
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+       <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
+        <div id="overall-progress-percent" class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+         0%
+        </div>
+        <div class="text-gray-700 dark:text-gray-300 font-medium">
+         Overall Progress
+        </div>
+        <div class="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-3 mt-3">
+         <div id="overall-progress-bar" class="bg-blue-500 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%;"></div>
+        </div>
+       </div>
+       <div class="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl border border-green-200 dark:border-green-800">
+        <div id="correct-answers" class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
+         0
+        </div>
+        <div class="text-gray-700 dark:text-gray-300 font-medium">
+         Correct Answers
+        </div>
+        <div class="text-sm text-green-600 dark:text-green-400 mt-2">
+         Keep going!
+        </div>
+       </div>
+       <div class="text-center p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl border border-purple-200 dark:border-purple-800">
+        <div id="quiz-average" class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+         0%
+        </div>
+        <div class="text-gray-700 dark:text-gray-300 font-medium">
+         Quiz Average
+        </div>
+        <div id="performance-text" class="text-sm text-purple-600 dark:text-purple-400 mt-2">
+         Start learning!
+        </div>
+       </div>
+      </div><!-- Creator Credit in Learning Section -->
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-4 border border-blue-200 dark:border-blue-800">
+       <div class="flex items-center justify-center space-x-3"><i class="fas fa-crown text-yellow-500 text-xl"></i> <span class="font-semibold text-gray-800 dark:text-gray-200">Learning Module Created by</span> <span class="font-bold gradient-text text-lg">Banny SV</span> <i class="fas fa-graduation-cap text-blue-500 text-xl"></i>
+       </div>
+      </div>
+     </div><!-- Quick Quiz Section -->
+     <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-3xl p-8 text-white">
+      <div class="text-center mb-8">
+       <h3 class="text-3xl font-bold mb-4"><i class="fas fa-brain mr-3"></i>Quick Knowledge Check</h3>
+       <p class="text-xl opacity-90">Test your understanding with our daily quiz</p>
+      </div>
+      <div class="max-w-2xl mx-auto">
+       <div id="quiz-container" class="bg-white/10 backdrop-blur-md rounded-2xl p-6"><!-- Quiz Progress -->
+        <div class="mb-6">
+         <div class="flex justify-between items-center mb-2"><span class="text-white/80 text-sm">Question <span id="current-question">1</span> of <span id="total-questions">5</span></span> <span class="text-white/80 text-sm">Score: <span id="current-score">0</span>/<span id="total-score">0</span></span>
+         </div>
+         <div class="w-full bg-white/20 rounded-full h-2">
+          <div id="quiz-progress-bar" class="bg-white h-2 rounded-full transition-all duration-500" style="width: 20%;"></div>
+         </div>
+        </div>
+        <div id="quiz-question" class="mb-6">
+         <h4 id="question-text" class="text-xl font-semibold mb-4">Which of the following is the generic name for Tylenol?</h4>
+         <div class="space-y-3" id="quiz-options"><button onclick="selectQuizAnswer(0)" class="quiz-option w-full text-left p-4 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-300"> A) Ibuprofen </button> <button onclick="selectQuizAnswer(1)" class="quiz-option w-full text-left p-4 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-300"> B) Acetaminophen </button> <button onclick="selectQuizAnswer(2)" class="quiz-option w-full text-left p-4 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-300"> C) Aspirin </button> <button onclick="selectQuizAnswer(3)" class="quiz-option w-full text-left p-4 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-300"> D) Naproxen </button>
+         </div>
+        </div>
+        <div id="quiz-result" class="hidden mb-6 p-4 rounded-xl">
+         <div id="result-message" class="text-center font-semibold mb-2"></div>
+         <div id="result-explanation" class="text-center text-sm opacity-90"></div>
+        </div>
+        <div class="text-center"><button id="submit-btn" onclick="submitQuizAnswer()" class="bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"> Submit Answer </button> <button id="next-btn" onclick="nextQuestion()" class="hidden bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"> Next Question </button> <button id="restart-btn" onclick="restartQuiz()" class="hidden bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"> Start New Quiz </button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- About Section -->
+   <section id="about-section" class="hidden fade-in py-8">
+    <div class="space-y-12">
+     <div class="text-center">
+      <h2 class="text-4xl font-bold gradient-text mb-4">About PharmEdu</h2>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">Revolutionizing pharmaceutical education for the next generation of healthcare professionals</p>
+     </div><!-- Mission & Vision -->
+     <div class="grid md:grid-cols-2 gap-12">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+       <div class="text-center mb-6">
+        <div class="gradient-bg w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-bullseye text-white text-3xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Our Mission</h3>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">To democratize pharmaceutical knowledge by making complex drug information accessible, understandable, and actionable for non-pharmacy students and healthcare learners worldwide.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+       <div class="text-center mb-6">
+        <div class="gradient-bg w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-eye text-white text-3xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Our Vision</h3>
+       </div>
+       <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">To become the world's leading platform for pharmaceutical education, empowering millions of students and healthcare professionals with essential medication knowledge.</p>
+      </div>
+     </div><!-- Important Disclaimer -->
+     <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-3xl p-8">
+      <div class="flex items-start"><i class="fas fa-exclamation-triangle text-yellow-500 mr-4 mt-1 text-2xl"></i>
+       <div>
+        <h4 class="text-xl font-bold text-yellow-800 dark:text-yellow-300 mb-4">Important Medical Disclaimer</h4>
+        <div class="text-yellow-700 dark:text-yellow-400 space-y-3">
+         <p><strong>Educational Purpose Only:</strong> PharmEdu is designed exclusively for educational purposes. All information provided is for learning and reference only.</p>
+         <p><strong>Consult Healthcare Professionals:</strong> Always consult with qualified healthcare professionals before making any decisions about medications or treatments.</p>
+         <p><strong>No Medical Advice:</strong> The content on this platform does not constitute medical advice and should not be relied upon for medical decision-making.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main><!-- Footer with Credits -->
+  <footer class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12 mt-16">
+   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-3 gap-8">
+     <div>
+      <h3 class="text-2xl font-bold gradient-text mb-4">Banny SV Pharmaceutical Learning Platform</h3>
+      <p class="text-gray-300 mb-4">Revolutionizing pharmaceutical education with innovative learning solutions.</p>
+      <div class="flex items-center space-x-2"><i class="fas fa-crown text-yellow-400"></i> <span class="font-semibold">Created by Banny SV</span>
+      </div>
+     </div>
+     <div>
+      <h4 class="text-lg font-semibold mb-4">Platform Features</h4>
+      <ul class="space-y-2 text-gray-300">
+       <li><i class="fas fa-check text-green-400 mr-2"></i>Advanced Drug Search</li>
+       <li><i class="fas fa-check text-green-400 mr-2"></i>Interactive Comparisons</li>
+       <li><i class="fas fa-check text-green-400 mr-2"></i>PDF/Excel/Image Exports</li>
+       <li><i class="fas fa-check text-green-400 mr-2"></i>Learning Modules</li>
+      </ul>
+     </div>
+     <div>
+      <h4 class="text-lg font-semibold mb-4">Developer Info</h4>
+      <div class="space-y-3 text-gray-300">
+       <div class="flex items-center"><i class="fas fa-user-tie text-blue-400 mr-3"></i> <span>Banny SV - Platform Creator</span>
+       </div>
+       <div class="flex items-center"><i class="fas fa-code text-green-400 mr-3"></i> <span>Full-Stack Developer</span>
+       </div>
+       <div class="flex items-center"><i class="fas fa-graduation-cap text-purple-400 mr-3"></i> <span>Pharmaceutical Education Expert</span>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+     <p class="text-gray-400">© 2024 <span class="font-semibold text-white">Banny SV Pharmaceutical Learning Platform</span>. All rights reserved. | Created with ❤️ by <span class="gradient-text font-bold">Banny SV</span></p>
+     <p class="text-sm text-gray-500 mt-2">Educational platform for pharmaceutical knowledge • Not for medical advice</p>
+    </div>
+   </div>
+  </footer><!-- Drug Detail Modal -->
+  <div id="drug-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center z-50 p-4">
+   <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+    <div class="p-8"><!-- Modal Header -->
+     <div class="flex justify-between items-start mb-8">
+      <div class="flex items-center space-x-6">
+       <div id="modal-drug-icon" class="pill-icon w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl"><i class="fas fa-pills text-white text-3xl"></i>
+       </div>
+       <div>
+        <h2 id="modal-drug-name" class="text-4xl font-bold text-gray-900 dark:text-white mb-2"></h2>
+        <p id="modal-drug-generic" class="text-xl text-gray-600 dark:text-gray-400 mb-2"></p>
+        <div class="flex items-center space-x-3"><span id="modal-category-badge" class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium"></span> <span id="modal-type-badge" class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-sm font-medium"></span>
+        </div>
+       </div>
+      </div>
+      <div class="flex items-center space-x-3"><button id="favorite-btn" onclick="toggleFavorite()" class="p-4 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-110"> <i class="fas fa-heart text-gray-400 text-xl"></i> </button> <button onclick="closeDrugModal()" class="p-4 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300"> <i class="fas fa-times text-gray-600 dark:text-gray-400 text-xl"></i> </button>
+      </div>
+     </div><!-- Drug Information Tabs -->
+     <div class="mb-8">
+      <div class="flex space-x-2 bg-gray-100 dark:bg-gray-700 rounded-2xl p-2"><button onclick="showTab('overview')" class="tab-btn flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 active"> <i class="fas fa-info-circle mr-2"></i>Overview </button> <button onclick="showTab('details')" class="tab-btn flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 text-gray-600 dark:text-gray-400"> <i class="fas fa-list-ul mr-2"></i>Details </button> <button onclick="showTab('safety')" class="tab-btn flex-1 py-3 px-6 rounded-xl font-semibold transition-all duration-300 text-gray-600 dark:text-gray-400"> <i class="fas fa-shield-alt mr-2"></i>Safety </button>
+      </div>
+     </div><!-- Tab Content -->
+     <div id="tab-content"><!-- Overview Tab -->
+      <div id="overview-tab" class="tab-content active">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+         <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
+          <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-4 flex items-center"><i class="fas fa-info-circle mr-3"></i>What is this medication?</h3>
+          <p id="modal-description" class="text-blue-800 dark:text-blue-400 leading-relaxed"></p>
+         </div>
+         <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-800">
+          <h3 class="text-xl font-bold text-green-900 dark:text-green-300 mb-4 flex items-center"><i class="fas fa-check-circle mr-3"></i>What it's used for</h3>
+          <p id="modal-uses" class="text-green-800 dark:text-green-400 leading-relaxed"></p>
+         </div>
+        </div>
+        <div class="space-y-6">
+         <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800">
+          <h3 class="text-xl font-bold text-purple-900 dark:text-purple-300 mb-4 flex items-center"><i class="fas fa-cogs mr-3"></i>How it works</h3>
+          <p id="modal-mechanism" class="text-purple-800 dark:text-purple-400 leading-relaxed"></p>
+         </div>
+         <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"><span class="font-semibold text-gray-700 dark:text-gray-300">Category:</span> <span id="modal-category" class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-4 py-2 rounded-full font-medium"></span>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"><span class="font-semibold text-gray-700 dark:text-gray-300">Type:</span> <span id="modal-type" class="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-4 py-2 rounded-full font-medium"></span>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"><span class="font-semibold text-gray-700 dark:text-gray-300">Form:</span> <span id="modal-form" class="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 px-4 py-2 rounded-full font-medium"></span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Details Tab -->
+      <div id="details-tab" class="tab-content">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+         <div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Brand Names</h3>
+          <div id="modal-brands" class="flex flex-wrap gap-3"><!-- Brand names will be populated here -->
+          </div>
+         </div>
+         <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-pills mr-2 text-blue-500"></i>Dosage Information</h3>
+          <p id="modal-dosage" class="text-blue-800 dark:text-blue-400 leading-relaxed"></p>
+         </div>
+        </div>
+        <div class="space-y-6">
+         <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>Drug Interactions</h3>
+          <div id="modal-interactions" class="text-yellow-700 dark:text-yellow-400"><!-- Interactions will be populated here -->
+          </div>
+         </div>
+         <div class="bg-gray-50 dark:bg-gray-700 rounded-2xl p-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4"><i class="fas fa-warehouse mr-2 text-gray-500"></i>Storage Instructions</h3>
+          <div id="modal-storage" class="text-gray-700 dark:text-gray-300"><!-- Storage info will be populated here -->
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Safety Tab -->
+      <div id="safety-tab" class="tab-content">
+       <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+         <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-yellow-800 dark:text-yellow-300 mb-4 flex items-center"><i class="fas fa-exclamation-triangle mr-3"></i>Common Side Effects</h3>
+          <p id="modal-side-effects" class="text-yellow-700 dark:text-yellow-400 leading-relaxed"></p>
+         </div>
+         <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-red-800 dark:text-red-300 mb-4 flex items-center"><i class="fas fa-shield-alt mr-3"></i>Important Precautions</h3>
+          <p id="modal-precautions" class="text-red-700 dark:text-red-400 leading-relaxed"></p>
+         </div>
+        </div>
+        <div class="space-y-6">
+         <div class="bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-orange-800 dark:text-orange-300 mb-4 flex items-center"><i class="fas fa-ban mr-3"></i>Contraindications</h3>
+          <p id="modal-contraindications" class="text-orange-700 dark:text-orange-400 leading-relaxed"></p>
+         </div>
+         <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-400 rounded-r-2xl p-6">
+          <h3 class="text-xl font-bold text-purple-800 dark:text-purple-300 mb-4 flex items-center"><i class="fas fa-baby mr-3"></i>Special Populations</h3>
+          <p id="modal-special-populations" class="text-purple-700 dark:text-purple-400 leading-relaxed"></p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Favorites Modal -->
+  <div id="favorites-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center z-50 p-4">
+   <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-5xl w-full max-h-[80vh] overflow-y-auto border border-gray-200 dark:border-gray-700">
+    <div class="p-8">
+     <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center"><i class="fas fa-heart text-red-500 mr-4 text-4xl"></i>Your Favorite Medications</h2><button onclick="closeFavoritesModal()" class="p-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300"> <i class="fas fa-times text-gray-600 dark:text-gray-400 text-xl"></i> </button>
+     </div>
+     <div id="favorites-list" class="space-y-4"><!-- Favorites will be populated here -->
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Configuration and state
+        const defaultConfig = {
+            site_title: "Banny SV Pharmaceutical Learning Platform",
+            tagline: "Created by Banny SV - Your gateway to pharmaceutical knowledge",
+            hero_title: "Master Pharmaceutical Knowledge",
+            hero_subtitle: "Comprehensive drug education platform designed for non-pharmacy students to understand medications with confidence"
+        };
+
+        let currentDrugId = null;
+        let userFavorites = [];
+        let isDarkMode = false;
+        let selectedQuizAnswer = null;
+        let currentSearchTerm = '';
+        let searchTimeout = null;
+
+        // Comprehensive drug database
+        const drugDatabase = [
+            {
+                id: "paracetamol",
+                name: "Paracetamol",
+                generic: "Acetaminophen",
+                brands: ["Tylenol", "Panadol", "Calpol", "Fevadol"],
+                category: "painkillers",
+                type: "otc",
+                form: "tablet",
+                description: "A widely used over-the-counter pain reliever and fever reducer that's gentle on the stomach and safe for most people when used correctly.",
+                uses: "Used to treat mild to moderate pain including headaches, muscle aches, arthritis, backaches, toothaches, colds, and fevers.",
+                mechanism: "Works by blocking the production of prostaglandins in the brain that cause pain and fever.",
+                sideEffects: "Generally well-tolerated when used as directed. Rare side effects may include nausea, rash, or allergic reactions.",
+                precautions: "Do not exceed the recommended dose. Avoid alcohol while taking this medication.",
+                dosage: "Adults: 500-1000mg every 4-6 hours as needed, maximum 4000mg per day.",
+                contraindications: "Severe liver disease, known allergy to acetaminophen.",
+                interactions: "Warfarin (blood thinner), chronic alcohol use, certain seizure medications.",
+                storage: "Store at room temperature, away from moisture and heat.",
+                specialPopulations: "Safe during pregnancy and breastfeeding when used as directed."
+            },
+            {
+                id: "ibuprofen",
+                name: "Ibuprofen",
+                generic: "Ibuprofen",
+                brands: ["Advil", "Motrin", "Nurofen", "Brufen"],
+                category: "painkillers",
+                type: "otc",
+                form: "tablet",
+                description: "A nonsteroidal anti-inflammatory drug (NSAID) that reduces pain, inflammation, and fever.",
+                uses: "Effective for reducing pain, inflammation, and fever. Used for headaches, dental pain, menstrual cramps, muscle aches, and arthritis.",
+                mechanism: "NSAID that blocks cyclooxygenase (COX) enzymes, reducing production of prostaglandins.",
+                sideEffects: "Stomach upset, heartburn, nausea, dizziness, headache. Long-term use may cause stomach ulcers.",
+                precautions: "Take with food to reduce stomach irritation. Avoid if allergic to aspirin or other NSAIDs.",
+                dosage: "Adults: 200-400mg every 4-6 hours as needed, maximum 1200mg daily for OTC use.",
+                contraindications: "Active stomach ulcers, severe heart failure, severe kidney disease, aspirin allergy.",
+                interactions: "Blood thinners, ACE inhibitors, diuretics, lithium, methotrexate.",
+                storage: "Store at room temperature in original container.",
+                specialPopulations: "Avoid in third trimester of pregnancy. Use caution in elderly."
+            },
+            {
+                id: "amoxicillin",
+                name: "Amoxicillin",
+                generic: "Amoxicillin",
+                brands: ["Amoxil", "Trimox", "Moxatag"],
+                category: "antibiotics",
+                type: "prescription",
+                form: "capsule",
+                description: "A penicillin-type antibiotic that fights bacterial infections by stopping bacteria from building their cell walls.",
+                uses: "Treats various bacterial infections including pneumonia, bronchitis, ear infections, urinary tract infections, and skin infections.",
+                mechanism: "Kills bacteria by interfering with their cell wall formation.",
+                sideEffects: "Nausea, vomiting, diarrhea, stomach pain, headache, rash.",
+                precautions: "Tell your doctor about any penicillin allergies. Complete the full course even if feeling better.",
+                dosage: "Adults: 250-500mg every 8 hours or 500-875mg every 12 hours, depending on infection severity.",
+                contraindications: "Known allergy to penicillin or amoxicillin, infectious mononucleosis.",
+                interactions: "Birth control pills, blood thinners, other antibiotics, probenecid.",
+                storage: "Store capsules at room temperature. Liquid forms should be refrigerated.",
+                specialPopulations: "Generally safe during pregnancy and breastfeeding."
+            },
+            {
+                id: "lisinopril",
+                name: "Lisinopril",
+                generic: "Lisinopril",
+                brands: ["Prinivil", "Zestril", "Qbrelis"],
+                category: "cardiovascular",
+                type: "prescription",
+                form: "tablet",
+                description: "An ACE inhibitor that relaxes blood vessels to lower blood pressure and reduce strain on the heart.",
+                uses: "Treats high blood pressure and heart failure. Also used after heart attacks to improve survival.",
+                mechanism: "ACE inhibitor that blocks the enzyme that produces angiotensin II, allowing blood vessels to relax.",
+                sideEffects: "Dry cough, dizziness, headache, fatigue, nausea.",
+                precautions: "Monitor blood pressure regularly. Avoid potassium supplements unless directed by doctor.",
+                dosage: "Adults: Starting dose 10mg once daily, may increase to 20-40mg daily based on response.",
+                contraindications: "Pregnancy, history of angioedema, bilateral renal artery stenosis.",
+                interactions: "Potassium supplements, diuretics, NSAIDs, lithium, diabetes medications.",
+                storage: "Store at room temperature, protect from moisture and light.",
+                specialPopulations: "Contraindicated in pregnancy. Use caution in elderly and those with kidney disease."
+            },
+            {
+                id: "metformin",
+                name: "Metformin",
+                generic: "Metformin",
+                brands: ["Glucophage", "Fortamet", "Glumetza"],
+                category: "diabetes",
+                type: "prescription",
+                form: "tablet",
+                description: "The first-line medication for type 2 diabetes that helps control blood sugar without causing weight gain.",
+                uses: "First-line treatment for type 2 diabetes. Helps control blood sugar levels and may aid in weight management.",
+                mechanism: "Decreases glucose production by the liver and improves insulin sensitivity in muscle and fat tissues.",
+                sideEffects: "Nausea, vomiting, diarrhea, stomach upset, metallic taste in mouth.",
+                precautions: "Take with food to reduce stomach upset. Monitor kidney function regularly.",
+                dosage: "Adults: Start with 500mg twice daily with meals, may increase gradually to maximum 2000-2500mg daily.",
+                contraindications: "Severe kidney disease, acute heart failure, severe liver disease.",
+                interactions: "Contrast dyes, alcohol, certain diuretics, corticosteroids.",
+                storage: "Store at room temperature, protect from moisture.",
+                specialPopulations: "Generally safe during pregnancy for gestational diabetes."
+            },
+            {
+                id: "vitamin-d",
+                name: "Vitamin D3",
+                generic: "Cholecalciferol",
+                brands: ["D-Vital", "Vigantol", "Calcichew-D3"],
+                category: "vitamins",
+                type: "otc",
+                form: "tablet",
+                description: "An essential vitamin that helps the body absorb calcium and maintain strong bones and teeth.",
+                uses: "Prevents and treats vitamin D deficiency, supports bone health, may boost immune function.",
+                mechanism: "Converted in the liver and kidneys to the active hormone calcitriol, which regulates calcium absorption.",
+                sideEffects: "Generally well-tolerated. High doses may cause nausea, vomiting, weakness, kidney problems.",
+                precautions: "Don't exceed recommended doses unless directed by healthcare provider.",
+                dosage: "Adults: 800-2000 IU daily for maintenance, higher doses for deficiency treatment.",
+                contraindications: "Hypercalcemia, severe kidney disease, sarcoidosis.",
+                interactions: "Thiazide diuretics, digoxin, calcium supplements.",
+                storage: "Store in cool, dry place away from light.",
+                specialPopulations: "Safe during pregnancy and breastfeeding. Elderly often need higher doses."
+            }
+        ];
+
+        // Data SDK handler
+        const dataHandler = {
+            onDataChanged(data) {
+                userFavorites = data;
+                updateFavoritesCount();
+                if (currentDrugId) {
+                    updateFavoriteButton();
+                }
+            }
+        };
+
+        // Element SDK configuration
+        const elementConfig = {
+            defaultConfig,
+            onConfigChange: async (config) => {
+                document.getElementById('site-title').textContent = config.site_title || defaultConfig.site_title;
+                document.getElementById('tagline').textContent = config.tagline || defaultConfig.tagline;
+                document.getElementById('hero-title').textContent = config.hero_title || defaultConfig.hero_title;
+                document.getElementById('hero-subtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+            },
+            mapToCapabilities: (config) => ({
+                recolorables: [
+                    {
+                        get: () => config.primary_color || "#667eea",
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || "Inter, sans-serif",
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || 16,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }
+            }),
+            mapToEditPanelValues: (config) => new Map([
+                ["site_title", config.site_title || defaultConfig.site_title],
+                ["tagline", config.tagline || defaultConfig.tagline],
+                ["hero_title", config.hero_title || defaultConfig.hero_title],
+                ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle]
+            ])
+        };
+
+        // Initialize application
+        async function initializeApp() {
+            try {
+                // Initialize Element SDK
+                if (window.elementSdk) {
+                    window.elementSdk.init(elementConfig);
+                }
+
+                // Initialize Data SDK
+                if (window.dataSdk) {
+                    const initResult = await window.dataSdk.init(dataHandler);
+                    if (!initResult.isOk) {
+                        console.error("Failed to initialize data SDK");
+                    }
+                }
+
+                // Load initial content
+                displayFeaturedDrugs();
+                populateCompareDropdowns();
+                
+                // Check for saved dark mode preference
+                const savedTheme = localStorage.getItem('darkMode');
+                if (savedTheme === 'true') {
+                    toggleDarkMode();
+                }
+            } catch (error) {
+                console.error("Error initializing app:", error);
+            }
+        }
+
+        // Dark mode functionality
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark');
+            
+            const themeIcon = document.getElementById('theme-icon');
+            themeIcon.className = isDarkMode ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-gray-600 dark:text-gray-300';
+            
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'dark:text-blue-400');
+                btn.classList.add('text-gray-700', 'dark:text-gray-300');
+            });
+            
+            // Find and highlight the clicked button
+            const clickedBtns = Array.from(document.querySelectorAll('.nav-btn')).filter(btn => 
+                btn.textContent.toLowerCase().includes(sectionName.toLowerCase())
+            );
+            clickedBtns.forEach(btn => {
+                btn.classList.remove('text-gray-700', 'dark:text-gray-300');
+                btn.classList.add('text-blue-600', 'dark:text-blue-400');
+            });
+
+            // Hide mobile menu after selection
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Search functionality
+        function handleSearchInput() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            currentSearchTerm = searchTerm;
+            
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            searchTimeout = setTimeout(() => {
+                if (searchTerm.length >= 2) {
+                    showSearchSuggestions();
+                } else {
+                    document.getElementById('search-suggestions').classList.add('hidden');
+                }
+            }, 300);
+        }
+
+        function showSearchSuggestions() {
+            const searchTerm = currentSearchTerm;
+            const suggestionsDiv = document.getElementById('search-suggestions');
+            
+            if (searchTerm.length < 2) {
+                suggestionsDiv.classList.add('hidden');
+                return;
+            }
+            
+            const suggestions = drugDatabase.filter(drug => {
+                const searchLower = searchTerm.toLowerCase();
+                return (
+                    drug.name.toLowerCase().includes(searchLower) ||
+                    drug.generic.toLowerCase().includes(searchLower) ||
+                    drug.brands.some(brand => brand.toLowerCase().includes(searchLower)) ||
+                    drug.category.toLowerCase().includes(searchLower) ||
+                    drug.uses.toLowerCase().includes(searchLower)
+                );
+            }).slice(0, 6);
+            
+            if (suggestions.length > 0) {
+                suggestionsDiv.innerHTML = suggestions.map(drug => `
+                    <div class="p-4 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-600 last:border-b-0 transition-colors duration-200" 
+                         onclick="selectSuggestion('${drug.id}')">
+                        <div class="flex items-center space-x-4">
+                            <div class="pill-icon w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-pills text-white"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-semibold text-gray-900 dark:text-white">${drug.name}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">${drug.generic} • ${drug.category.charAt(0).toUpperCase() + drug.category.slice(1)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                suggestionsDiv.classList.remove('hidden');
+            } else {
+                suggestionsDiv.innerHTML = `
+                    <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+                        <i class="fas fa-search text-2xl mb-2"></i>
+                        <div>No medications found for "${searchTerm}"</div>
+                    </div>
+                `;
+                suggestionsDiv.classList.remove('hidden');
+            }
+        }
+
+        function selectSuggestion(drugId) {
+            document.getElementById('search-suggestions').classList.add('hidden');
+            document.getElementById('search-input').value = '';
+            currentSearchTerm = '';
+            openDrugModal(drugId);
+        }
+
+        function handleSearchKeypress(event) {
+            if (event.key === 'Enter') {
+                performAdvancedSearch();
+            }
+        }
+
+        function quickSearch(term) {
+            document.getElementById('search-input').value = term;
+            currentSearchTerm = term.toLowerCase();
+            performAdvancedSearch();
+        }
+
+        function performAdvancedSearch() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            const categoryFilter = document.getElementById('filter-category').value;
+            const typeFilter = document.getElementById('filter-type').value;
+            const formFilter = document.getElementById('filter-form').value;
+            
+            let filteredDrugs = drugDatabase;
+            
+            // Apply search term filter
+            if (searchTerm) {
+                filteredDrugs = filteredDrugs.filter(drug => 
+                    drug.name.toLowerCase().includes(searchTerm) ||
+                    drug.generic.toLowerCase().includes(searchTerm) ||
+                    drug.brands.some(brand => brand.toLowerCase().includes(searchTerm)) ||
+                    drug.uses.toLowerCase().includes(searchTerm) ||
+                    drug.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply filters
+            if (categoryFilter) {
+                filteredDrugs = filteredDrugs.filter(drug => drug.category === categoryFilter);
+            }
+            
+            if (typeFilter) {
+                filteredDrugs = filteredDrugs.filter(drug => drug.type === typeFilter);
+            }
+            
+            if (formFilter) {
+                filteredDrugs = filteredDrugs.filter(drug => drug.form === formFilter);
+            }
+            
+            displaySearchResults(filteredDrugs);
+            document.getElementById('search-suggestions').classList.add('hidden');
+            
+            showToast(`Found ${filteredDrugs.length} medication${filteredDrugs.length !== 1 ? 's' : ''}`, 'info');
+        }
+
+        function filterByCategory(category) {
+            document.getElementById('filter-category').value = category;
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-form').value = '';
+            document.getElementById('search-input').value = '';
+            
+            performAdvancedSearch();
+            showSection('home');
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-category').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-form').value = '';
+            document.getElementById('search-results').classList.add('hidden');
+            currentSearchTerm = '';
+        }
+
+        function displaySearchResults(drugs) {
+            const resultsSection = document.getElementById('search-results');
+            const resultsGrid = document.getElementById('results-grid');
+            
+            resultsGrid.innerHTML = '';
+            
+            if (drugs.length === 0) {
+                resultsGrid.innerHTML = `
+                    <div class="col-span-full text-center py-16">
+                        <div class="max-w-md mx-auto">
+                            <i class="fas fa-search text-gray-400 text-6xl mb-6"></i>
+                            <h3 class="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-4">No medications found</h3>
+                            <p class="text-gray-500 dark:text-gray-500 mb-6">Try adjusting your search terms or filters.</p>
+                            <button onclick="clearSearch()" class="gradient-bg text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
+                                Clear Search
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                drugs.forEach(drug => {
+                    resultsGrid.appendChild(createDrugCard(drug));
+                });
+            }
+            
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function displayFeaturedDrugs() {
+            const featuredGrid = document.getElementById('featured-drugs');
+            const featuredDrugs = drugDatabase.slice(0, 6);
+            
+            featuredGrid.innerHTML = '';
+            featuredDrugs.forEach(drug => {
+                featuredGrid.appendChild(createDrugCard(drug));
+            });
+        }
+
+        function showAllDrugs() {
+            displaySearchResults(drugDatabase);
+        }
+
+        function createDrugCard(drug) {
+            const card = document.createElement('div');
+            card.className = 'drug-card bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 cursor-pointer border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-300';
+            card.onclick = () => openDrugModal(drug.id);
+            
+            const categoryColors = {
+                painkillers: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
+                antibiotics: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',
+                cardiovascular: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
+                diabetes: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300',
+                vitamins: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300',
+                gastrointestinal: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300'
+            };
+            
+            const typeColors = {
+                otc: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
+                prescription: 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300'
+            };
+            
+            card.innerHTML = `
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="pill-icon w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-pills text-white text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${drug.name}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">${drug.generic}</p>
+                        <div class="flex items-center space-x-2 mt-2">
+                            <span class="${categoryColors[drug.category] || 'bg-gray-100 text-gray-800'} px-2 py-1 rounded-full text-xs font-medium">${drug.category.charAt(0).toUpperCase() + drug.category.slice(1)}</span>
+                            <span class="${typeColors[drug.type]} px-2 py-1 rounded-full text-xs font-medium">${drug.type.toUpperCase()}</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-3">${drug.description}</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Click to learn more</span>
+                    <i class="fas fa-arrow-right text-blue-500"></i>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Drug modal functions
+        function openDrugModal(drugId) {
+            const drug = drugDatabase.find(d => d.id === drugId);
+            if (!drug) return;
+            
+            currentDrugId = drugId;
+            
+            // Populate modal content
+            document.getElementById('modal-drug-name').textContent = drug.name;
+            document.getElementById('modal-drug-generic').textContent = drug.generic;
+            document.getElementById('modal-description').textContent = drug.description;
+            document.getElementById('modal-uses').textContent = drug.uses;
+            document.getElementById('modal-mechanism').textContent = drug.mechanism;
+            document.getElementById('modal-category').textContent = drug.category.charAt(0).toUpperCase() + drug.category.slice(1);
+            document.getElementById('modal-type').textContent = drug.type.toUpperCase();
+            document.getElementById('modal-form').textContent = drug.form.charAt(0).toUpperCase() + drug.form.slice(1);
+            
+            // Populate brands
+            const brandsContainer = document.getElementById('modal-brands');
+            brandsContainer.innerHTML = drug.brands.map(brand => 
+                `<span class="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium">${brand}</span>`
+            ).join('');
+            
+            // Populate other tabs
+            document.getElementById('modal-dosage').textContent = drug.dosage;
+            document.getElementById('modal-interactions').textContent = drug.interactions;
+            document.getElementById('modal-storage').textContent = drug.storage;
+            document.getElementById('modal-side-effects').textContent = drug.sideEffects;
+            document.getElementById('modal-precautions').textContent = drug.precautions;
+            document.getElementById('modal-contraindications').textContent = drug.contraindications;
+            document.getElementById('modal-special-populations').textContent = drug.specialPopulations;
+            
+            // Update favorite button
+            updateFavoriteButton();
+            
+            // Show modal
+            document.getElementById('drug-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrugModal() {
+            document.getElementById('drug-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentDrugId = null;
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-gray-600', 'dark:text-gray-400');
+            });
+            
+            // Highlight active tab button
+            event.target.classList.add('active');
+            event.target.classList.remove('text-gray-600', 'dark:text-gray-400');
+        }
+
+        // Favorites functionality
+        async function toggleFavorite() {
+            if (!currentDrugId || !window.dataSdk) return;
+            
+            const existingFavorite = userFavorites.find(fav => fav.drug_id === currentDrugId);
+            
+            if (existingFavorite) {
+                // Remove from favorites
+                const result = await window.dataSdk.delete(existingFavorite);
+                if (result.isOk) {
+                    showToast('Removed from favorites', 'success');
+                } else {
+                    showToast('Failed to remove favorite', 'error');
+                }
+            } else {
+                // Add to favorites
+                const favoriteData = {
+                    drug_id: currentDrugId,
+                    user_id: 'user1',
+                    favorited_at: new Date().toISOString(),
+                    notes: ''
+                };
+                
+                const result = await window.dataSdk.create(favoriteData);
+                if (result.isOk) {
+                    showToast('Added to favorites', 'success');
+                } else {
+                    showToast('Failed to add favorite', 'error');
+                }
+            }
+        }
+
+        function updateFavoriteButton() {
+            const favoriteBtn = document.getElementById('favorite-btn');
+            const heartIcon = favoriteBtn.querySelector('i');
+            
+            const isFavorited = userFavorites.some(fav => fav.drug_id === currentDrugId);
+            
+            if (isFavorited) {
+                heartIcon.className = 'fas fa-heart text-red-500 text-xl';
+            } else {
+                heartIcon.className = 'fas fa-heart text-gray-400 text-xl';
+            }
+        }
+
+        function updateFavoritesCount() {
+            document.getElementById('favorites-count').textContent = userFavorites.length;
+        }
+
+        function showFavorites() {
+            const favoritesList = document.getElementById('favorites-list');
+            
+            if (userFavorites.length === 0) {
+                favoritesList.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fas fa-heart text-gray-400 text-6xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-4">No favorites yet</h3>
+                        <p class="text-gray-500 dark:text-gray-500">Start exploring medications and add them to your favorites!</p>
+                    </div>
+                `;
+            } else {
+                favoritesList.innerHTML = userFavorites.map(favorite => {
+                    const drug = drugDatabase.find(d => d.id === favorite.drug_id);
+                    if (!drug) return '';
+                    
+                    return `
+                        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="pill-icon w-12 h-12 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-pills text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white">${drug.name}</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">${drug.generic}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openDrugModal('${drug.id}')" class="text-blue-500 hover:text-blue-700 transition-colors">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="removeFavorite('${favorite.__backendId}')" class="text-red-500 hover:text-red-700 transition-colors">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('favorites-modal').classList.remove('hidden');
+        }
+
+        function closeFavoritesModal() {
+            document.getElementById('favorites-modal').classList.add('hidden');
+        }
+
+        async function removeFavorite(favoriteId) {
+            if (!window.dataSdk) return;
+            
+            const favorite = userFavorites.find(fav => fav.__backendId === favoriteId);
+            if (favorite) {
+                const result = await window.dataSdk.delete(favorite);
+                if (result.isOk) {
+                    showToast('Removed from favorites', 'success');
+                } else {
+                    showToast('Failed to remove favorite', 'error');
+                }
+            }
+        }
+
+        // Compare functionality
+        function populateCompareDropdowns() {
+            const dropdown1 = document.getElementById('compare-drug-1');
+            const dropdown2 = document.getElementById('compare-drug-2');
+            
+            const options = drugDatabase.map(drug => 
+                `<option value="${drug.id}">${drug.name} (${drug.generic})</option>`
+            ).join('');
+            
+            dropdown1.innerHTML = '<option value="">Choose a medication...</option>' + options;
+            dropdown2.innerHTML = '<option value="">Choose a medication...</option>' + options;
+        }
+
+        function compareDrugs() {
+            const drug1Id = document.getElementById('compare-drug-1').value;
+            const drug2Id = document.getElementById('compare-drug-2').value;
+            
+            if (!drug1Id || !drug2Id) {
+                showToast('Please select two medications to compare', 'error');
+                return;
+            }
+            
+            if (drug1Id === drug2Id) {
+                showToast('Please select two different medications', 'error');
+                return;
+            }
+            
+            const drug1 = drugDatabase.find(d => d.id === drug1Id);
+            const drug2 = drugDatabase.find(d => d.id === drug2Id);
+            
+            if (!drug1 || !drug2) return;
+            
+            // Update headers
+            document.getElementById('drug1-header').textContent = drug1.name;
+            document.getElementById('drug2-header').textContent = drug2.name;
+            
+            // Populate comparison table
+            const tableBody = document.getElementById('comparison-table-body');
+            const comparisons = [
+                ['Generic Name', drug1.generic, drug2.generic],
+                ['Category', drug1.category, drug2.category],
+                ['Type', drug1.type, drug2.type],
+                ['Form', drug1.form, drug2.form],
+                ['Primary Use', drug1.uses.substring(0, 100) + '...', drug2.uses.substring(0, 100) + '...'],
+                ['Common Side Effects', drug1.sideEffects.substring(0, 100) + '...', drug2.sideEffects.substring(0, 100) + '...']
+            ];
+            
+            tableBody.innerHTML = comparisons.map(([aspect, val1, val2]) => `
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                    <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">${aspect}</td>
+                    <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${val1}</td>
+                    <td class="px-6 py-4 text-gray-700 dark:text-gray-300">${val2}</td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('comparison-results').classList.remove('hidden');
+            showToast('Comparison generated successfully', 'success');
+        }
+
+        async function exportComparison(format) {
+            const drug1Id = document.getElementById('compare-drug-1').value;
+            const drug2Id = document.getElementById('compare-drug-2').value;
+            
+            if (!drug1Id || !drug2Id) {
+                showToast('Please compare medications first', 'error');
+                return;
+            }
+            
+            const drug1 = drugDatabase.find(d => d.id === drug1Id);
+            const drug2 = drugDatabase.find(d => d.id === drug2Id);
+            
+            const button = document.getElementById(`${format}-export-btn`);
+            const originalContent = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = `<div class="loading-spinner inline-block mr-2"></div>Generating ${format.toUpperCase()}...`;
+            button.disabled = true;
+            
+            try {
+                if (format === 'pdf') {
+                    await exportToPDF(drug1, drug2);
+                } else if (format === 'excel') {
+                    await exportToExcel(drug1, drug2);
+                } else if (format === 'image') {
+                    await exportToImage(drug1, drug2);
+                }
+                
+                showToast(`${format.toUpperCase()} downloaded successfully!`, 'success');
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast(`Failed to export ${format.toUpperCase()}`, 'error');
+            } finally {
+                // Restore button
+                button.innerHTML = originalContent;
+                button.disabled = false;
+            }
+        }
+        
+        async function exportToPDF(drug1, drug2) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set up the PDF
+            doc.setFontSize(20);
+            doc.setTextColor(102, 126, 234);
+            doc.text('Banny SV Pharmaceutical Learning Platform', 20, 30);
+            
+            // Add creator credits
+            doc.setFontSize(14);
+            doc.setTextColor(102, 126, 234);
+            doc.text('Drug Comparison Report', 20, 45);
+            
+            // Add timestamp and credits
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, 20, 55);
+            doc.text('Created by: Banny SV | Platform Developer & Pharmaceutical Education Expert', 20, 62);
+            
+            // Drug names
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`${drug1.name} vs ${drug2.name}`, 20, 75);
+            
+            // Comparison data
+            const comparisons = [
+                ['Aspect', drug1.name, drug2.name],
+                ['Generic Name', drug1.generic, drug2.generic],
+                ['Category', drug1.category.charAt(0).toUpperCase() + drug1.category.slice(1), drug2.category.charAt(0).toUpperCase() + drug2.category.slice(1)],
+                ['Type', drug1.type.toUpperCase(), drug2.type.toUpperCase()],
+                ['Form', drug1.form.charAt(0).toUpperCase() + drug1.form.slice(1), drug2.form.charAt(0).toUpperCase() + drug2.form.slice(1)],
+                ['Description', doc.splitTextToSize(drug1.description, 60), doc.splitTextToSize(drug2.description, 60)],
+                ['Primary Uses', doc.splitTextToSize(drug1.uses, 60), doc.splitTextToSize(drug2.uses, 60)],
+                ['Mechanism', doc.splitTextToSize(drug1.mechanism, 60), doc.splitTextToSize(drug2.mechanism, 60)],
+                ['Side Effects', doc.splitTextToSize(drug1.sideEffects, 60), doc.splitTextToSize(drug2.sideEffects, 60)],
+                ['Precautions', doc.splitTextToSize(drug1.precautions, 60), doc.splitTextToSize(drug2.precautions, 60)]
+            ];
+            
+            let yPosition = 90;
+            doc.setFontSize(12);
+            
+            comparisons.forEach((row, index) => {
+                if (index === 0) {
+                    // Header row
+                    doc.setFillColor(102, 126, 234);
+                    doc.setTextColor(255, 255, 255);
+                    doc.rect(20, yPosition - 5, 170, 10, 'F');
+                    doc.text(row[0], 25, yPosition);
+                    doc.text(row[1], 85, yPosition);
+                    doc.text(row[2], 145, yPosition);
+                    yPosition += 15;
+                } else {
+                    // Data rows
+                    doc.setTextColor(0, 0, 0);
+                    if (index % 2 === 0) {
+                        doc.setFillColor(245, 245, 245);
+                        doc.rect(20, yPosition - 5, 170, Math.max(10, Array.isArray(row[1]) ? row[1].length * 5 + 5 : 10), 'F');
+                    }
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text(row[0], 25, yPosition);
+                    doc.setFont(undefined, 'normal');
+                    
+                    if (Array.isArray(row[1])) {
+                        doc.text(row[1], 85, yPosition);
+                        doc.text(row[2], 145, yPosition);
+                        yPosition += row[1].length * 5 + 10;
+                    } else {
+                        doc.text(row[1], 85, yPosition);
+                        doc.text(row[2], 145, yPosition);
+                        yPosition += 15;
+                    }
+                    
+                    // Add new page if needed
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 30;
+                    }
+                }
+            });
+            
+            // Add footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Page ${i} of ${pageCount} | Banny SV Pharmaceutical Learning Platform - Educational Use Only`, 20, 285);
+                doc.text('Created by Banny SV | This comparison is for educational purposes only. Consult healthcare professionals for medical advice.', 20, 290);
+                doc.text('© 2024 Banny SV - All Rights Reserved | Platform Developer & Pharmaceutical Education Expert', 20, 295);
+            }
+            
+            // Save the PDF
+            doc.save(`BannySV_DrugComparison_${drug1.name}_vs_${drug2.name}_${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+        
+        async function exportToExcel(drug1, drug2) {
+            const wb = XLSX.utils.book_new();
+            
+            // Create comparison data
+            const comparisonData = [
+                ['Banny SV Pharmaceutical Learning Platform - Drug Comparison Report'],
+                [`Created by: Banny SV | Platform Developer & Pharmaceutical Education Expert`],
+                [`Generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`],
+                [''],
+                ['Comparison Aspect', drug1.name, drug2.name],
+                ['Generic Name', drug1.generic, drug2.generic],
+                ['Category', drug1.category.charAt(0).toUpperCase() + drug1.category.slice(1), drug2.category.charAt(0).toUpperCase() + drug2.category.slice(1)],
+                ['Type', drug1.type.toUpperCase(), drug2.type.toUpperCase()],
+                ['Form', drug1.form.charAt(0).toUpperCase() + drug1.form.slice(1), drug2.form.charAt(0).toUpperCase() + drug2.form.slice(1)],
+                ['Description', drug1.description, drug2.description],
+                ['Primary Uses', drug1.uses, drug2.uses],
+                ['Mechanism of Action', drug1.mechanism, drug2.mechanism],
+                ['Common Side Effects', drug1.sideEffects, drug2.sideEffects],
+                ['Precautions', drug1.precautions, drug2.precautions],
+                ['Contraindications', drug1.contraindications, drug2.contraindications],
+                ['Dosage Information', drug1.dosage, drug2.dosage],
+                ['Drug Interactions', drug1.interactions, drug2.interactions],
+                ['Storage Instructions', drug1.storage, drug2.storage],
+                ['Special Populations', drug1.specialPopulations, drug2.specialPopulations],
+                [''],
+                ['Brand Names', drug1.brands.join(', '), drug2.brands.join(', ')],
+                [''],
+                ['© 2024 Banny SV - All Rights Reserved'],
+                ['Created by: Banny SV | Pharmaceutical Learning Platform Developer'],
+                ['Disclaimer: This comparison is for educational purposes only.'],
+                ['Always consult healthcare professionals for medical advice.']
+            ];
+            
+            const ws = XLSX.utils.aoa_to_sheet(comparisonData);
+            
+            // Set column widths
+            ws['!cols'] = [
+                { width: 25 },
+                { width: 40 },
+                { width: 40 }
+            ];
+            
+            // Style the header
+            ws['A1'].s = {
+                font: { bold: true, sz: 16, color: { rgb: "667eea" } },
+                alignment: { horizontal: "center" }
+            };
+            
+            // Style the comparison header row
+            ws['A4'].s = { font: { bold: true }, fill: { fgColor: { rgb: "667eea" } } };
+            ws['B4'].s = { font: { bold: true }, fill: { fgColor: { rgb: "667eea" } } };
+            ws['C4'].s = { font: { bold: true }, fill: { fgColor: { rgb: "667eea" } } };
+            
+            XLSX.utils.book_append_sheet(wb, ws, "Drug Comparison");
+            
+            // Save the file
+            XLSX.writeFile(wb, `BannySV_DrugComparison_${drug1.name}_vs_${drug2.name}_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+        
+        async function exportToImage(drug1, drug2) {
+            // Create a temporary div with the comparison content
+            const tempDiv = document.createElement('div');
+            tempDiv.style.cssText = `
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+                width: 1200px;
+                background: white;
+                padding: 40px;
+                font-family: 'Inter', sans-serif;
+                color: #1f2937;
+            `;
+            
+            tempDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #667eea; font-size: 32px; font-weight: bold; margin: 0;">Banny SV Pharmaceutical Learning Platform</h1>
+                    <h2 style="color: #4b5563; font-size: 24px; margin: 10px 0;">Drug Comparison Report</h2>
+                    <p style="color: #667eea; font-size: 16px; font-weight: 600; margin: 5px 0;">Created by: Banny SV | Platform Developer & Expert</p>
+                    <p style="color: #6b7280; font-size: 14px; margin: 5px 0;">Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+                    <div style="flex: 1; margin-right: 20px; padding: 20px; background: #f3f4f6; border-radius: 12px;">
+                        <h3 style="color: #667eea; font-size: 20px; font-weight: bold; margin: 0 0 10px 0;">${drug1.name}</h3>
+                        <p style="color: #6b7280; margin: 0; font-size: 14px;">${drug1.generic}</p>
+                    </div>
+                    <div style="flex: 1; margin-left: 20px; padding: 20px; background: #f3f4f6; border-radius: 12px;">
+                        <h3 style="color: #667eea; font-size: 20px; font-weight: bold; margin: 0 0 10px 0;">${drug2.name}</h3>
+                        <p style="color: #6b7280; margin: 0; font-size: 14px;">${drug2.generic}</p>
+                    </div>
+                </div>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                    <thead>
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 15px; text-align: left; font-weight: bold;">Comparison Aspect</th>
+                            <th style="padding: 15px; text-align: left; font-weight: bold;">${drug1.name}</th>
+                            <th style="padding: 15px; text-align: left; font-weight: bold;">${drug2.name}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #f9fafb;">
+                            <td style="padding: 12px; font-weight: 600;">Category</td>
+                            <td style="padding: 12px;">${drug1.category.charAt(0).toUpperCase() + drug1.category.slice(1)}</td>
+                            <td style="padding: 12px;">${drug2.category.charAt(0).toUpperCase() + drug2.category.slice(1)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; font-weight: 600;">Type</td>
+                            <td style="padding: 12px;">${drug1.type.toUpperCase()}</td>
+                            <td style="padding: 12px;">${drug2.type.toUpperCase()}</td>
+                        </tr>
+                        <tr style="background: #f9fafb;">
+                            <td style="padding: 12px; font-weight: 600;">Form</td>
+                            <td style="padding: 12px;">${drug1.form.charAt(0).toUpperCase() + drug1.form.slice(1)}</td>
+                            <td style="padding: 12px;">${drug2.form.charAt(0).toUpperCase() + drug2.form.slice(1)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; font-weight: 600;">Primary Uses</td>
+                            <td style="padding: 12px; font-size: 12px;">${drug1.uses.substring(0, 100)}...</td>
+                            <td style="padding: 12px; font-size: 12px;">${drug2.uses.substring(0, 100)}...</td>
+                        </tr>
+                        <tr style="background: #f9fafb;">
+                            <td style="padding: 12px; font-weight: 600;">Side Effects</td>
+                            <td style="padding: 12px; font-size: 12px;">${drug1.sideEffects.substring(0, 100)}...</td>
+                            <td style="padding: 12px; font-size: 12px;">${drug2.sideEffects.substring(0, 100)}...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="text-align: center; margin-top: 30px; padding: 20px; background: #fef3c7; border-radius: 12px;">
+                    <p style="margin: 0 0 8px 0; font-size: 14px; color: #667eea; font-weight: 700;">
+                        © 2024 Banny SV - All Rights Reserved | Created by Banny SV
+                    </p>
+                    <p style="margin: 0; font-size: 12px; color: #92400e; font-weight: 600;">
+                        ⚠️ EDUCATIONAL USE ONLY - This comparison is for educational purposes only. Always consult healthcare professionals for medical advice.
+                    </p>
+                </div>
+            `;
+            
+            document.body.appendChild(tempDiv);
+            
+            try {
+                const canvas = await html2canvas(tempDiv, {
+                    width: 1200,
+                    height: tempDiv.scrollHeight,
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+                
+                // Convert to blob and download
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `BannySV_DrugComparison_${drug1.name}_vs_${drug2.name}_${new Date().toISOString().split('T')[0]}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png', 1.0);
+                
+            } finally {
+                document.body.removeChild(tempDiv);
+            }
+        }
+
+        // Quiz functionality
+        function selectQuizAnswer(answerIndex) {
+            selectedQuizAnswer = answerIndex;
+            
+            // Update button styles
+            document.querySelectorAll('.quiz-option').forEach((btn, index) => {
+                if (index === answerIndex) {
+                    btn.classList.add('bg-white/40');
+                } else {
+                    btn.classList.remove('bg-white/40');
+                }
+            });
+        }
+
+        function submitQuizAnswer() {
+            if (selectedQuizAnswer === null) {
+                showToast('Please select an answer first', 'error');
+                return;
+            }
+            
+            const correctAnswer = 1; // Acetaminophen is correct
+            
+            if (selectedQuizAnswer === correctAnswer) {
+                showToast('Correct! Acetaminophen is the generic name for Tylenol', 'success');
+            } else {
+                showToast('Incorrect. The correct answer is Acetaminophen', 'error');
+            }
+            
+            // Reset quiz
+            setTimeout(() => {
+                selectedQuizAnswer = null;
+                document.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.classList.remove('bg-white/40');
+                });
+            }, 2000);
+        }
+
+        // Utility functions
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Theme customization functions
+        function toggleColorPicker() {
+            const colorPicker = document.getElementById('color-picker');
+            colorPicker.classList.toggle('hidden');
+        }
+        
+        function changeThemeColor(color) {
+            const root = document.documentElement;
+            
+            // Generate secondary color (darker version)
+            const secondaryColor = adjustBrightness(color, -20);
+            
+            root.style.setProperty('--primary-color', color);
+            root.style.setProperty('--secondary-color', secondaryColor);
+            
+            // Save to localStorage
+            localStorage.setItem('themeColor', color);
+            localStorage.setItem('secondaryColor', secondaryColor);
+            
+            // Hide color picker
+            document.getElementById('color-picker').classList.add('hidden');
+            
+            showToast('Theme color updated!', 'success');
+        }
+        
+        function adjustBrightness(hex, percent) {
+            // Remove # if present
+            hex = hex.replace('#', '');
+            
+            // Parse r, g, b values
+            const num = parseInt(hex, 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+        
+        function loadSavedTheme() {
+            const savedColor = localStorage.getItem('themeColor');
+            const savedSecondaryColor = localStorage.getItem('secondaryColor');
+            
+            if (savedColor && savedSecondaryColor) {
+                const root = document.documentElement;
+                root.style.setProperty('--primary-color', savedColor);
+                root.style.setProperty('--secondary-color', savedSecondaryColor);
+            }
+        }
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedTheme();
+            initializeApp();
+        });
+
+        // Close modals and dropdowns when clicking outside
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal-backdrop')) {
+                closeDrugModal();
+                closeFavoritesModal();
+            }
+            
+            // Close color picker when clicking outside
+            const colorPicker = document.getElementById('color-picker');
+            const colorPickerButton = event.target.closest('[onclick="toggleColorPicker()"]');
+            
+            if (!colorPickerButton && !colorPicker.contains(event.target)) {
+                colorPicker.classList.add('hidden');
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9948e7f0a4864728',t:'MTc2MTQ3MDcyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
