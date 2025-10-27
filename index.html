@@ -1090,15 +1090,12 @@
   <i class="nav-icon fas fa-store"></i>
   <span class="nav-text">Store</span>
 </a>
-<!-- single, correct Store link -->
-<a href="store.html"
-   class="nav-item store-premium"
-   id="store-link">
+<!-- ✅ Working Store Link -->
+<a href="store.html" class="nav-item store-premium" id="store-link">
   <i class="nav-icon fas fa-store"></i>
   <span class="nav-text">Store</span>
   <span class="new-badge">NEW</span>
-  <span class="glassy-shine"></span>
-</a>
+  <span 
 
 </nav>
 
@@ -2572,20 +2569,19 @@ style.innerHTML = `
 document.head.appendChild(style);
 </script>
 
- 
-<!-- place this script before closing </body> -->
+ <!-- ✅ Fix for sidebar JS blocking navigation -->
 <script>
-  // Ensure Store always opens even if other scripts prevent links.
-  (function () {
-    const link = document.getElementById('store-link');
-    if (!link) return;
-    link.addEventListener('click', function (e) {
-      e.stopImmediatePropagation(); // stop other handlers that might block it
-      e.preventDefault();           // prevent default just in case
-      window.location.href = 'store.html';
-    }, { passive: false });
-  })();
+  document.addEventListener("DOMContentLoaded", function() {
+    const storeLink = document.getElementById("store-link");
+    if (storeLink) {
+      storeLink.addEventListener("click", function(event) {
+        event.stopPropagation();  // Stop other sidebar scripts
+        window.location.href = "store.html"; // Navigate to the page
+      });
+    }
+  });
 </script>
+
  
  
  </body>
