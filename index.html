@@ -470,21 +470,29 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
         }
         
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .hero-avatar {
-                width: 200px;
-                height: 200px;
-            }
-            
-            .hero-avatar i {
-                font-size: 4rem;
-            }
-        }
+      /* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .hero-avatar {
+        width: 180px;
+        height: 180px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-avatar i {
+        font-size: 3rem;
+    }
+}
+
         
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -1159,6 +1167,7 @@
        </div>
       </div>
      </div>
+
     </div><!-- Scroll Indicator -->
     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
      <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
