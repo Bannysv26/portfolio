@@ -977,65 +977,104 @@
         .presentation-overlay:hover .play-button {
             transform: scale(1);
         }
-
-/* === Premium Neon-Glassy Store Link === */
+/* === ✨ Ultimate Premium Neon-Glass Store Link (Canva Pro Style) === */
 .store-premium {
   position: relative;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(12px);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.35s ease;
-  box-shadow: 0 0 10px rgba(99,102,241,0.1);
-}
-
-.store-premium:hover {
-  background: rgba(255,255,255,0.1);
+  background: radial-gradient(circle at 30% 20%, rgba(163, 132, 255, 0.25) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: none; /* 🟢 no visible border */
+  border-radius: 14px;
+  backdrop-filter: blur(20px) saturate(180%);
   box-shadow:
-    0 0 15px rgba(99,102,241,0.6),
-    0 0 30px rgba(255,99,71,0.4);
-  transform: translateX(8px);
+    0 0 20px rgba(163, 132, 255, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.08);
+  transition: all 0.45s ease;
+  overflow: hidden;
+  animation: subtleAura 6s ease-in-out infinite alternate;
 }
 
-/* moving glassy highlight */
+/* 🩵 Subtle constant breathing glow */
+@keyframes subtleAura {
+  0% {
+    box-shadow:
+      0 0 20px rgba(163, 132, 255, 0.35),
+      0 0 35px rgba(255, 120, 120, 0.2),
+      inset 0 0 8px rgba(255, 255, 255, 0.05);
+  }
+  100% {
+    box-shadow:
+      0 0 30px rgba(163, 132, 255, 0.6),
+      0 0 60px rgba(255, 150, 150, 0.35),
+      inset 0 0 12px rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* 💫 Hover: bright neon effect + slight movement */
+.store-premium:hover {
+  transform: translateX(8px) scale(1.06);
+  background: radial-gradient(circle at 30% 20%, rgba(163, 132, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 100%);
+  box-shadow:
+    0 0 35px rgba(163, 132, 255, 0.8),
+    0 0 60px rgba(255, 125, 125, 0.4);
+}
+
+/* 🌈 Animated reflective glass highlight */
 .glassy-shine {
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 70%;
+  left: -120%;
+  width: 80%;
   height: 100%;
-  background: linear-gradient(115deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,0.4) 50%,
-      rgba(255,255,255,0) 100%);
+  background: linear-gradient(120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.45) 50%,
+      rgba(255, 255, 255, 0) 100%);
   transform: skewX(-25deg);
-  animation: glassyMove 3.5s infinite;
+  animation: glassSweep 4.2s ease-in-out infinite;
+  pointer-events: none;
 }
 
-@keyframes glassyMove {
-  0% { left: -100%; }
-  50% { left: 130%; }
-  100% { left: 130%; }
+@keyframes glassSweep {
+  0% { left: -120%; opacity: 0; }
+  40% { opacity: 1; }
+  60% { left: 130%; opacity: 1; }
+  100% { left: 130%; opacity: 0; }
 }
 
-/* “NEW” badge */
+/* 🔮 Premium “NEW” badge shimmer effect */
 .new-badge {
-  background: linear-gradient(90deg, #6d5dfc, #ff3b3b);
+  background: linear-gradient(270deg, #a48bff, #ff6b6b, #ffb347);
   color: #fff;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 8px;
+  padding: 3px 9px;
+  border-radius: 10px;
   margin-left: 8px;
-  letter-spacing: 0.5px;
-  animation: badgePulse 1.5s infinite;
-  box-shadow: 0 0 6px rgba(109,93,252,0.8);
+  letter-spacing: 0.6px;
+  background-size: 250%;
+  animation: badgeFlow 3.5s linear infinite, badgePulse 2.2s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  border: none;
+  box-shadow: 0 0 10px rgba(163, 132, 255, 0.6);
+}
+
+@keyframes badgeFlow {
+  0% { background-position: 0%; }
+  100% { background-position: 250%; }
 }
 
 @keyframes badgePulse {
   0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.85; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+}
+
+/* ✨ Icon glow effect */
+.store-premium .nav-icon {
+  transition: 0.4s ease;
+}
+
+.store-premium:hover .nav-icon {
+  color: #a48bff;
+  filter: drop-shadow(0 0 10px rgba(163, 132, 255, 0.9));
 }
 
 
@@ -1109,7 +1148,8 @@
     </div>
    </div>
   </nav><!-- Mobile Menu Button --> <button class="fixed top-4 left-4 z-[1100] lg:hidden w-12 h-12 bg-gray-800/90 backdrop-blur-md rounded-lg flex items-center justify-center text-white shadow-lg border border-white/20 transition-all duration-300 hover:bg-gray-700/90" id="mobile-menu-btn" onclick="toggleMobileMenu()"> <i class="fas fa-bars text-lg"></i> </button> <!-- Main Content -->
-  <main class="main-content"><!-- Hero Section -->
+  <main class="main-content">
+    <!-- Hero Section -->
    <section id="home" class="hero-section">
     <div class="container mx-auto px-6 lg:px-12">
      <div class="grid lg:grid-cols-2 gap-12 items-center">
