@@ -23,7 +23,6 @@
 
   <!-- TWITTER CARD -->
   <meta name="twitter:card" content="summary_large_image">
-
   <!-- GOOGLE STRUCTURED DATA (SEO BOOST) -->
   <script type="application/ld+json">
   {
@@ -45,6 +44,196 @@
  <body>
   
  
+
+
+
+
+
+
+
+
+<style id="mobile-sidebar-final-fix">
+  /* Prevent hidden overlay from blocking touches (matches your .mobile-overlay + .show) */
+  .mobile-overlay { pointer-events: none !important; opacity: 0 !important; visibility: hidden !important; transition: opacity .25s ease, visibility .25s linear; }
+  .mobile-overlay.show { pointer-events: auto !important; opacity: 1 !important; visibility: visible !important; }
+
+  /* Keep sidebar below the button (safe default) */
+  .sidebar { z-index: 1045 !important; }
+
+  /* Ensure the mobile menu button sits above overlays/sidebar and has a big touch area */
+  #mobile-menu-btn, .mobile-menu-btn, .sidebar-toggle, [data-mobile-menu-btn] {
+    z-index: 1100 !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Prevent inner icons from swallowing events */
+  #mobile-menu-btn .icon, .mobile-menu-btn .icon, .sidebar-toggle .icon { pointer-events: none; }
+/* Smooth mobile sidebar open animation */
+.sidebar.mobile-open {
+    transform: translateX(0) !important;
+    transition: transform 0.3s ease;
+}
+
+/* Better overlay fade animation */
+.mobile-overlay.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity .3s ease, visibility .3s ease;
+}
+
+/* Mobile menu button touch animation */
+#mobile-menu-btn:active,
+.mobile-menu-btn:active,
+.sidebar-toggle:active {
+    transform: scale(0.90);
+    transition: transform .1s ease;
+}
+
+
+
+
+</style>
+
+<script>
+/* ======= Defensive mobile menu initializer & DOMContentLoaded caller ======= */
+(function(){
+  // Safe initializeMobileMenu function: will NOT overwrite if you already defined one.
+  if (typeof window.initializeMobileMenu !== 'function') {
+    window.initializeMobileMenu = function() {
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn') || document.querySelector('.mobile-menu-btn') || document.querySelector('.sidebar-toggle') || document.querySelector('[data-mobile-menu-btn]');
+      const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar') || null;
+      const overlay = document.getElementById('mobile-overlay') || document.querySelector('.mobile-overlay') || null;
+
+      console.info('initializeMobileMenu (safe) running...', { mobileMenuBtn, sidebar, overlay });
+
+      if (!mobileMenuBtn) {
+        console.warn('initializeMobileMenu: no menu button found. Selector tried: #mobile-menu-btn, .mobile-menu-btn, .sidebar-toggle, [data-mobile-menu-btn]');
+        return;
+      }
+
+      // Provide safe open/close/toggle only if not present
+      if (typeof window.openMobileMenu !== 'function') {
+        window.openMobileMenu = function() {
+          if (sidebar) sidebar.classList.add('mobile-open');
+          if (overlay) overlay.classList.add('show');
+          try { mobileMenuBtn.innerHTML = '<i class="fas fa-times text-lg"></i>'; } catch(e){}
+          document.body.style.overflow = 'hidden';
+        };
+      }
+
+      if (typeof window.closeMobileMenu !== 'function') {
+        window.closeMobileMenu = function() {
+          if (sidebar) sidebar.classList.remove('mobile-open');
+          if (overlay) overlay.classList.remove('show');
+          try { mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-lg"></i>'; } catch(e){}
+          document.body.style.overflow = '';
+        };
+      }
+
+      if (typeof window.toggleMobileMenu !== 'function') {
+        window.toggleMobileMenu = function() {
+          const open = sidebar && sidebar.classList.contains('mobile-open');
+          if (open) window.closeMobileMenu(); else window.openMobileMenu();
+        };
+      }
+
+      // Attach event listeners safely, avoiding double-fire (touch -> synthetic click)
+      let lastTouch = 0;
+
+      // touchstart: set lastTouch and toggle
+      mobileMenuBtn.addEventListener('touchstart', function(e){
+        lastTouch = Date.now();
+        try { window.toggleMobileMenu(); } catch(err){ console.warn(err); }
+      }, { passive: true });
+
+      // click: ignore if a touch happened very recently
+      mobileMenuBtn.addEventListener('click', function(e){
+        if (Date.now() - lastTouch < 700) return;
+        try { window.toggleMobileMenu(); } catch(err){ console.warn(err); }
+      });
+
+      // overlay click closes the menu (prefer site's close function if present)
+      if (overlay) {
+        overlay.addEventListener('click', function(){
+          try {
+            if (typeof window.closeMobileMenu === 'function') { window.closeMobileMenu(); return; }
+          } catch(err){ console.warn(err); }
+          // fallback
+          if (sidebar) sidebar.classList.remove('mobile-open');
+          overlay.classList.remove('show');
+        });
+      }
+
+      // close on nav item click (non-destructive)
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(){
+          try { if (typeof window.closeMobileMenu === 'function') window.closeMobileMenu(); } catch(e){/*ignore*/ }
+        });
+      });
+
+      // close on Escape
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && sidebar && sidebar.classList.contains('mobile-open')) {
+          try { if (typeof window.closeMobileMenu === 'function') window.closeMobileMenu(); } catch(e){/*ignore*/ }
+        }
+      });
+
+      // make sure overlay isn't blocking on load unless it has .show
+      if (overlay && !overlay.classList.contains('show')) overlay.style.pointerEvents = 'none';
+
+      console.info('initializeMobileMenu (safe) completed');
+    }; // end initializeMobileMenu
+  } // end if not defined
+
+  // Ensure DOMContentLoaded runs your initializers (adds mobile menu init if missing)
+  function onReady() {
+    try {
+      if (typeof initializeContactForm === 'function') {
+        try { initializeContactForm(); } catch(err){ console.warn('initializeContactForm error', err); }
+      }
+    } catch(e){ /* ignore */ }
+
+    try {
+      if (typeof initializeMobileMenu === 'function') {
+        try { initializeMobileMenu(); } catch(err){ console.warn('initializeMobileMenu error', err); }
+      }
+    } catch(e){ /* ignore */ }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
+  else onReady();
+})();
+</script>
+<!-- ======= End mobile menu safe fix block ======= -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -1251,12 +1440,13 @@
       </div>
      </div>
 
-    </div><!-- Scroll Indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-     <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-      <div class="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
-     </div>
-    </div>
+  
+
+
+
+
+
+
    </section><!-- About Section -->
    <section id="about" class="section">
     <div class="container mx-auto px-6 lg:px-12">
@@ -1374,7 +1564,7 @@
        <h3 class="text-xl font-bold mb-4">Matrix Tablets: Advanced Drug Delivery Systems</h3>
        <p class="opacity-80 mb-6">Comprehensive review of matrix tablet formulations and their applications in controlled drug release mechanisms.</p>
       <div class="flex items-center justify-between">
-  <span class="text-sm opacity-70">Published: 2024</span>
+  <span class="text-sm opacity-70">Published: 2025</span>
 
   <a href="https://wjpr.net/public/index.php/abstract_file/30711" 
      target="_blank" 
@@ -1399,7 +1589,7 @@
 <h3 class="text-xl font-bold mb-4">Depression: Therapeutic Interventions</h3>
        <p class="opacity-80 mb-6">Comprehensive analysis of depression treatment modalities and emerging pharmaceutical interventions.</p>
       <div class="flex items-center justify-between">
-  <span class="text-sm opacity-70">Published: 2023</span>
+  <span class="text-sm opacity-70">Published: 2025</span>
 
   <a href="https://www.wjpr.net/abstract_file/31893" 
      target="_blank" 
@@ -1458,10 +1648,10 @@
          </div>
         </div>
         <div class="glass-card p-6">
-         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">JavaScript</span> <span class="text-yellow-400 font-bold">2    0%</span>
+         <div class="flex justify-between items-center mb-4"><span class="font-semibold text-lg">JavaScript</span> <span class="text-yellow-400 font-bold">20%</span>
          </div>
          <div class="w-full bg-gray-700 rounded-full h-3">
-          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500" data-width="85" style="width: 0%;"></div>
+          <div class="skill-bar h-3 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500" data-width="20" style="width: 0%;"></div>
          </div>
         </div>
        
@@ -1569,8 +1759,8 @@
   </p>
 
   <div class="flex flex-wrap gap-2 mb-6">
-    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">React</span>
-    <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Node.js</span>
+    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">tablet punching machine</span>
+    <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">NDDS</span>
   </div>
 
   <div class="flex gap-3">
@@ -1578,15 +1768,10 @@
     <a href="https://bannysv.netlify.app/store.html"
        target="_blank"
        class="flex-1 neon-button text-sm py-2 text-center">
-      <i class="fas fa-external-link-alt mr-2"></i>Demo
+      <i class="fas fa-external-link-alt mr-2"></i>OPEN
     </a>
 
-    <!-- Code Button -->
-    <button onclick="openConfidentialModal()"
-      class="flex-1 neon-button text-sm py-2 text-center"
-      style="--primary-color: #10b981;">
-      <i class="fab fa-github mr-2"></i>Code
-    </button>
+   
   </div>
 </div>
 
@@ -1654,8 +1839,8 @@
   </p>
 
   <div class="flex flex-wrap gap-2 mb-6">
-    <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">Vue.js</span>
-    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Chart.js</span>
+    <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm"></span>
+    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm"></span>
   </div>
 
   <div class="flex gap-3">
@@ -1738,8 +1923,8 @@
   <p class="opacity-80 mb-4">Data visualization dashboard for research analytics</p>
 
   <div class="flex flex-wrap gap-2 mb-6">
-    <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm">D3.js</span>
-    <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm">Python</span>
+    <span class="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm"></span>
+    <span class="px-3 py-1 bg-pink-500/20 text-pink-300 rounded-full text-sm"></span>
   </div>
 
   <div class="flex gap-3">
@@ -2123,7 +2308,24 @@
        </div><!-- Social Links -->
        <div class="glass-card p-8">
         <h3 class="text-2xl font-bold mb-6">Connect With Me</h3>
-        <div class="grid grid-cols-3 gap-4"><a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-linkedin text-2xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">LinkedIn</p></a> <a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-github text-2xl text-gray-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">GitHub</p></a> <a href="#" class="glass-card p-4 text-center hover-card group"> <i class="fab fa-slideshare text-2xl text-orange-400 mb-2 group-hover:scale-110 transition-transform"></i> <p class="text-sm font-semibold">SlideShare</p></a>
+<div class="grid grid-cols-3 gap-4">
+
+  <a href="#" class="glass-card p-4 text-center hover-card group prevent-social">
+    <i class="fab fa-linkedin text-2xl text-blue-400 mb-2 group-hover:scale-110 transition-transform"></i>
+    <p class="text-sm font-semibold">LinkedIn</p>
+  </a>
+
+  <a href="#" class="glass-card p-4 text-center hover-card group prevent-social">
+    <i class="fab fa-instagram text-2xl text-gray-400 mb-2 group-hover:scale-110 transition-transform"></i>
+    <p class="text-sm font-semibold">Instagram</p>
+  </a>
+
+  <a href="#" class="glass-card p-4 text-center hover-card group prevent-social">
+    <i class="fab fa-slideshare text-2xl text-orange-400 mb-2 group-hover:scale-110 transition-transform"></i>
+    <p class="text-sm font-semibold">SlideShare</p>
+  </a>
+
+</div>
         </div>
        </div><!-- Quick Stats -->
        <div class="glass-card p-8">
@@ -2147,15 +2349,15 @@
          </div>
          <div class="text-center">
           <div class="text-3xl font-bold gradient-text mb-2">
-           50+
+           6+
           </div>
           <div class="text-sm opacity-70">
-           Happy Clients
+          power point presentations
           </div>
          </div>
          <div class="text-center">
           <div class="text-3xl font-bold gradient-text mb-2">
-           5+
+           1+
           </div>
           <div class="text-sm opacity-70">
            Years Experience
@@ -2183,7 +2385,7 @@
       <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mr-3"><i class="fas fa-robot text-white text-sm"></i>
       </div>
       <div>
-       <h4 class="font-bold text-sm">Chat Assistant</h4>
+       <h4 class="font-bold text-sm">Banny Chat Assistant</h4>
        <p class="text-xs opacity-70">Online now</p>
       </div>
      </div><button onclick="toggleChatbox()" class="text-white/70 hover:text-white"> <i class="fas fa-times"></i> </button>
@@ -2771,77 +2973,7 @@ function showToast(message, type = 'success') {
             };
         }
 
-        // Chatbox functionality
-        let chatboxOpen = false;
-
-        function toggleChatbox() {
-            const chatbox = document.getElementById('chatbox');
-            const toggle = document.getElementById('chatbox-toggle');
-            
-            chatboxOpen = !chatboxOpen;
-            
-            if (chatboxOpen) {
-                chatbox.classList.add('show');
-                toggle.innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                chatbox.classList.remove('show');
-                toggle.innerHTML = '<i class="fas fa-comments"></i>';
-            }
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            
-            if (message) {
-                addChatMessage(message, 'user');
-                input.value = '';
-                
-                // Simulate bot response
-                setTimeout(() => {
-                    const response = generateBotResponse(message);
-                    addChatMessage(response, 'bot');
-                }, 1000);
-            }
-        }
-
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        function addChatMessage(message, sender) {
-            const messagesContainer = document.getElementById('chatbox-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = `<p>${message}</p>`;
-            
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function generateBotResponse(userMessage) {
-            const responses = {
-                'hello': 'Hello! Welcome to Banny\'s portfolio. How can I assist you today?',
-                'research': 'Banny specializes in pharmaceutical sciences, particularly matrix tablets and drug delivery systems. Would you like to know more about any specific research?',
-                'contact': 'You can reach Banny through the contact form below, or connect on social media. He typically responds within 24 hours.',
-                'projects': 'Banny has worked on various projects including pharmaceutical databases, mental health trackers, and research analytics dashboards. Check out the Projects section!',
-                'experience': 'Banny is currently a PhD Research Scholar in Pharmaceutical Sciences with 3+ years of frontend development experience.',
-                'skills': 'Banny\'s expertise includes pharmaceutical research, drug delivery systems, JavaScript, React, and data analysis.',
-                'default': 'That\'s interesting! Feel free to explore the portfolio or ask me about Banny\'s research, projects, or experience. You can also use the contact form to get in touch directly.'
-            };
-            
-            const lowerMessage = userMessage.toLowerCase();
-            
-            for (const [key, response] of Object.entries(responses)) {
-                if (lowerMessage.includes(key)) {
-                    return response;
-                }
-            }
-            
-            return responses.default;
-        }
+      
 
 
 
@@ -2931,107 +3063,6 @@ function showToast(message, type = 'success') {
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990187a3608847db',t:'MTc2MDcyMjI5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
  
  
- <!-- === Banny SV Footer Section === -->
-<footer id="banny-footer" style="position:relative; background: radial-gradient(circle at top, rgba(0,114,255,0.2), #0a0c12); padding:5rem 2rem 2rem; overflow:hidden; border-top:1px solid rgba(255,255,255,0.1); color:#e2e8f0; z-index:100;">
-
-  <!-- Particle Background -->
-  <div id="footer-particles" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; overflow:hidden;"></div>
-
-  <!-- Footer Container -->
-  <div style="position:relative; z-index:2; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem;">
-
-    <!-- Brand Card -->
-    <div style="background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:2rem; backdrop-filter:blur(10px); transition:0.4s;">
-      <h3 style="font-size:1.2rem; margin-bottom:1rem; background: linear-gradient(90deg,#00c6ff,#0072ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Banny SV</h3>
-      <p style="color:#94a3b8; font-size:0.9rem; line-height:1.6;">Creating AI-driven, modern, and aesthetic digital experiences that leave an impact.</p>
-      <!-- Social Icons -->
-      <div style="display:flex; gap:1rem; margin-top:1rem;">
-        <a href="#" style="display:flex; align-items:center; justify-content:center; width:45px; height:45px; border-radius:50%; background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); transition:0.3s;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter" style="width:24px;height:24px;">
-        </a>
-        <a href="#" style="display:flex; align-items:center; justify-content:center; width:45px; height:45px; border-radius:50%; background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); transition:0.3s;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" style="width:24px;height:24px;">
-        </a>
-        <a href="#" style="display:flex; align-items:center; justify-content:center; width:45px; height:45px; border-radius:50%; background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); transition:0.3s;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:24px;height:24px;">
-        </a>
-        <a href="#" style="display:flex; align-items:center; justify-content:center; width:45px; height:45px; border-radius:50%; background: rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); transition:0.3s;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" style="width:24px;height:24px;">
-        </a>
-      </div>
-    </div>
-
-    <!-- Quick Links Card -->
-    <div style="background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:2rem; backdrop-filter:blur(10px); transition:0.4s;">
-      <h3 style="font-size:1.2rem; margin-bottom:1rem; background: linear-gradient(90deg,#00c6ff,#0072ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Explore</h3>
-      <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.5rem;">
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Home</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Projects</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Gallery</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Showcase</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Contact</a>
-      </div>
-    </div>
-
-    <!-- Resources Card -->
-    <div style="background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:2rem; backdrop-filter:blur(10px); transition:0.4s;">
-      <h3 style="font-size:1.2rem; margin-bottom:1rem; background: linear-gradient(90deg,#00c6ff,#0072ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Resources</h3>
-      <div style="display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:0.5rem;">
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Docs</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Blog</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Community</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Updates</a>
-        <a href="#" style="color:#94a3b8; text-decoration:none; font-size:0.9rem; padding:0.5rem 0.8rem; border-radius:0.5rem; background: rgba(255,255,255,0.05); transition:0.3s;">Privacy</a>
-      </div>
-    </div>
-
-    <!-- Subscribe Card -->
-    <div style="background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:2rem; backdrop-filter:blur(10px); transition:0.4s;">
-      <h3 style="font-size:1.2rem; margin-bottom:1rem; background: linear-gradient(90deg,#00c6ff,#0072ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Stay Updated</h3>
-      <p style="color:#94a3b8; font-size:0.9rem; line-height:1.6;">Subscribe for AI, design, and innovation updates from <b>Banny SV</b>.</p>
-      <div style="display:flex; margin-top:1rem; border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);">
-        <input type="email" placeholder="Enter your email" required style="flex:1; background:transparent; border:none; padding:0.9rem 1.2rem; color:#fff; outline:none; font-size:0.9rem;">
-        <button style="background: linear-gradient(90deg,#00c6ff,#0072ff); border:none; padding:0 1.5rem; color:#fff; font-weight:600; cursor:pointer; transition:0.3s;">Join</button>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Footer Bottom -->
-  <div style="margin-top:3rem; text-align:center; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.1); padding-top:1rem; font-size:0.9rem;">
-    © 2025 <span style="color:#00c6ff; font-weight:600;">Banny SV</span> — Built and designed entirely by <span style="color:#00c6ff; font-weight:600;">Banny SV</span>. All rights reserved.
-  </div>
-</footer>
-
-<!-- Particle Script + Keyframes -->
-<script>
-const container = document.getElementById('footer-particles');
-for(let i=0;i<30;i++){
-  const p=document.createElement('span');
-  const size=Math.random()*6+4;
-  p.style.width=`${size}px`;
-  p.style.height=`${size}px`;
-  p.style.left=`${Math.random()*100}%`;
-  p.style.top=`${Math.random()*100}%`;
-  p.style.position='absolute';
-  p.style.borderRadius='50%';
-  p.style.background='rgba(0,114,255,0.4)';
-  p.style.animation=`float ${8+Math.random()*8}s linear infinite`;
-  p.style.animationDelay=`${Math.random()*5}s`;
-  container.appendChild(p);
-}
-
-// Particle keyframes
-const style = document.createElement('style');
-style.innerHTML = `
-@keyframes float {
-  0% { transform: translateY(0) scale(1); opacity:1; }
-  50% { transform: translateY(-50px) scale(1.3); opacity:0.6; }
-  100% { transform: translateY(0) scale(1); opacity:1; }
-}
-`;
-document.head.appendChild(style);
-</script>
 
  <!-- ✅ Fix for sidebar JS blocking navigation -->
 <script>
@@ -3098,7 +3129,660 @@ document.head.appendChild(style);
 
 
 
+<script>
+(function () {
 
- 
+    const THEMES = [
+        {
+            name: "default",
+            vars: {
+                "--primary-color": "#6366f1",
+                "--secondary-color": "#8b5cf6",
+                "--accent-color": "#f59e0b",
+                "--background-color": "#0f0f23",
+                "--text-color": "#ffffff",
+                "--neon-glow": "#00ffff",
+                "--particle-color": "#ff6b6b",
+            }
+        },
+        {
+            name: "dark-neon",
+            vars: {
+                "--primary-color": "#00eaff",
+                "--secondary-color": "#0088ff",
+                "--accent-color": "#00ff88",
+                "--background-color": "#050510",
+                "--text-color": "#e0eaff",
+                "--neon-glow": "#00eaff",
+                "--particle-color": "#00ffcc",
+            }
+        },
+        {
+            name: "cyber-green",
+            vars: {
+                "--primary-color": "#00ff6a",
+                "--secondary-color": "#00cc55",
+                "--accent-color": "#00ffaa",
+                "--background-color": "#041b0f",
+                "--text-color": "#ccffdd",
+                "--neon-glow": "#00ff6a",
+                "--particle-color": "#00ffaa",
+            }
+        },
+        {
+            name: "sunset",
+            vars: {
+                "--primary-color": "#ff6a3d",
+                "--secondary-color": "#ff914d",
+                "--accent-color": "#ffd36a",
+                "--background-color": "#1b0f0f",
+                "--text-color": "#ffeedd",
+                "--neon-glow": "#ff6a3d",
+                "--particle-color": "#ff914d",
+            }
+        }
+    ];
+
+    let index = 0;
+
+    function applyTheme(themeVars) {
+        Object.entries(themeVars).forEach(([key, value]) => {
+            document.documentElement.style.setProperty(key, value);
+        });
+    }
+
+    // Watch for the toast text
+    const TARGET_TOAST = "Theme customization coming soon!";
+    const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
+                if (!node || !node.textContent) continue;
+                if (node.textContent.includes(TARGET_TOAST)) {
+
+                    // remove toast
+                    try { node.remove(); } catch (e) {}
+
+                    // switch theme
+                    index = (index + 1) % THEMES.length;
+                    applyTheme(THEMES[index].vars);
+
+                    showToast(`Theme switched: ${THEMES[index].name}`, "success");
+                }
+            }
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+})();
+</script>
+
+ <script>
+(function () {
+
+    const TARGET_TOAST = "CV download will be available soon!";
+
+    // Path to your actual CV file (CHANGE THIS ONE LINE)
+    const CV_FILE_URL = "Banny_SV_Demo_Resume.pdf";  
+    // If hosted on Netlify: "https://yourwebsite.netlify.app/cv.pdf"
+
+    function triggerDownload() {
+        const a = document.createElement("a");
+        a.href = CV_FILE_URL;
+        a.download = "Banny-SV-CV.pdf";  // filename for user
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+
+    // Detect the toast → replace with real download
+    const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+            for (const node of m.addedNodes) {
+                if (!node || !node.textContent) continue;
+
+                const text = node.textContent.trim();
+
+                if (text.includes(TARGET_TOAST)) {
+                    // Remove toast
+                    try { node.remove(); } catch(e){}
+
+                    // Trigger actual download
+                    triggerDownload();
+
+                    // Show success message
+                    showToast("Your CV is downloading…", "success");
+                }
+            }
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+})();
+</script>
+<script>
+// Auto-version using latest modified time of your website files
+async function checkAutoVersion() {
+    try {
+        // Fetch ANY file that changes when you push updates (index.html is best)
+        const res = await fetch("/index.html", { cache: "no-cache" });
+        const text = await res.text();
+
+        // Extract last modified time from headers
+        const lastModified = res.headers.get("last-modified") || Date.now().toString();
+
+        const savedVersion = localStorage.getItem("auto_version");
+
+        // If version changed → show message
+        if (savedVersion !== lastModified) {
+            showToast("✨ Your site was updated — refresh to see changes!", "success");
+            localStorage.setItem("auto_version", lastModified);
+        }
+    } catch (e) {
+        console.error("Auto-version check failed:", e);
+    }
+}
+
+checkAutoVersion();
+</script>
+<!-- FINAL: Neon Scroll Indicator (paste once before </body>) -->
+<style id="scroll-indicator-final-style">
+  /* Container */
+  #scroll-indicator-fixed {
+    position: fixed !important;
+    bottom: 28px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    transition: opacity 300ms ease, transform 300ms ease;
+    opacity: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Outer glass + border */
+  #scroll-indicator-fixed .outer {
+    width: 48px;
+    height: 78px;
+    border: 2px solid rgba(163,132,255,0.18);
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    backdrop-filter: blur(6px) saturate(140%);
+    box-shadow: 0 8px 24px rgba(99,102,241,0.08);
+  }
+
+  /* Neon dot */
+  #scroll-indicator-fixed .dot {
+    width: 4px;
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #c7f9ff, #7ee7ff);
+    box-shadow: 0 6px 22px rgba(99,102,241,0.24), 0 0 12px rgba(126,231,255,0.18);
+    animation: sPulse 1100ms infinite ease-in-out;
+  }
+
+  @keyframes sPulse {
+    0% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(8px); opacity: 0.45; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #scroll-indicator-fixed .dot { animation: none; }
+  }
+</style>
+
+<div id="scroll-indicator-fixed" role="button" aria-label="Scroll to research">
+  <div class="outer" aria-hidden="true">
+    <div class="dot"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const indicator = document.getElementById('scroll-indicator-fixed');
+  if (!indicator) return;
+
+  // ensure fully visible
+  indicator.style.opacity = '1';
+  indicator.style.pointerEvents = 'auto';
+
+  // click -> scroll to #research
+  indicator.addEventListener('click', function(e){
+    e.preventDefault();
+    const target = document.getElementById('about');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.warn('#research not found — please confirm section id');
+      // subtle feedback
+      indicator.style.transform = 'translateX(-50%) translateY(-6px)';
+      setTimeout(()=> indicator.style.transform = 'translateX(-50%)', 220);
+    }
+  });
+
+  // Fade out when user scrolls down, show when near top
+  function updateVisibility(){
+    const y = window.scrollY || window.pageYOffset;
+    if (y > 60) {
+      indicator.style.opacity = '0';
+      indicator.style.pointerEvents = 'none';
+    } else {
+      indicator.style.opacity = '1';
+      indicator.style.pointerEvents = 'auto';
+    }
+  }
+
+  // initial visibility
+  updateVisibility();
+
+  // throttle via rAF
+  let scheduled = false;
+  window.addEventListener('scroll', function(){
+    if (!scheduled) {
+      window.requestAnimationFrame(function(){
+        updateVisibility();
+        scheduled = false;
+      });
+      scheduled = true;
+    }
+  }, { passive: true });
+
+})();
+</script>
+
+
+<!-- Contact Notice Popup -->
+<div id="contact-popup"
+     class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 invisible transition-all duration-300 z-[2000]">
+  <div class="bg-[#1a1a2e]/90 border border-white/10 rounded-2xl p-6 w-80 text-center scale-90 transition-all duration-300 glass-card">
+    <h2 class="text-xl font-bold mb-3 gradient-text">Notice</h2>
+
+    <p class="text-gray-300 text-sm leading-relaxed mb-4">
+      Banny S.V does not share social media links.  
+      Please use the <strong>Contact section</strong> to reach him.
+    </p>
+
+    <button id="contact-popup-close"
+            class="mt-2 px-5 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold hover:scale-105 transition">
+      Okay
+    </button>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const popup = document.getElementById("contact-popup");
+  const popupClose = document.getElementById("contact-popup-close");
+
+  // All social cards → open popup instead of link
+  document.querySelectorAll(".prevent-social").forEach(card => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      popup.classList.remove("opacity-0", "invisible");
+      popup.classList.add("opacity-100", "visible");
+      popup.querySelector("div").classList.remove("scale-90");
+      popup.querySelector("div").classList.add("scale-100");
+    });
+  });
+
+  popupClose.addEventListener("click", () => {
+    popup.classList.add("opacity-0", "invisible");
+    popup.classList.remove("opacity-100", "visible");
+    popup.querySelector("div").classList.add("scale-90");
+    popup.querySelector("div").classList.remove("scale-100");
+  });
+
+});
+</script>
+
+<script>
+/* Chatbox with navigation + "Banny S.V." identity
+   Replace your existing chatbox JS with this block.
+*/
+
+let chatboxOpen = false;
+let isProcessing = false; // prevents double sends
+
+function toggleChatbox() {
+    const chatbox = document.getElementById('chatbox');
+    const toggle = document.getElementById('chatbox-toggle');
+
+    chatboxOpen = !chatboxOpen;
+
+    if (chatboxOpen) {
+        chatbox.classList.add('show');
+        if (toggle) toggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+        chatbox.classList.remove('show');
+        if (toggle) toggle.innerHTML = '<i class="fas fa-comments"></i>';
+    }
+}
+
+function sendChatMessage(text) {
+    // text optional (used by suggested buttons). If not provided, read input.
+    if (isProcessing) return;
+    const input = document.getElementById('chat-input');
+    let message = (typeof text === 'string' && text.length) ? text : (input ? input.value.trim() : '');
+    if (!message) return;
+
+    isProcessing = true;
+    addChatMessage(message, 'user');
+
+    if (input) input.value = '';
+
+    // Show typing indicator
+    showBotTyping(true);
+
+    // short "thinking" time
+    const baseDelay = 600;
+    const perChar = 18;
+    const delay = Math.min(baseDelay + (message.length * perChar), 2000);
+
+    setTimeout(async () => {
+        // If message is a navigation request, handle navigation
+        const navHandled = handleNavigationIfNeeded(message);
+        if (!navHandled) {
+            const response = generateBotResponse(message);
+            await typeBotMessage(response);
+        }
+        showBotTyping(false);
+        isProcessing = false;
+    }, delay);
+}
+
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+    }
+}
+
+function addChatMessage(message, sender) {
+    const messagesContainer = document.getElementById('chatbox-messages');
+    if (!messagesContainer) return;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    messageDiv.innerHTML = `<p>${escapeHtml(message)}</p>`;
+
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Typing indicator helpers
+function showBotTyping(show) {
+    const messagesContainer = document.getElementById('chatbox-messages');
+    if (!messagesContainer) return;
+
+    let typingElem = document.getElementById('bot-typing');
+    if (show) {
+        if (!typingElem) {
+            typingElem = document.createElement('div');
+            typingElem.id = 'bot-typing';
+            typingElem.className = 'message bot typing';
+            typingElem.innerHTML = `<p><span class="dot">●</span> <span class="dot">●</span> <span class="dot">●</span></p>`;
+            messagesContainer.appendChild(typingElem);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    } else {
+        if (typingElem) typingElem.remove();
+    }
+}
+
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+// Visual typing effect for bot messages
+async function typeBotMessage(fullText) {
+    showBotTyping(false); // remove typing placeholder if any
+
+    const messagesContainer = document.getElementById('chatbox-messages');
+    if (!messagesContainer) return;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message bot';
+    const p = document.createElement('p');
+    messageDiv.appendChild(p);
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    const minDelay = 6;
+    const maxDelay = 22;
+    const variance = 12;
+
+    for (let i = 0; i < fullText.length; i++) {
+        p.textContent = fullText.slice(0, i + 1);
+        const charDelay = Math.max(minDelay, Math.min(maxDelay, Math.floor(Math.random() * variance) + 4));
+        await sleep(charDelay);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+}
+
+// HTML-escape to avoid injection
+function escapeHtml(unsafe) {
+    return unsafe
+         .replaceAll('&', '&amp;')
+         .replaceAll('<', '&lt;')
+         .replaceAll('>', '&gt;')
+         .replaceAll('"', '&quot;')
+         .replaceAll("'", '&#039;');
+}
+
+/* ---------- NAVIGATION HANDLER ----------
+   Recognizes "go to/about/open/contact/skills/projects/research" and scrolls if found.
+   Returns true if it handled navigation (and replies).
+*/
+function handleNavigationIfNeeded(userMessage) {
+    const msg = userMessage.toLowerCase();
+
+    // Look for navigation verbs
+    const navVerbs = ['go to', 'open', 'navigate to', 'take me to', 'show', 'goto', 'visit', 'scroll to'];
+    let verbFound = navVerbs.some(v => msg.includes(v));
+    // also treat short commands like "about", "projects" directly as navigation too
+    const directKeywords = ['about', 'projects', 'research', 'contact', 'skills', 'home'];
+
+    // Map keywords -> section IDs (update if your section IDs differ)
+    const map = {
+        'about': 'about',
+        'projects': 'projects',
+        'research': 'research',
+        'contact': 'contact',
+        'skills': 'skills',
+        'home': 'hero' // hero/home
+    };
+
+    // Search for a target keyword in the message
+    for (const key of Object.keys(map)) {
+        if (msg.includes(key)) {
+            // If navigation verb present OR the message is short (user typed "about" or "go about")
+            if (verbFound || msg.trim().split(/\s+/).length <= 2) {
+                const id = map[key];
+                const el = document.getElementById(id);
+                if (el) {
+                    // perform scrolling
+                    el.scrollIntoView({ behavior: 'smooth' });
+                    const reply = `OK — navigating to the ${key} section for you. You can also use the contact section on bannysv.netlify.app if you need more details.`;
+                    // type reply
+                    typeBotMessage(reply);
+                    return true;
+                } else {
+                    // target section not found
+                    const reply = `I would navigate to ${key}, but I can't find that section on this page. Please check the menu or visit the Contact section on bannysv.netlify.app to reach Mr. Banny.`;
+                    typeBotMessage(reply);
+                    return true;
+                }
+            }
+        }
+    }
+
+    // no navigation intent detected
+    return false;
+}
+
+/* ---------- SMART RESPONSE GENERATOR ----------
+   Returns a string reply for non-navigation queries.
+   Identity: uses Banny S.V. as the subject.
+*/
+function generateBotResponse(userMessage) {
+    const msg = userMessage.trim().toLowerCase();
+
+    // Basic exact replies
+    const exact = {
+        'hello': "Hello! I'm Banny S.V.'s site assistant. Ask me about the site, presentations, or B.Pharm topics.",
+        'hi': "Hi! Ask me about research, presentations, or where to find resources on the site.",
+        'hey': "Hey! I can help you find presentations, projects, or show how to contact Banny."
+    };
+    if (exact[msg]) return exact[msg];
+
+    // Keyword-based replies
+    const knowledge = [
+        { keys: ['research', 'drug delivery', 'matrix system', 'matrix'], res: "Banny focuses on pharmaceutical topics like drug delivery systems and matrix-controlled release. See the Research section for details." },
+        { keys: ['pharmacognosy', 'lycopodium', 'spore'], res: "Check the Educational Contributions for practical pharmacognosy guides such as the Lycopodium Spore Method." },
+        { keys: ['pharmaceutics', 'dosage', 'tablet', 'formulation'], res: "Pharmaceutics (dosage forms, tablet classification) is covered in the site's presentation resources — great for B.Pharm students." },
+        { keys: ['organic', 'benzene', 'aromatic', 'huckel'], res: "There are slide-style lectures explaining benzene, aromaticity, Huckel's rule and electrophilic substitution in the Organic Chemistry section." },
+        { keys: ['slideshare', 'presentation', 'slides'], res: "Banny shares well-structured SlideShare presentations. Visit the SlideShare/Presentations area on the site to view them." },
+        { keys: ['projects', 'portfolio', 'work'], res: "Projects include educational tools, presentation designs, and research summaries — check the Projects section for examples." },
+        { keys: ['contact', 'reach', 'email', 'phone'], res: "To contact Mr. Banny, please use the Contact section on bannysv.netlify.app — he prefers to be contacted there." },
+        { keys: ['skills', 'expertise', 'technology'], res: "B.Pharm knowledge, pharmacognosy, pharmaceutics, and basics of web UI development are the main skills showcased on the site." },
+        { keys: ['education', 'b.pharm', 'b pharm', 'study'], res: "Banny creates study-friendly materials for B.Pharm students — look in Educational Contributions for slide-based lessons." },
+        { keys: ['social', 'linkedin', 'instagram', 'slideshare'], res: "Social links are not shared publicly. Please use the Contact section on the website to reach Mr. Banny." }
+    ];
+    for (const item of knowledge) {
+        for (const k of item.keys) {
+            if (msg.includes(k)) return item.res;
+        }
+    }
+
+    // If question-like (who/what/why/how)
+    if (/^(who|what|when|where|why|how)\b/.test(msg)) {
+        return "Good question! This site hosts B.Pharm study materials and SlideShare presentations by Banny. Tell me which topic you'd like to explore (e.g., 'benzene', 'tablets', 'lycopodium') and I'll point you to the right section.";
+    }
+
+    // Long request or instruction
+    if (msg.length > 60 || msg.includes('explain') || msg.includes('help') || msg.includes('how to')) {
+        return "I can help with slide-based explanations and study guides. Tell me which topic (e.g., 'benzene', 'dosage forms', 'lycopodium') and I'll point you to relevant resources on the site.";
+    }
+
+    // Friendly fallback (positive)
+    const fallback = [
+        "Nice! You seem curious — try asking about 'research', 'projects', or 'contact'.",
+        "Great! I can point you to presentations and study guides. Ask me about a topic or click the Contact section to reach Mr. Banny.",
+        "Interesting — I can help find slide resources or explain a topic. What would you like to learn about?"
+    ];
+    return fallback[Math.floor(Math.random() * fallback.length)];
+}
+
+/* ---------- Suggested quick buttons UI ----------
+   Adds simple buttons below the chat input (Research / Projects / Contact / About)
+*/
+(function attachSuggestedButtons(){
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('chat-suggestions-container');
+        if (!container) {
+            // create container if not present
+            const formArea = document.getElementById('chatbox');
+            if (!formArea) return;
+            const wrapper = document.createElement('div');
+            wrapper.id = 'chat-suggestions-container';
+            wrapper.style.padding = '12px';
+            wrapper.style.display = 'flex';
+            wrapper.style.gap = '8px';
+            wrapper.style.flexWrap = 'wrap';
+            wrapper.style.justifyContent = 'center';
+
+            const buttons = [
+                { t: 'Research', v: 'research' },
+                { t: 'Projects', v: 'projects' },
+                { t: 'Contact', v: 'contact' },
+                { t: 'About', v: 'about' }
+            ];
+            buttons.forEach(b => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'neon-button';
+                btn.style.padding = '6px 10px';
+                btn.style.fontSize = '13px';
+                btn.textContent = b.t;
+                btn.addEventListener('click', () => {
+                    // trigger navigation if possible, otherwise send as query
+                    sendChatMessage(b.v);
+                });
+                wrapper.appendChild(btn);
+            });
+
+            // append wrapper under chatbox (try to find chatbox-input area)
+            const chatboxEl = document.getElementById('chatbox');
+            if (chatboxEl) chatboxEl.appendChild(wrapper);
+        }
+    });
+})();
+
+</script>
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Find all potential social links
+    const links = document.querySelectorAll(
+        ".social-link-item, .glass-card, .prevent-social, .social-btn"
+    );
+
+    links.forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const popup = document.getElementById("social-popup");
+            if (!popup) {
+                console.warn("Popup #social-popup not found");
+                return;
+            }
+
+            // Try to find any text area inside popup
+            const msgBox =
+                popup.querySelector(".popup-message") ||
+                popup.querySelector("p") ||
+                popup.querySelector(".message") ||
+                popup.querySelector(".content");
+
+            if (msgBox) {
+                msgBox.innerHTML = `
+                    <strong>Banny S.V</strong> does not share social media links publicly.<br>
+                    Please contact via 
+                    <a href="https://bannysv.netlify.app#contact" target="_blank">bannysv.netlify.app</a>.
+                `;
+            }
+
+            // Try to open popup using multiple fallback methods
+            if (typeof showSocialPopup === "function") {
+                showSocialPopup();
+            } else if (typeof openSocialPopup === "function") {
+                openSocialPopup();
+            } else {
+                popup.classList.add("show");
+            }
+        });
+    });
+
+});
+</script>
+
+
+
+
+
+
  </body>
 </html>

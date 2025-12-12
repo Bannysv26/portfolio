@@ -1,4 +1,4 @@
 {
-  "version": "v2",
-  "message": "✨ Added new updates — refresh to see changes!"
+  "version": "__BUILD_TIME__",
+  "message": "✨ New updates available — refresh to see changes!"
 }
