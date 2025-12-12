@@ -3732,54 +3732,6 @@ function generateBotResponse(userMessage) {
 
 
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-    // Find all potential social links
-    const links = document.querySelectorAll(
-        ".social-link-item, .glass-card, .prevent-social, .social-btn"
-    );
-
-    links.forEach(link => {
-        link.addEventListener("click", function (e) {
-            e.preventDefault();
-
-            const popup = document.getElementById("social-popup");
-            if (!popup) {
-                console.warn("Popup #social-popup not found");
-                return;
-            }
-
-            // Try to find any text area inside popup
-            const msgBox =
-                popup.querySelector(".popup-message") ||
-                popup.querySelector("p") ||
-                popup.querySelector(".message") ||
-                popup.querySelector(".content");
-
-            if (msgBox) {
-                msgBox.innerHTML = `
-                    <strong>Banny S.V</strong> does not share social media links publicly.<br>
-                    Please contact via 
-                    <a href="https://bannysv.netlify.app#contact" target="_blank">bannysv.netlify.app</a>.
-                `;
-            }
-
-            // Try to open popup using multiple fallback methods
-            if (typeof showSocialPopup === "function") {
-                showSocialPopup();
-            } else if (typeof openSocialPopup === "function") {
-                openSocialPopup();
-            } else {
-                popup.classList.add("show");
-            }
-        });
-    });
-
-});
-</script>
-
-
 
 
 
