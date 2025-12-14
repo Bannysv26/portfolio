@@ -36,22 +36,13 @@
   </script>
 
   <!-- YOUR ORIGINAL CODE (UNCHANGED) -->
-  <style>@view-transition { navigation: auto; }</style>
-  <link rel="icon" type="image/png" href="s.png">
+   <style>@view-transition { navigation: auto; }</style>
+
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico">
 </head>
-
-
  <body>
   
- 
-
-
-
-
-
-
-
-
 <style id="mobile-sidebar-final-fix">
   /* Prevent hidden overlay from blocking touches (matches your .mobile-overlay + .show) */
   .mobile-overlay { pointer-events: none !important; opacity: 0 !important; visibility: hidden !important; transition: opacity .25s ease, visibility .25s linear; }
@@ -2844,21 +2835,7 @@ function showToast(message, type = 'success') {
             countElement.textContent = count;
         }
 
-        // Social popup functionality
-        function showSocialPopup() {
-            const popup = document.getElementById('social-popup');
-            popup.classList.add('show');
-            
-            // Auto hide after 10 seconds
-            setTimeout(() => {
-                closeSocialPopup();
-            }, 10000);
-        }
-
-        function closeSocialPopup() {
-            const popup = document.getElementById('social-popup');
-            popup.classList.remove('show');
-        }
+       
 
         // Modal functionality
         function openModal(type) {
@@ -3075,55 +3052,6 @@ function showToast(message, type = 'success') {
       });
     }
   });
-</script>
-
-
-
-<script>
-  // 👇 Make sure this version matches your version.json version
-  const CURRENT_VERSION = "v1";
-
-  async function checkForNewVersion() {
-    try {
-      const res = await fetch("/version.json", { cache: "no-store" });
-      const data = await res.json();
-
-      if (data.version !== CURRENT_VERSION) {
-        showUpdateBanner(data.message || "New version available — click to refresh");
-      }
-    } catch (err) {
-      console.error("Version check failed:", err);
-    }
-  }
-
-  function showUpdateBanner(message) {
-    const banner = document.createElement("div");
-    banner.innerHTML = `
-      <strong>${message}</strong><br>
-      <small>Click here to refresh and see the latest version.</small>
-    `;
-    banner.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-      text-align: center;
-      font-family: system-ui, sans-serif;
-      line-height: 1.4;
-    `;
-    banner.onclick = () => location.reload(true);
-    document.body.appendChild(banner);
-  }
-
-  // 🔁 Check every 1 minute (60,000 ms)
-  setInterval(checkForNewVersion, 60000);
 </script>
 
 
@@ -3724,17 +3652,6 @@ function generateBotResponse(userMessage) {
 })();
 
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
  </body>
 </html>
