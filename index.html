@@ -1397,8 +1397,24 @@
        <p class="text-lg lg:text-xl mb-12 opacity-80 max-w-2xl" id="hero-description">I am a pharmacist with a passion for both science and technology. Alongside my professional work, I have published three review articles and actively share knowledge through platforms like YouTube and SlideShare. I have a strong interest in coding and enjoy exploring new ways to merge healthcare with technology. I thrive on learning, creating, and sharing insights that can make a meaningful impact, whether through research, digital content, or innovative projects..</p>
        <div class="flex flex-col sm:flex-row gap-6 mb-12"><button class="neon-button" onclick="downloadCV()"> <i class="fas fa-download mr-2"></i>Download CV </button> <button class="neon-button" style="--primary-color: #f59e0b;" onclick="scrollToSection('projects')"> <i class="fas fa-eye mr-2"></i>View Projects </button> <button class="neon-button" style="--primary-color: #10b981;" onclick="scrollToSection('contact')"> <i class="fas fa-envelope mr-2"></i>Get In Touch </button>
        </div><!-- Social Links -->
-       <div class="flex justify-center lg:justify-start space-x-6"><a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-linkedin text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-github text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-instagram text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-facebook text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-telegram text-xl group-hover:scale-110 transition-transform"></i> </a> <a href="#" class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group"> <i class="fab fa-slideshare text-xl group-hover:scale-110 transition-transform"></i> </a>
-       </div>
+       <div class="flex justify-center lg:justify-start space-x-6"> </a>        
+        <a href="#" onclick="showSocialMsg(event)"
+   class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group">
+  <i class="fab fa-linkedin text-xl"></i>
+</a>
+<a href="#" onclick="showSocialMsg(event)"
+   class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group">
+  <i class="fab fa-snapchat text-xl"></i>
+</a>
+<a href="#" onclick="showSocialMsg(event)"
+   class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group">
+  <i class="fab fa-telegram text-xl"></i>
+</a>
+ <a href="#" onclick="showSocialMsg(event)"
+   class="w-12 h-12 glass-card flex items-center justify-center hover:neon-glow transition-all duration-300 group">
+  <i class="fab fa-instagram text-xl"></i>
+</a>
+      </div>
       </div>
       <div class="text-center">
        
@@ -3214,6 +3230,8 @@ async function checkAutoVersion() {
 
 checkAutoVersion();
 </script>
+
+
 <!-- FINAL: Neon Scroll Indicator (paste once before </body>) -->
 <style id="scroll-indicator-final-style">
   /* Container */
@@ -3652,6 +3670,153 @@ function generateBotResponse(userMessage) {
 })();
 
 </script>
+<!-- ===== PREMIUM NOTICE POPUP (CANVA STYLE) ===== -->
+<style>
+/* Overlay */
+#premiumOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.65);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+/* Popup Card */
+#premiumPopup {
+  width: 360px;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 30, 60, 0.95),
+    rgba(15, 15, 35, 0.95)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 26px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
+  transform: scale(0.92);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+/* Active state */
+#premiumOverlay.active #premiumPopup {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Title */
+#premiumPopup h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  background: linear-gradient(90deg, #8b5cf6, #6366f1);
+
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Text */
+#premiumPopup p {
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+/* Buttons */
+#premiumActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#premiumActions button {
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#premiumCancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+#premiumCancel:hover {
+  transform: translateY(-1px);
+}
+
+#premiumContact {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+}
+
+#premiumContact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(139, 92, 246, 0.45);
+}
+</style>
+
+<div id="premiumOverlay">
+  <div id="premiumPopup">
+    <h2>Notice</h2>
+
+    <p>
+      Banny S.V does not share social media links.<br>
+      Please use the <strong>Contact section</strong> to connect with him.
+    </p>
+
+    <div id="premiumActions">
+      <button id="premiumCancel">Cancel</button>
+      <button id="premiumContact">Go to Contact</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let premiumOverlay = document.getElementById("premiumOverlay");
+let premiumCancel = document.getElementById("premiumCancel");
+let premiumContact = document.getElementById("premiumContact");
+
+function showSocialMsg(e) {
+  e.preventDefault();
+  premiumOverlay.style.display = "flex";
+  requestAnimationFrame(() => {
+    premiumOverlay.classList.add("active");
+  });
+}
+
+function closePremiumPopup() {
+  premiumOverlay.classList.remove("active");
+  setTimeout(() => {
+    premiumOverlay.style.display = "none";
+  }, 300);
+}
+
+premiumCancel.addEventListener("click", closePremiumPopup);
+
+premiumContact.addEventListener("click", () => {
+  closePremiumPopup();
+  const contact = document.getElementById("contact");
+  if (contact) {
+    contact.scrollIntoView({ behavior: "smooth" });
+  }
+});
+</script>
+<!-- ===== END PREMIUM POPUP ===== -->
+
 
  </body>
 </html>
