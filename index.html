@@ -3816,39 +3816,38 @@ premiumContact.addEventListener("click", () => {
 });
 </script>
 <!-- ===== END PREMIUM POPUP ===== -->
-
 <script>
-/* ===== CONFIG ===== */
+/* ================= CONFIG ================= */
 const BASE_LIKES = 10000;
 const COUNT_KEY = "local_like_count";
 const USER_LIKED_KEY = "user_liked";
 const SLIDESHARE_URL = "https://www.slideshare.net/srirambanny349";
 
-/* ===== INIT ===== */
+/* ================= INIT ================= */
 let count = Number(localStorage.getItem(COUNT_KEY));
-if (!count) {
+if (!count || isNaN(count)) {
   count = BASE_LIKES;
   localStorage.setItem(COUNT_KEY, count);
 }
 
 let userLiked = localStorage.getItem(USER_LIKED_KEY) === "true";
 
-/* ===== HEART ANIMATION ===== */
-function showHeart(button) {
-  const r = button.getBoundingClientRect();
+/* ================= HEART ================= */
+function showHeart(btn) {
+  const r = btn.getBoundingClientRect();
   const heart = document.createElement("div");
   heart.textContent = "❤️";
 
   Object.assign(heart.style, {
     position: "fixed",
-    left: r.left + r.width / 2 + "px",
-    top: r.top + r.height / 2 + "px",
+    left: `${r.left + r.width / 2}px`,
+    top: `${r.top + r.height / 2}px`,
     transform: "translate(-50%, -50%)",
     fontSize: "32px",
-    opacity: "1",
     pointerEvents: "none",
     zIndex: "999999",
-    transition: "transform 1s ease, opacity 1s ease"
+    transition: "transform 0.9s ease, opacity 0.9s ease",
+    opacity: "1"
   });
 
   document.body.appendChild(heart);
@@ -3858,38 +3857,27 @@ function showHeart(button) {
     heart.style.opacity = "0";
   });
 
-  setTimeout(() => heart.remove(), 1000);
+  setTimeout(() => heart.remove(), 900);
 }
 
-/* ===== TOAST WITH BUTTON ===== */
-function showToast(type) {
+/* ================= TOAST (ISOLATED) ================= */
+function showToast(message, withLink = false) {
   const toast = document.createElement("div");
 
-  if (type === "like") {
-    toast.innerHTML = `
-      <div style="font-weight:600;margin-bottom:8px;">
-        ❤️ You liked this
-      </div>
-      <button id="visitBtn" style="
+  toast.innerHTML = withLink
+    ? `
+      <div style="font-weight:600;margin-bottom:8px;">${message}</div>
+      <button style="
+        width:100%;
         background:#7c3aed;
         border:none;
         color:white;
-        padding:8px 12px;
+        padding:8px;
         border-radius:8px;
-        font-size:13px;
         cursor:pointer;
-        width:100%;
-      ">
-        Visit SlideShare Page
-      </button>
-    `;
-  } else {
-    toast.innerHTML = `
-      <div style="font-weight:600;">
-        💔 You removed your like
-      </div>
-    `;
-  }
+      ">Visit SlideShare Page</button>
+    `
+    : `<div style="font-weight:600;">${message}</div>`;
 
   Object.assign(toast.style, {
     position: "fixed",
@@ -3909,10 +3897,12 @@ function showToast(type) {
   document.body.appendChild(toast);
   toast.getBoundingClientRect();
 
-  // Button click
-  const btn = toast.querySelector("#visitBtn");
-  if (btn) {
-    btn.onclick = () => window.open(SLIDESHARE_URL, "_blank");
+  if (withLink) {
+    const btn = toast.querySelector("button");
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      window.open(SLIDESHARE_URL, "_blank");
+    };
   }
 
   requestAnimationFrame(() => {
@@ -3922,37 +3912,42 @@ function showToast(type) {
   setTimeout(() => {
     toast.style.opacity = "0";
     toast.style.transform = "translateX(120%)";
-  }, 3000);
+  }, 2800);
 
-  setTimeout(() => toast.remove(), 3500);
+  setTimeout(() => toast.remove(), 3300);
 }
 
-/* ===== CLICK HANDLER ===== */
-window.toggleLike = function (button) {
-  const countEl = button.querySelector(".like-count");
+/* ================= MAIN HANDLER ================= */
+window.toggleLike = function (btn) {
+  // 🔒 HARD GUARD
+  if (!btn || !btn.classList.contains("like-btn")) return;
 
-  // Button pop
-  button.style.transition = "transform 0.2s ease";
-  button.style.transform = "scale(1.4)";
-  setTimeout(() => button.style.transform = "scale(1)", 200);
+  const countEl = btn.querySelector(".like-count");
+  if (!countEl) return;
+
+  // Button animation
+  btn.style.transform = "scale(1.4)";
+  btn.style.transition = "transform 0.2s ease";
+  setTimeout(() => (btn.style.transform = "scale(1)"), 200);
 
   if (userLiked) {
     count--;
     userLiked = false;
     localStorage.setItem(USER_LIKED_KEY, "false");
-    showToast("unlike");
+    showToast("💔 You removed your like");
   } else {
     count++;
     userLiked = true;
     localStorage.setItem(USER_LIKED_KEY, "true");
-    showHeart(button);
-    showToast("like");
+    showHeart(btn);
+    showToast("❤️ You liked this", true);
   }
 
   localStorage.setItem(COUNT_KEY, count);
   countEl.textContent = count.toLocaleString();
 };
 </script>
+
 
  </body>
 </html>
