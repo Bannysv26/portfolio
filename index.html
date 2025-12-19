@@ -3,46 +3,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- GOOGLE SEARCH CONSOLE VERIFICATION -->
-<meta name="google-site-verification" content="HnY1RAN5qtcVR8BFpmwW3lWhQpCQaa9VHt4Hrbp2qUE" />
 
   <!-- TITLE -->
   <title>Banny S.V | Official Website</title>
 
   <!-- META DESCRIPTION -->
   <meta name="description" content="Official website of Banny S.V (Banny). Explore my portfolio, projects, skills and contact information.">
-
-  <!-- SEARCH ENGINE -->
-  <meta name="robots" content="index, follow">
-
-  <!-- OPENGRAPH FOR SOCIAL MEDIA -->
-  <meta property="og:title" content="Banny S.V | Official Website">
-  <meta property="og:description" content="Welcome to the official website of Banny S.V. Explore my work, portfolio and more.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://bannysv.netlify.app/">
-
-  <!-- TWITTER CARD -->
-  <meta name="twitter:card" content="summary_large_image">
-  <!-- GOOGLE STRUCTURED DATA (SEO BOOST) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Banny S.V",
-    "alternateName": "Banny",
-    "url": "https://bannysv.netlify.app/",
-    "description": "Official website of Banny S.V — portfolio and personal information."
-  }
+  
   </script>
 
   <!-- YOUR ORIGINAL CODE (UNCHANGED) -->
    <style>@view-transition { navigation: auto; }</style>
 
   <link rel="icon" href="/favicon.ico">
-
 </head>
  <body>
   
+
 <style id="mobile-sidebar-final-fix">
   /* Prevent hidden overlay from blocking touches (matches your .mobile-overlay + .show) */
   .mobile-overlay { pointer-events: none !important; opacity: 0 !important; visibility: hidden !important; transition: opacity .25s ease, visibility .25s linear; }
@@ -3817,6 +3794,110 @@ premiumContact.addEventListener("click", () => {
 </script>
 <!-- ===== END PREMIUM POPUP ===== -->
 
+<script>
+(function () {
+  // ===== CONFIG =====
+  const BASE_LIKES = 10000;
+  const COUNT_KEY = "local_like_count";
+  const USER_LIKED_KEY = "user_liked";
+  const SLIDESHARE_URL = "https://www.slideshare.net/srirambanny349";
+
+  // ===== INIT =====
+  let count = Number(localStorage.getItem(COUNT_KEY)) || BASE_LIKES;
+  let userLiked = localStorage.getItem(USER_LIKED_KEY) === "true";
+
+  // ===== UTIL =====
+  function updateCount(el) {
+    el.textContent = count.toLocaleString();
+    localStorage.setItem(COUNT_KEY, count);
+  }
+
+  function heart(btn) {
+    const r = btn.getBoundingClientRect();
+    const h = document.createElement("div");
+    h.textContent = "❤️";
+    Object.assign(h.style, {
+      position: "fixed",
+      left: r.left + r.width / 2 + "px",
+      top: r.top + r.height / 2 + "px",
+      transform: "translate(-50%, -50%)",
+      fontSize: "32px",
+      pointerEvents: "none",
+      zIndex: 999999,
+      transition: "all 0.9s ease",
+      opacity: 1
+    });
+    document.body.appendChild(h);
+    requestAnimationFrame(() => {
+      h.style.transform = "translate(-50%, -140px) scale(2)";
+      h.style.opacity = 0;
+    });
+    setTimeout(() => h.remove(), 900);
+  }
+
+  function toast(text, link) {
+    const t = document.createElement("div");
+    t.innerHTML = `
+      <div style="font-weight:600;margin-bottom:${link ? "8px" : "0"}">${text}</div>
+      ${link ? `<button style="width:100%;background:#7c3aed;color:#fff;border:none;padding:8px;border-radius:8px;cursor:pointer">Visit SlideShare Page</button>` : ""}
+    `;
+    Object.assign(t.style, {
+      position: "fixed",
+      right: "20px",
+      bottom: "40px",
+      width: "260px",
+      background: "rgba(0,0,0,0.9)",
+      color: "#fff",
+      padding: "14px",
+      borderRadius: "12px",
+      zIndex: 999999,
+      transform: "translateX(120%)",
+      transition: "all 0.4s ease"
+    });
+    document.body.appendChild(t);
+    t.getBoundingClientRect();
+    if (link) {
+      t.querySelector("button").onclick = (e) => {
+        e.stopPropagation();
+        window.open(SLIDESHARE_URL, "_blank");
+      };
+    }
+    requestAnimationFrame(() => (t.style.transform = "translateX(0)"));
+    setTimeout(() => (t.style.transform = "translateX(120%)"), 2800);
+    setTimeout(() => t.remove(), 3300);
+  }
+
+  // ===== ATTACH ONLY TO LIKE BUTTON =====
+  const likeBtn = document.querySelector(".like-btn");
+  if (!likeBtn) return;
+
+  const countEl = likeBtn.querySelector(".like-count");
+  updateCount(countEl);
+
+  likeBtn.addEventListener("click", function (e) {
+    e.stopPropagation(); // isolate
+    e.preventDefault();
+
+    likeBtn.style.transform = "scale(1.3)";
+    setTimeout(() => (likeBtn.style.transform = "scale(1)"), 200);
+
+    if (userLiked) {
+      count--;
+      userLiked = false;
+      localStorage.setItem(USER_LIKED_KEY, "false");
+      toast("💔 You removed your like");
+    } else {
+      count++;
+      userLiked = true;
+      localStorage.setItem(USER_LIKED_KEY, "true");
+      heart(likeBtn);
+      toast("❤️ You liked this", true);
+    }
+
+    updateCount(countEl);
+  });
+})();
+</script>
 
 
  </body>
