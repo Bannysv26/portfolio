@@ -3899,6 +3899,622 @@ premiumContact.addEventListener("click", () => {
 })();
 </script>
 
+ <!-- 
+      =======================================================================
+      👋 COPY FROM HERE DOWN TO PASTE INTO YOUR WEBSITE 
+      =======================================================================
+    -->
+
+    <!-- === START OF UPDATE FEATURE MODULE === -->
+    <div id="banny-update-module">
+
+        <!-- 1. MODULE STYLES & CONFIG -->
+        <script>
+            // Tailwind Config for the Module
+            // Checks if tailwind object exists to avoid overwriting existing config
+            if (typeof tailwind !== 'undefined') {
+                tailwind.config = {
+                    darkMode: 'class',
+                    theme: {
+                        extend: {
+                            colors: {
+                                bg: 'var(--bg-color)',
+                                surface: 'var(--surface-color)',
+                                surfaceHighlight: 'var(--surface-highlight)',
+                                primary: 'var(--primary-color)',
+                                accent: 'var(--accent-color)',
+                                textMain: 'var(--text-main)',
+                                textSub: 'var(--text-sub)',
+                                borderCol: 'var(--border-color)',
+                            },
+                            animation: {
+                                'pulse-slow': 'pulse 3s infinite',
+                                'scan': 'scan 4s linear infinite',
+                                'pop-in': 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                            },
+                            keyframes: {
+                                scan: {
+                                    '0%': { top: '0%', opacity: 0 },
+                                    '10%': { opacity: 1 },
+                                    '90%': { opacity: 1 },
+                                    '100%': { top: '100%', opacity: 0 },
+                                },
+                                popIn: {
+                                    '0%': { transform: 'scale(0)', opacity: '0' },
+                                    '100%': { transform: 'scale(1)', opacity: '1' },
+                                }
+                            },
+                            boxShadow: {
+                                'neon': '0 0 30px rgba(139, 92, 246, 0.15)',
+                                'card': '0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3)',
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <style>
+            /* --- UPDATE MODULE CSS VARIABLES --- */
+            :root {
+                /* Dark Theme Defaults */
+                --bg-color: #020617;
+                --surface-color: #0f172a;
+                --surface-highlight: #1e293b;
+                --text-main: #f8fafc;
+                --text-sub: #94a3b8;
+                --primary-color: #818cf8;
+                --accent-color: #38bdf8;
+                --border-color: rgba(255, 255, 255, 0.08);
+                --grid-color: rgba(255, 255, 255, 0.03);
+                --chart-grid: #1e293b;
+            }
+
+            [data-theme="light"] {
+                --bg-color: #f8fafc;
+                --surface-color: #ffffff;
+                --surface-highlight: #f1f5f9;
+                --text-main: #0f172a;
+                --text-sub: #64748b;
+                --primary-color: #4f46e5;
+                --accent-color: #0284c7;
+                --border-color: #e2e8f0;
+                --grid-color: rgba(0, 0, 0, 0.03);
+                --chart-grid: #e2e8f0;
+            }
+
+            /* Module Scoped Styles */
+            #research-deck { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s; }
+            
+            .bg-cyber-grid {
+                background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+                background-size: 40px 40px;
+                mask-image: radial-gradient(ellipse at center, black 50%, transparent 100%);
+                -webkit-mask-image: radial-gradient(ellipse at center, black 50%, transparent 100%);
+            }
+
+            .deck-scroll::-webkit-scrollbar { width: 5px; }
+            .deck-scroll::-webkit-scrollbar-track { background: transparent; }
+            .deck-scroll::-webkit-scrollbar-thumb { background: var(--surface-highlight); border-radius: 10px; }
+            .deck-scroll::-webkit-scrollbar-thumb:hover { background: var(--text-sub); }
+
+            .zoom-overlay { transition: opacity 0.3s ease, visibility 0.3s ease; }
+            .zoom-overlay.active { opacity: 1; visibility: visible; }
+
+            .tab-btn { position: relative; overflow: hidden; transition: all 0.2s; }
+            .tab-btn.active { color: var(--text-main); background: var(--surface-highlight); border-color: var(--primary-color); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+            .tab-btn.active::before { content: ''; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 4px; height: 4px; border-radius: 50%; background-color: var(--primary-color); }
+
+            .graph-line { stroke-dasharray: 1200; stroke-dashoffset: 1200; filter: drop-shadow(0 0 4px var(--primary-color)); }
+            .chart-point { transform-origin: center; opacity: 0; cursor: pointer; transition: r 0.2s; }
+            .chart-point:hover { r: 6; }
+
+            .data-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+            .data-table th, .data-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-sub); }
+            .data-table th { background: var(--surface-highlight); color: var(--text-main); font-weight: 600; text-transform: uppercase; border-top: 1px solid var(--border-color); }
+            .data-table td { color: var(--text-main); background: var(--surface); }
+            .highlight-col { background: rgba(129, 140, 248, 0.08) !important; color: var(--primary-color) !important; font-weight: 700; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); }
+
+            @keyframes drawGraph { to { stroke-dashoffset: 0; } }
+
+            .info-step { position: relative; z-index: 10; }
+            .info-step::after { content: ''; position: absolute; top: 2rem; left: 50%; width: 100%; height: 2px; background: var(--border-color); z-index: -1; }
+            .info-step:last-child::after { display: none; }
+            @media (max-width: 640px) { .info-step::after { top: 100%; left: 50%; width: 2px; height: 2rem; transform: translateX(-50%); } }
+
+            #update-prompt { transform-origin: bottom right; transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
+            #update-trigger { transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        </style>
+
+        <!-- 2. UI ELEMENTS -->
+        
+        <!-- First-Time Prompt (Bottom Right) -->
+        <div id="update-prompt" class="fixed bottom-28 right-8 z-[9990] w-80 bg-surface/95 backdrop-blur-xl border border-borderCol rounded-2xl shadow-2xl p-5 opacity-0 pointer-events-none translate-y-10 flex flex-col gap-4">
+            <button onclick="dismissUpdate()" class="absolute top-3 right-3 text-textSub hover:text-textMain transition"><i class="fas fa-times"></i></button>
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary shrink-0 animate-pulse-slow"><i class="fas fa-bolt"></i></div>
+                <div>
+                    <h4 class="text-sm font-bold text-textMain">New Research Available</h4>
+                    <p class="text-[11px] text-textSub mt-1 leading-snug">
+                        I've published the Review Article on Novel Drug Delivery Systems with interactive data & visuals.
+                    </p>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-1">
+                <button onclick="dismissUpdate()" class="flex-1 py-2 rounded-lg border border-borderCol text-xs font-bold text-textSub hover:text-textMain hover:bg-surfaceHighlight transition">Later</button>
+                <button onclick="viewUpdatesFromPrompt()" class="flex-1 py-2 rounded-lg bg-primary text-white text-xs font-bold hover:bg-primary/90 transition shadow-lg shadow-primary/20">View Updates</button>
+            </div>
+        </div>
+
+        <!-- Persistent Floating Icon (Collapsed State) -->
+        <div id="update-trigger" onclick="openDeck()" class="fixed bottom-28 right-8 z-[9980] opacity-0 translate-y-10 pointer-events-none group cursor-pointer">
+            <div class="flex items-center gap-3">
+                <span class="bg-surface border border-borderCol text-textSub text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-2 group-hover:translate-x-0 shadow-sm">See Updates</span>
+                <div class="w-12 h-12 rounded-full bg-surface border border-borderCol flex items-center justify-center text-textMain shadow-lg hover:border-primary hover:text-primary transition-colors relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-bg rounded-full"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Research Deck -->
+        <div id="deck-backdrop" onclick="closeDeck()" class="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[9998] opacity-0 pointer-events-none transition-opacity duration-500"></div>
+
+        <div id="research-deck" class="fixed top-0 right-0 h-full w-full md:w-[650px] bg-bg z-[9999] transform translate-x-full shadow-neon border-l border-borderCol flex flex-col font-sans">
+            <div class="absolute inset-0 bg-cyber-grid pointer-events-none opacity-100"></div>
+
+            <!-- Deck Header -->
+            <div class="h-18 border-b border-borderCol flex items-center justify-between px-8 py-4 bg-surface/90 backdrop-blur relative z-20">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-surfaceHighlight border border-borderCol flex items-center justify-center text-primary shadow-sm"><i class="fas fa-microscope text-lg"></i></div>
+                    <div>
+                        <h2 class="text-base font-bold text-textMain tracking-tight" id="header-title">Research Update</h2>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                            <p class="text-[11px] font-medium text-textSub uppercase tracking-wide" id="header-date">LIVE • DEC 2025</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 bg-surfaceHighlight p-1 rounded-lg border border-borderCol">
+                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-md flex items-center justify-center text-textSub hover:text-textMain hover:bg-bg transition" title="Toggle Theme"><i class="fas fa-moon" id="theme-icon"></i></button>
+                    <div class="w-px h-4 bg-borderCol"></div>
+                    <button onclick="closeDeck()" class="w-8 h-8 rounded-md flex items-center justify-center text-textSub hover:text-red-400 hover:bg-bg transition" title="Close"><i class="fas fa-times text-lg"></i></button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="px-8 pt-6 pb-2 relative z-20 bg-bg">
+                <div class="flex p-1 bg-surfaceHighlight rounded-xl border border-borderCol shadow-inner">
+                    <button onclick="switchTab('overview')" class="tab-btn active flex-1 py-2.5 rounded-lg text-xs font-bold text-textSub transition-all duration-200 hover:text-textMain pl-4">Overview</button>
+                    <button onclick="switchTab('data')" class="tab-btn flex-1 py-2.5 rounded-lg text-xs font-bold text-textSub transition-all duration-200 hover:text-textMain pl-4">Data Analysis</button>
+                    <button onclick="switchTab('downloads')" class="tab-btn flex-1 py-2.5 rounded-lg text-xs font-bold text-textSub transition-all duration-200 hover:text-textMain pl-4">Resources</button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto deck-scroll relative z-10 px-2 pb-8 bg-bg">
+                
+                <!-- Tab: Overview -->
+                <div id="tab-overview" class="p-6 space-y-6 absolute inset-0 transition-opacity duration-300">
+                    <div class="relative w-full rounded-2xl overflow-hidden border border-borderCol group bg-black aspect-video shadow-card ring-1 ring-white/5">
+                        
+                        <!-- MP4 VIDEO PLAYER (Initially Hidden if no source) -->
+                        <video id="research-video" class="hidden w-full h-full object-cover opacity-95 transition-all duration-500" controls controlsList="nodownload" playsinline>
+                            <source id="video-source" src="" type="video/mp4">
+                        </video>
+
+                        <!-- STATUS OVERLAY (Shown when video missing) -->
+                        <div id="status-container" class="absolute inset-0 z-10 bg-black flex flex-col items-center justify-center p-6 text-center">
+                            <div class="w-16 h-16 rounded-full bg-surfaceHighlight flex items-center justify-center mb-4 border border-borderCol animate-pulse-slow">
+                                <i class="fas fa-video-slash text-textSub text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-textMain mb-2">Video In Production</h3>
+                            <p class="text-xs text-textSub max-w-xs leading-relaxed">
+                                The visual abstract is currently being created by SV. Please check back in a few days for the full 3D animation.
+                            </p>
+                            <div class="mt-4 px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-wider rounded-full">
+                                Coming Soon
+                            </div>
+                        </div>
+                        
+                        <!-- Quality Settings (Hidden when no video) -->
+                        <div class="absolute top-4 right-4 z-30" id="video-controls-overlay" style="display: none;">
+                            <div class="relative">
+                                <button onclick="toggleQualityMenu()" class="bg-surface/80 backdrop-blur rounded-lg text-textMain border border-borderCol flex items-center justify-center transition px-3 py-1.5 text-xs font-bold gap-2 hover:bg-surfaceHighlight">
+                                    <i class="fas fa-cog"></i> <span id="quality-label">AUTO</span>
+                                </button>
+                                <div id="quality-menu" class="hidden absolute right-0 mt-2 w-36 bg-surface border border-borderCol rounded-xl shadow-xl overflow-hidden z-40 transform origin-top-right transition-all">
+                                    <div class="px-3 py-2 text-[10px] text-textSub bg-surfaceHighlight border-b border-borderCol font-bold tracking-wider">RESOLUTION</div>
+                                    <button onclick="setQuality('4k')" class="quality-btn w-full text-left px-4 py-2.5 text-xs text-textMain hover:bg-surfaceHighlight transition-colors border-l-2 border-transparent" id="btn-4k">4K Ultra HD</button>
+                                    <button onclick="setQuality('1080p')" class="quality-btn w-full text-left px-4 py-2.5 text-xs text-textMain hover:bg-surfaceHighlight transition-colors border-l-2 border-transparent" id="btn-1080p">1080p HD</button>
+                                    <button onclick="setQuality('720p')" class="quality-btn w-full text-left px-4 py-2.5 text-xs text-textMain hover:bg-surfaceHighlight transition-colors border-l-2 border-transparent" id="btn-720p">720p</button>
+                                    <button onclick="setQuality('360p')" class="quality-btn w-full text-left px-4 py-2.5 text-xs text-textMain hover:bg-surfaceHighlight transition-colors border-l-2 border-transparent" id="btn-360p">360p</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Chapters Section -->
+                    <div class="mt-4 p-4 rounded-xl bg-surfaceHighlight border border-borderCol">
+                        <h3 class="text-xs font-bold text-textMain uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-list-ol text-primary"></i> 3D Animation Chapters
+                        </h3>
+                        <ul class="text-[11px] text-textSub space-y-1.5 h-32 overflow-y-auto deck-scroll pr-2">
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>01. Introduction - Venlafaxine Matrix</span> <span>0:00</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>02. Oral Admin & GI Transit</span> <span>0:05</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>03. Matrix Swelling & Release</span> <span>0:20</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>04. Absorption</span> <span>0:45</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>05. Distribution</span> <span>1:10</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>06. Pharmacological Action</span> <span>1:35</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>07. Metabolism</span> <span>2:00</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>08. Elimination</span> <span>2:30</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>09. Pharmacokinetic Visual</span> <span>2:50</span></li>
+                            <li class="flex justify-between hover:text-primary cursor-pointer transition p-1 hover:bg-bg rounded"><span>10. Conclusion</span> <span>3:10</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-surface border border-borderCol shadow-card mt-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h1 class="text-xl font-bold text-textMain" id="overview-title">Title</h1>
+                            <span class="px-2.5 py-1 rounded-md bg-surfaceHighlight border border-borderCol text-[10px] font-bold text-primary tracking-wide">ABSTRACT</span>
+                        </div>
+                        <p class="text-sm text-textSub leading-relaxed mb-6" id="overview-desc">Loading...</p>
+                        <div class="flex gap-3 overflow-x-auto pb-2">
+                            <span class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-surfaceHighlight border border-borderCol text-[11px] font-bold text-textSub flex items-center"><i class="fas fa-vial mr-2 text-primary"></i> Wet Granulation</span>
+                            <span class="whitespace-nowrap px-3 py-1.5 rounded-lg bg-surfaceHighlight border border-borderCol text-[11px] font-bold text-textSub flex items-center"><i class="fas fa-layer-group mr-2 text-accent"></i> HPMC K100M</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Data Analysis -->
+                <div id="tab-data" class="p-6 space-y-6 absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-300">
+                    <div class="p-6 rounded-2xl bg-surface border border-borderCol shadow-card relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-base font-bold text-textMain flex items-center gap-2"><i class="fas fa-chart-line text-primary"></i> Dissolution Profile</h3>
+                                <p class="text-[11px] text-textSub mt-1">Cumulative Drug Release (%) vs Time (h)</p>
+                            </div>
+                            <span class="px-2 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold border border-primary/20">Batch F1</span>
+                        </div>
+                        <div class="h-48 w-full relative z-10 flex justify-center items-end" id="chart-wrapper">
+                            <svg viewBox="0 0 120 60" class="w-full h-full overflow-visible" id="dissolution-svg">
+                                <defs>
+                                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:var(--primary-color);stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:var(--accent-color);stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                                <line x1="0" y1="60" x2="120" y2="60" stroke="var(--chart-grid)" stroke-width="0.5" />
+                                <line x1="0" y1="0" x2="0" y2="60" stroke="var(--chart-grid)" stroke-width="0.5" />
+                                <line x1="0" y1="30" x2="120" y2="30" stroke="var(--chart-grid)" stroke-width="0.2" stroke-dasharray="2" />
+                                <path id="graphPath" d="" fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="graph-line" />
+                                <g id="graphPoints"></g>
+                            </svg>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-textSub mt-3 font-mono border-t border-borderCol pt-2" id="x-axis-labels"></div>
+                        <button onclick="downloadGraph()" class="mt-6 w-full py-2.5 rounded-xl border border-borderCol hover:bg-surfaceHighlight text-xs font-bold text-textSub hover:text-primary transition flex items-center justify-center gap-2"><i class="fas fa-download"></i> Export Chart (High-Res)</button>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-surface border border-borderCol shadow-card">
+                        <h3 class="text-base font-bold text-textMain mb-4 flex items-center gap-2"><i class="fas fa-project-diagram text-accent"></i> Mechanism of Action</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div class="info-step relative p-4 rounded-xl bg-surfaceHighlight border border-borderCol flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 mb-2 border border-blue-500/20"><i class="fas fa-tint text-lg"></i></div>
+                                <h4 class="text-xs font-bold text-textMain">1. Hydration</h4>
+                                <p class="text-[10px] text-textSub mt-1">Water penetrates the matrix.</p>
+                            </div>
+                            <div class="info-step relative p-4 rounded-xl bg-surfaceHighlight border border-borderCol flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500 mb-2 border border-purple-500/20"><i class="fas fa-layer-group text-lg"></i></div>
+                                <h4 class="text-xs font-bold text-textMain">2. Gel Formation</h4>
+                                <p class="text-[10px] text-textSub mt-1">HPMC swells to form barrier.</p>
+                            </div>
+                            <div class="info-step relative p-4 rounded-xl bg-surfaceHighlight border border-borderCol flex flex-col items-center">
+                                <div class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 mb-2 border border-green-500/20"><i class="fas fa-arrow-right text-lg"></i></div>
+                                <h4 class="text-xs font-bold text-textMain">3. Diffusion</h4>
+                                <p class="text-[10px] text-textSub mt-1">Drug releases consistently.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-borderCol overflow-hidden shadow-card">
+                        <div class="bg-surfaceHighlight px-4 py-3 border-b border-borderCol flex justify-between items-center">
+                            <h4 class="text-xs font-bold text-textMain uppercase tracking-wider">Formulation Data</h4>
+                            <div class="px-2 py-0.5 rounded bg-bg border border-borderCol text-[10px] text-textSub">N=3</div>
+                        </div>
+                        <div class="overflow-x-auto bg-surface">
+                            <table class="w-full data-table">
+                                <thead>
+                                    <tr><th>Time</th><th class="highlight-col">F1</th><th>F2</th><th>F3</th><th>F4</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>0h</td><td class="highlight-col">0</td><td>0</td><td>0</td><td>0</td></tr>
+                                    <tr><td>2h</td><td class="highlight-col">23.56</td><td>26.45</td><td>28.87</td><td>34.56</td></tr>
+                                    <tr><td>4h</td><td class="highlight-col">50.97</td><td>48.62</td><td>60.63</td><td>66.89</td></tr>
+                                    <tr><td>6h</td><td class="highlight-col">68.07</td><td>67.89</td><td>66.60</td><td>64.87</td></tr>
+                                    <tr><td>8h</td><td class="highlight-col">85.69</td><td>89.70</td><td>88.73</td><td>82.56</td></tr>
+                                    <tr><td>10h</td><td class="highlight-col">99.10</td><td>90.10</td><td>93.13</td><td>95.72</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Resources -->
+                <div id="tab-downloads" class="p-6 space-y-4 absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-300">
+                    <h3 class="text-sm font-bold text-textSub uppercase tracking-widest mb-2 border-b border-borderCol pb-2">Available Assets</h3>
+                    
+                    <a href="https://wjpr.s3.ap-south-1.amazonaws.com/article_issue/ab8922c79fe10030683f909f710f2979.pdf" target="_blank" class="w-full p-5 rounded-2xl bg-surface border border-borderCol hover:border-primary/50 transition group flex items-center gap-4 relative overflow-hidden shadow-card hover:shadow-neon block">
+                        <div class="w-12 h-12 rounded-xl bg-surfaceHighlight flex items-center justify-center text-red-500 border border-borderCol relative z-10 group-hover:scale-110 transition-transform"><i class="fas fa-file-pdf text-xl"></i></div>
+                        <div class="flex-1 text-left relative z-10">
+                            <h4 class="text-sm font-bold text-textMain group-hover:text-primary transition-colors">Full Research Report</h4>
+                            <p class="text-[11px] text-textSub mt-0.5">PDF • Watermarked • Educational Purpose Only</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surfaceHighlight flex items-center justify-center text-textSub group-hover:text-primary transition relative z-10"><i class="fas fa-download text-xs"></i></div>
+                    </a>
+                    
+                    <!-- NEW SLIDESHARE BUTTON -->
+                    <a href="https://www.slideshare.net/srirambanny349" target="_blank" class="w-full p-5 rounded-2xl bg-surface border border-borderCol hover:border-accent/50 transition group flex items-center gap-4 shadow-card hover:shadow-neon block">
+                        <div class="w-12 h-12 rounded-xl bg-surfaceHighlight flex items-center justify-center text-accent border border-borderCol group-hover:scale-110 transition-transform"><i class="fab fa-slideshare text-xl"></i></div>
+                        <div class="flex-1 text-left">
+                            <h4 class="text-sm font-bold text-textMain group-hover:text-accent transition-colors">SlideShare Profile</h4>
+                            <p class="text-[11px] text-textSub mt-0.5">View all presentations & slides</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surfaceHighlight flex items-center justify-center text-textSub group-hover:text-accent transition"><i class="fas fa-external-link-alt text-xs"></i></div>
+                    </a>
+
+                    <div class="p-5 rounded-2xl bg-surfaceHighlight border border-borderCol mt-4">
+                        <p class="text-[10px] text-textSub font-bold uppercase mb-2 tracking-wider flex items-center gap-2"><i class="fas fa-quote-right text-primary"></i> Citation</p>
+                        <code id="citation-text" class="text-xs text-primary block mb-3 font-mono bg-bg p-3 rounded-lg border border-borderCol select-all cursor-text">Loading...</code>
+                        <button onclick="copyCite(this)" class="text-xs text-textMain hover:text-accent font-bold transition flex items-center gap-2"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deck Footer -->
+            <div class="p-4 border-t border-borderCol bg-surface/80 backdrop-blur relative z-20">
+                <button onclick="closeDeck()" class="w-full py-3 rounded-xl bg-textMain text-bg font-bold text-sm hover:opacity-90 transition shadow-lg transform hover:-translate-y-0.5 border border-borderCol">Close</button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-surface border border-borderCol px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-textMain opacity-0 pointer-events-none transition-opacity z-[99999]">Action Completed</div>
+
+        <!-- 3. MODULE LOGIC -->
+        <script>
+            // --- DATA CONFIGURATION ---
+            const DATA = {
+                title: "REVIEW ARTICLE ON NOVEL DRUG DELIVERY SYSTEMS",
+                date: "Dec 2025",
+                desc: "Based on the recently reported data, more than 70% of new drugs formulated are showing poor water solubility, which becomes the limiting factor in the absorption drug after oral admission.",
+                citation: "https://bannysv.netlify.app/",
+                graph: [0, 23.56, 50.97, 68.07, 85.69, 99.10],
+                labels: ["0h", "2h", "4h", "6h", "8h", "10h"],
+                videos: {
+                    "4k": "", 
+                    "1080p": "",
+                    "720p": "",
+                    "360p": ""
+                }
+            };
+
+            const deck = document.getElementById('research-deck');
+            const backdrop = document.getElementById('deck-backdrop');
+            const video = document.getElementById('research-video');
+            const videoSrc = document.getElementById('video-source');
+            const prompt = document.getElementById('update-prompt');
+            const trigger = document.getElementById('update-trigger');
+            const statusContainer = document.getElementById('status-container');
+            const videoControls = document.getElementById('video-controls-overlay');
+            const videoDownloadBtn = document.getElementById('video-download-btn');
+            const STORAGE_KEY = 'banny_update_live_v2'; // Production key
+
+            function initModule() {
+                // Set text content
+                document.getElementById('header-title').innerText = "Research Update";
+                document.getElementById('header-date').innerText = "LIVE • " + DATA.date;
+                document.getElementById('overview-title').innerText = DATA.title;
+                document.getElementById('overview-desc').innerText = DATA.desc;
+                document.getElementById('citation-text').innerText = DATA.citation;
+                
+                setQuality('4k');
+                renderGraph();
+                checkUpdateStatus();
+                
+                // Initialize theme
+                if(localStorage.getItem('theme') === 'light') {
+                    document.body.setAttribute('data-theme', 'light');
+                    document.getElementById('theme-icon').classList.replace('fa-moon', 'fa-sun');
+                }
+            }
+            
+            function checkVideoSource() {
+                const defaultSource = DATA.videos['4k'];
+                
+                if (!defaultSource || defaultSource.trim() === "") {
+                    // PREVIEW / PRODUCTION MODE
+                    video.classList.add('hidden');
+                    statusContainer.classList.remove('hidden');
+                    if(videoControls) videoControls.style.display = 'none';
+                    if(videoDownloadBtn) videoDownloadBtn.style.display = 'none';
+                } else {
+                    // VIDEO MODE
+                    video.classList.remove('hidden');
+                    statusContainer.classList.add('hidden');
+                    setQuality('4k');
+                    if(videoControls) videoControls.style.display = 'block';
+                    if(videoDownloadBtn) videoDownloadBtn.style.display = 'flex';
+                }
+            }
+
+            function checkUpdateStatus() {
+                const status = localStorage.getItem(STORAGE_KEY);
+                if (!status) {
+                    setTimeout(() => prompt.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none'), 1000);
+                } else {
+                    showTrigger();
+                }
+            }
+
+            function dismissUpdate() {
+                prompt.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                localStorage.setItem(STORAGE_KEY, 'seen');
+                setTimeout(showTrigger, 500);
+            }
+
+            function viewUpdatesFromPrompt() {
+                prompt.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                localStorage.setItem(STORAGE_KEY, 'seen');
+                openDeck();
+                setTimeout(showTrigger, 500);
+            }
+
+            function showTrigger() {
+                trigger.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                trigger.classList.add('visible-trigger');
+            }
+
+            function openDeck() {
+                deck.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+                if (!video.classList.contains('hidden')) {
+                    video.play().catch(()=>{});
+                }
+            }
+
+            function closeDeck() {
+                deck.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+                video.pause();
+            }
+
+            function toggleTheme() {
+                const body = document.body;
+                const icon = document.getElementById('theme-icon');
+                if (body.getAttribute('data-theme') === 'light') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'dark');
+                    icon.className = 'fas fa-moon';
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    icon.className = 'fas fa-sun';
+                }
+                if (!document.getElementById('tab-data').classList.contains('opacity-0')) renderGraph();
+            }
+
+            function switchTab(id) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+                ['overview','data','downloads'].forEach(t => {
+                    const el = document.getElementById(`tab-${t}`);
+                    el.classList.add('opacity-0', 'pointer-events-none');
+                    el.style.position = 'absolute';
+                });
+                const active = document.getElementById(`tab-${id}`);
+                active.classList.remove('opacity-0', 'pointer-events-none');
+                active.style.position = 'relative';
+                if(id === 'data') renderGraph();
+            }
+
+            function renderGraph() {
+                const path = document.getElementById('graphPath');
+                const group = document.getElementById('graphPoints');
+                const xLabels = document.getElementById('x-axis-labels');
+                group.innerHTML = ""; xLabels.innerHTML = "";
+                let d = ""; const stepX = 100 / (DATA.graph.length - 1);
+
+                DATA.graph.forEach((val, i) => {
+                    const x = 10 + (i * stepX); 
+                    const y = 60 - ((val / 100) * 55); 
+                    d += (i===0 ? "M" : "L") + `${x},${y} `;
+                    
+                    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", "2.5");
+                    c.setAttribute("fill", "var(--text-main)");
+                    c.setAttribute("class", "chart-point");
+                    c.style.animation = `popIn 0.4s ease-out forwards ${i*0.1 + 0.5}s`;
+                    group.appendChild(c);
+
+                    const l = document.createElement("span");
+                    l.innerText = DATA.labels[i];
+                    xLabels.appendChild(l);
+                });
+                path.setAttribute("d", d);
+                path.style.animation = 'none'; path.offsetHeight; 
+                path.style.animation = 'drawGraph 2s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+            }
+
+            function toggleQualityMenu() { document.getElementById('quality-menu').classList.toggle('hidden'); }
+
+            function setQuality(q) {
+                if (video.classList.contains('hidden')) return;
+
+                const time = video.currentTime;
+                const isPlaying = !video.paused;
+                const url = DATA.videos[q];
+                
+                if (!url) {
+                    // Logic to handle missing quality if needed, but for now assuming valid
+                    return; 
+                }
+
+                videoSrc.src = url; 
+                video.load(); 
+                video.currentTime = time;
+                if (q === '360p') video.style.filter = "blur(2px)"; else video.style.filter = "none";
+                if(isPlaying) video.play();
+                
+                document.getElementById('quality-label').innerText = q.toUpperCase();
+                document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(`btn-${q}`).classList.add('active');
+                toggleQualityMenu();
+                
+                if(videoDownloadBtn) { 
+                    videoDownloadBtn.href = url; 
+                    videoDownloadBtn.target = "_blank"; 
+                }
+                showToast(`Resolution set to ${q}`);
+            }
+
+            function downloadGraph() {
+                const styles = getComputedStyle(document.body);
+                const bgColor = styles.getPropertyValue('--surface-color').trim();
+                const txtColor = styles.getPropertyValue('--text-main').trim();
+                const lineColor = styles.getPropertyValue('--primary-color').trim();
+                const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                canvas.width = 3000; canvas.height = 1500; 
+                ctx.fillStyle = bgColor; ctx.fillRect(0,0,3000,1500);
+                ctx.fillStyle = txtColor; ctx.font = 'bold 80px Arial'; ctx.fillText("Dissolution Profile - Formulation F1", 100, 150);
+                const pad = 200; const gw = 2600; const gh = 1000; const sx = pad; const sy = 1300; 
+                ctx.strokeStyle = styles.getPropertyValue('--text-sub').trim(); ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + gw, sy); ctx.stroke(); 
+                ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx, sy - gh); ctx.stroke(); 
+                ctx.strokeStyle = lineColor; ctx.lineWidth = 15; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath();
+                const step = gw / (DATA.graph.length - 1);
+                DATA.graph.forEach((val, i) => {
+                    const x = sx + (i * step); const y = sy - ((val/100) * gh);
+                    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+                    ctx.fillStyle = txtColor; ctx.font = '40px Arial'; ctx.textAlign = 'center'; ctx.fillText(DATA.labels[i], x, sy + 60);
+                });
+                ctx.stroke();
+                DATA.graph.forEach((val, i) => {
+                    const x = sx + (i * step); const y = sy - ((val/100) * gh);
+                    ctx.fillStyle = bgColor; ctx.strokeStyle = lineColor; ctx.lineWidth = 10;
+                    ctx.beginPath(); ctx.arc(x,y, 20, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+                });
+                ctx.save(); ctx.translate(1500, 750); ctx.rotate(-Math.PI/6);
+                ctx.font = 'bold 200px Arial'; ctx.fillStyle = 'rgba(128, 128, 128, 0.05)'; ctx.textAlign = 'center'; ctx.fillText("BANNY S.V", 0, 0); ctx.restore();
+                const a = document.createElement('a'); a.download = 'Dissolution_Graph_BannySV.png'; a.href = canvas.toDataURL('image/png'); a.click();
+            }
+
+            function copyCite() { navigator.clipboard.writeText(DATA.citation); showToast("Citation Copied!"); }
+            function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.remove('opacity-0'); setTimeout(() => t.classList.add('opacity-0'), 2000); }
+
+            // Initialize Module
+            initModule();
+        </script>
+    </div>
+    <!-- === END OF UPDATE FEATURE MODULE === -->
 
  </body>
 </html>
