@@ -4,12 +4,34 @@
 
   <title>Banny S.V | Official Website</title>
 
-  <meta name="description" content="Official website of Banny S.V (Banny). Explore my portfolio, projects, skills and contact information.">
+  <meta name="description" content="Official website of Banny S.V (Banny). Also known as SV, Banny S, or Banny SB. Explore my portfolio, projects, skills and contact information.">
   
-  <style>@view-transition { navigation: auto; }</style>
+  <meta name="keywords" content="Banny S.V, Banny SV, Banny S, SV, SB, Banny, Bany, BannySB, Banny Portfolio">
 
-  <link rel="icon" href="/logo.png" type="image/png" sizes="96x96">
-  <link rel="apple-touch-icon" href="/logo.png">
+  <link rel="canonical" href="https://bannysv.netlify.app/">
+
+  <link rel="icon" href="https://bannysv.netlify.app/logo.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="https://bannysv.netlify.app/logo.png">
+
+  <style>
+    @view-transition { navigation: auto; }
+  </style>
+
+  <style id="mobile-sidebar-final-fix">
+    /* Prevent hidden overlay from blocking touches */
+    .mobile-overlay { pointer-events: none !important; opacity: 0 !important; visibility: hidden !important; transition: opacity .25s ease; }
+    .mobile-overlay.show { pointer-events: auto !important; opacity: 1 !important; visibility: visible !important; }
+
+    /* Keep sidebar below the button (safe default) */
+    .sidebar { z-index: 1045 !important; }
+
+    /* Ensure the mobile menu button sits above overlays/sidebar */
+    #mobile-menu-btn, .mobile-menu-btn, .sidebar-toggle, [data-mobile-menu-btn] {
+      z-index: 1100 !important;
+      width: 48px !important;
+      height: 48px !important;
+    }
+  </style>
 </head>
  <body>
   
