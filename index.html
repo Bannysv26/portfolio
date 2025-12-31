@@ -10,8 +10,8 @@
 
   <link rel="canonical" href="https://bannysv.netlify.app/">
 
-  <link rel="icon" href="https://bannysv.netlify.app/logo.png" type="image/png" sizes="96x96">
-  <link rel="apple-touch-icon" href="https://bannysv.netlify.app/logo.png">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="96x96">
+<link rel="apple-touch-icon" href="/logo.png">
 
   <style>
     @view-transition { navigation: auto; }
@@ -299,14 +299,16 @@
     left: 0;
     top: 0;
     width: 80px;
+    /* FIX 1: Use dvh (Dynamic Viewport Height) to handle mobile browser bars */
     height: 100vh;
+    height: 100dvh; 
     background: rgba(15, 15, 35, 0.95);
     backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1050;
     transition: all 0.3s ease;
     
-    /* CRITICAL FIX 1: Keeps desktop view clean */
+    /* CRITICAL FIX 2: Keeps desktop view clean */
     overflow: hidden; 
 }
 
@@ -334,9 +336,12 @@
 }
 
 .sidebar-content {
-    /* CRITICAL FIX 2: Prevents padding from breaking layout */
+    /* CRITICAL FIX 3: Prevents padding from breaking layout */
     box-sizing: border-box;
     padding: 20px;
+    
+    /* FIX 4: Add extra padding at bottom so the last item (Color Theme) is not cut off */
+    padding-bottom: 120px;
     
     /* Ensures it fills the fixed parent */
     height: 100%;
@@ -345,11 +350,11 @@
     display: flex;
     flex-direction: column;
     
-    /* CRITICAL FIX 3: Enables scrolling inside the sidebar */
+    /* CRITICAL FIX 5: Enables scrolling inside the sidebar */
     overflow-y: auto;
     overflow-x: hidden;
     
-    /* CRITICAL FIX 4: Enables smooth touch-swiping on mobile */
+    /* CRITICAL FIX 6: Enables smooth touch-swiping on mobile */
     -webkit-overflow-scrolling: touch;
 }
 

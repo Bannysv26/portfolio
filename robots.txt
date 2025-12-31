@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bannysv.netlify.app/sitemap.xml
