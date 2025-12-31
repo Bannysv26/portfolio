@@ -293,7 +293,7 @@
             0% { transform: translateY(100vh) rotate(0deg); }
             100% { transform: translateY(-100px) rotate(360deg); }
         }
-       /* Sidebar Navigation */
+       /* Sidebar Navigation - FIXED */
 .sidebar {
     position: fixed;
     left: 0;
@@ -304,49 +304,56 @@
     backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1050;
-    transition: width 0.3s ease, transform 0.3s ease;
-    overflow: visible; /* ✅ important */
+    transition: all 0.3s ease;
+    
+    /* CRITICAL FIX 1: Keeps desktop view clean */
+    overflow: hidden; 
 }
 
-/* Expand on hover (desktop) */
 .sidebar:hover {
     width: 280px;
 }
 
-/* Mobile behavior */
 @media (max-width: 1024px) {
     .sidebar {
-        width: 280px;
         transform: translateX(-100%);
+        width: 280px;
         background: rgba(15, 15, 35, 0.98);
         backdrop-filter: blur(30px);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        touch-action: pan-y; /* ✅ enable finger scroll */
     }
-
+    
     .sidebar.mobile-open {
         transform: translateX(0);
     }
-
+    
     .sidebar:hover {
         width: 280px;
     }
 }
 
-/* Sidebar content (scroll container) */
 .sidebar-content {
+    /* CRITICAL FIX 2: Prevents padding from breaking layout */
+    box-sizing: border-box;
     padding: 20px;
+    
+    /* Ensures it fills the fixed parent */
     height: 100%;
+    width: 100%;
+    
     display: flex;
     flex-direction: column;
+    
+    /* CRITICAL FIX 3: Enables scrolling inside the sidebar */
     overflow-y: auto;
-
-    /* ✅ mobile scrolling fixes */
+    overflow-x: hidden;
+    
+    /* CRITICAL FIX 4: Enables smooth touch-swiping on mobile */
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
 }
 
-/* Scrollbar styling */
+/* Custom Scrollbar Styles */
 .sidebar-content::-webkit-scrollbar {
     width: 4px;
 }
@@ -360,12 +367,14 @@
     border-radius: 2px;
 }
 
-/* Logo */
 .sidebar-logo {
     display: flex;
     align-items: center;
     margin-bottom: 40px;
     white-space: nowrap;
+    
+    /* Prevents logo from shrinking during scroll */
+    flex-shrink: 0; 
 }
 
 .sidebar-logo .logo-icon {
@@ -380,11 +389,10 @@
     flex-shrink: 0;
 }
 
-/* Navigation container */
 .sidebar-nav {
     flex: 1;
+    min-height: min-content; 
 }
-
         .nav-item {
             display: flex;
             align-items: center;
