@@ -293,89 +293,98 @@
             0% { transform: translateY(100vh) rotate(0deg); }
             100% { transform: translateY(-100px) rotate(360deg); }
         }
-        
-        /* Sidebar Navigation */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 80px;
-            height: 100vh;
-            background: rgba(15, 15, 35, 0.95);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1050;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .sidebar:hover {
-            width: 280px;
-        }
-        
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                width: 280px;
-                background: rgba(15, 15, 35, 0.98);
-                backdrop-filter: blur(30px);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            }
-            
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
-            .sidebar:hover {
-                width: 280px;
-            }
-        }
-        
-        .sidebar-content {
-            padding: 20px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-        
-        .sidebar-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .sidebar-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar-content::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-        
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-            white-space: nowrap;
-        }
-        
-        .sidebar-logo .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-        
-        .sidebar-nav {
-            flex: 1;
-        }
-        
+       /* Sidebar Navigation */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 80px;
+    height: 100vh;
+    background: rgba(15, 15, 35, 0.95);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1050;
+    transition: width 0.3s ease, transform 0.3s ease;
+    overflow: visible; /* ✅ important */
+}
+
+/* Expand on hover (desktop) */
+.sidebar:hover {
+    width: 280px;
+}
+
+/* Mobile behavior */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        background: rgba(15, 15, 35, 0.98);
+        backdrop-filter: blur(30px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        touch-action: pan-y; /* ✅ enable finger scroll */
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .sidebar:hover {
+        width: 280px;
+    }
+}
+
+/* Sidebar content (scroll container) */
+.sidebar-content {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    /* ✅ mobile scrolling fixes */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* Scrollbar styling */
+.sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Logo */
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    white-space: nowrap;
+}
+
+.sidebar-logo .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+/* Navigation container */
+.sidebar-nav {
+    flex: 1;
+}
+
         .nav-item {
             display: flex;
             align-items: center;
@@ -1363,7 +1372,7 @@
   <!-- ✅ Single working Store link -->
   <a href="store.html" class="nav-item store-premium" id="store-link">
     <i class="nav-icon fas fa-store"></i>
-    <span class="nav-text">Svpharamcy</span>
+    <span class="nav-text">Drug Database</span>
     <span class="new-badge">NEW</span>
   </a>
 </nav>
@@ -1983,62 +1992,303 @@
      </div>
     </div>
    </section><!-- Testimonials Section -->
-   <section id="testimonials" class="section">
-    <div class="container mx-auto px-6 lg:px-12">
-     <div class="text-center mb-16">
-      <h2 class="text-5xl lg:text-6xl font-bold mb-6 gradient-text">What People Say</h2>
-      <div class="w-24 h-1 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
-     </div>
-     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-    <div class="glass-card p-8 hover-card relative overflow-hidden">
+   <section id="testimonials" class="relative w-full overflow-hidden py-24">
+  
+  <!-- Background Effects -->
+  <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse"></div>
+  <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
-  <!-- Soft Canva Glow -->
-  <div class="absolute -top-20 -right-20 w-48 h-48 bg-gradient-to-br from-blue-500/30 to-indigo-500/10 rounded-full blur-3xl"></div>
-
-  <div class="relative z-10">
-
+  <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+    
     <!-- Header -->
-    <div class="flex items-center mb-5">
-      <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-        <i class="fab fa-google text-xl text-white"></i>
+    <div class="text-center mb-20">
+      <h2 class="text-4xl md:text-6xl font-black mb-3 text-white tracking-tighter drop-shadow-2xl">
+        WHAT PEOPLE <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">SAY</span>
+      </h2>
+      <div class="w-24 h-1.5 mx-auto bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full shadow-[0_0_20px_#3b82f6]"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+
+      <!-- GOOGLE SUMMARY CARD -->
+      <div class="group relative h-fit rounded-[24px] border border-white/10 bg-[#0a0a0c]/60 backdrop-blur-xl p-8 transition-all duration-500 hover:border-white/20 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:-translate-y-1">
+        
+        <div class="flex items-center gap-5 mb-6">
+          <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg shrink-0 backdrop-blur-md">
+             <svg class="w-7 h-7" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/>
+                <path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.565 24 12.255 24z"/>
+                <path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/>
+                <path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0 7.565 0 3.515 2.7 1.545 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/>
+             </svg>
+          </div>
+          <div>
+             <h4 class="text-2xl font-bold text-white tracking-tight">Google Summary</h4>
+             <div class="flex items-center gap-2 mt-1">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <p class="text-xs text-blue-300/80 font-mono tracking-wide">PUBLICLY VERIFIED</p>
+             </div>
+          </div>
+        </div>
+
+        <div class="relative bg-black/20 rounded-2xl p-5 border border-white/5 mb-5">
+          <!-- IMPORTANT: style="max-height: 5.2em;" is the default closed state -->
+          <div id="googleText" class="text-[15px] text-gray-300 italic leading-relaxed overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]" style="max-height: 5.2em;">
+Banny S.V. is an Indian B.Pharm scholar and pharmaceutical researcher affiliated with Jawaharlal Nehru Technological University (JNTU), Anantapur, Andhra Pradesh.
+
+He is a verified author on ResearchGate and has published peer-reviewed articles in international journals, including the World Journal of Pharmaceutical Research (WJPR). His research work covers areas such as Novel Drug Delivery Systems, NABL / ISO-IEC 17025, and Physical Pharmaceutics practical methodologies.
+
+Banny S.V. is also an active academic content creator on SlideShare, sharing high-quality presentations on Pharmaceutics, Pharmacognosy, and Pharmaceutical Chemistry for pharmacy students.
+
+He maintains an academic portfolio at bannysv.netlify.app, providing study tools, revision resources, and educational content for pharmacy learners.          </div>
+          <div id="textFade" class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[#0a0a0c]/80 to-transparent pointer-events-none transition-opacity duration-500"></div>
+        </div>
+
+        <div class="flex justify-between items-center border-t border-white/10 pt-4">
+            <button onclick="toggleGoogleText()" class="flex items-center gap-2 text-xs font-bold text-white bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all active:scale-95 cursor-pointer">
+                <span id="readMoreLabel">Read More</span> 
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-500" id="readMoreArrow"></i>
+            </button>
+            <div class="flex gap-1 text-yellow-400 text-[10px]">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+        </div>
       </div>
-      <div>
-        <h4 class="font-bold text-lg">What Google Says About Banny SV</h4>
-        <p class="text-sm opacity-70">Public Web Summary</p>
+
+      <!-- PROFILE CARD (Target for Download) -->
+      <div class="relative mt-8 md:mt-0 pt-20 px-2" id="profileCard_target">
+        
+        <div class="absolute inset-4 top-20 rounded-[30px] overflow-hidden pointer-events-none">
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500 to-purple-600 opacity-30 animate-beam"></div>
+        </div>
+
+        <div class="relative bg-[#020203] rounded-[32px] p-[2px] mt-4 shadow-2xl"> 
+          <div class="relative bg-[#0a0a0c] rounded-[30px] p-8 pb-8 border border-white/5"> 
+            
+            <div class="absolute -top-16 left-8 z-[50]"> 
+              <div class="relative w-28 h-28 group">
+                  <div class="absolute inset-0 bg-blue-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                  <div class="relative w-full h-full rounded-full p-1 bg-gradient-to-b from-white/20 to-black">
+                    <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#0a0a0c] shadow-2xl bg-black">
+                       <img src="data:image/jpeg;base64,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" class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500" alt="Banny SV">
+                    </div>
+                  </div>
+                  <div class="absolute bottom-1 right-1 bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-4 border-[#0d0d0f] z-20">
+                     <i class="fas fa-check text-[10px]"></i>
+                  </div>
+              </div>
+            </div>
+
+            <div class="absolute top-6 right-6 z-40" id="downloadBtnContainer">
+                <button onclick="saveProfileCard()" class="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full hover:bg-white/10 hover:border-blue-500/50 transition-all text-gray-400 hover:text-white cursor-pointer active:scale-95 group/dl">
+                    <span id="dlText" class="text-[10px] font-bold uppercase tracking-wider hidden group-hover/dl:block">Save Card</span>
+                    <i id="dlIcon" class="fas fa-download text-[10px]"></i>
+                </button>
+            </div>
+
+            <div class="ml-32 mb-6 flex flex-col justify-center min-h-[70px]">
+                <h3 class="text-3xl font-black text-white tracking-tighter leading-none mb-3">Banny SV</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-[9px] font-bold text-blue-400 uppercase tracking-wide">
+                        Official Verified Author
+                    </span>
+                    <span class="px-2 py-0.5 rounded-md bg-green-500/10 border border-green-500/20 text-[9px] font-bold text-green-400 uppercase tracking-wide">
+                        Active
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-500/10 to-transparent border-l-2 border-blue-500 pl-3 py-2 rounded-r-lg mb-2">
+                <div class="flex items-center gap-2 mb-0.5">
+                    <i class="fas fa-star text-yellow-400 text-[10px] animate-pulse"></i>
+                    <span class="text-[9px] font-bold text-blue-400 uppercase"> Published Research</span>
+                    
+                </div>
+                <p class="text-white font-bold text-sm leading-tight">Novel Drug Delivery Systems (NDDS)</p>
+            </div>
+
+            <!-- Articles Section -->
+            <div id="hiddenArticles" class="overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]" style="max-height: 0px; opacity: 0;">
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center gap-3 bg-white/5 border-l-2 border-purple-500 pl-3 py-2 rounded-r-lg hover:bg-white/10 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0"><i class="fas fa-pills text-purple-400 text-[10px]"></i></div>
+                        <div><p class="text-white font-bold text-xs leading-tight">Formulation of Venlafaxine Matrix Tablets</p>
+                          <p class="text-[8px] text-gray-500 uppercase mt-0.5">Review Article</p><p class="text-[10px] text-gray-400 mt-1">
+  Peer-reviewed | International Journal (WJPR)
+</p>
+</div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/5 border-l-2 border-pink-500 pl-3 py-2 rounded-r-lg hover:bg-white/10 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-pink-500/10 flex items-center justify-center shrink-0"><i class="fas fa-brain text-pink-400 text-[10px]"></i></div>
+                        <div><p class="text-white font-bold text-xs leading-tight">Review article on Depression & Treatment</p><p class="text-[8px] text-gray-500 uppercase mt-0.5">Review Article</p>
+                        <p class="text-[10px] text-gray-400 mt-1">
+  Peer-reviewed | International Journal (WJPR)
+</p>
+</div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/5 border-l-2 border-cyan-500 pl-3 py-2 rounded-r-lg hover:bg-white/10 transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-cyan-500/10 flex items-center justify-center shrink-0"><i class="fas fa-microscope text-cyan-400 text-[10px]"></i></div>
+                        <div><p class="text-white font-bold text-xs leading-tight">A review article on Microsphere</p><p class="text-[8px] text-gray-500 uppercase mt-0.5">Review article</p>
+                        <p class="text-[10px] text-gray-400 mt-1">
+  Peer-reviewed | International Journal (WJPR)
+</p>
+</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="toggleArticleList()" id="viewAllBtn" class="w-full text-center text-[10px] font-bold text-blue-400 hover:text-white mt-3 flex items-center justify-center gap-1 cursor-pointer">
+                <span id="viewAllLabel">View All Articles</span> <i id="viewAllArrow" class="fas fa-chevron-down text-[8px] transition-transform duration-300"></i>
+            </button>
+
+            <div class="grid grid-cols-2 gap-3 mt-5">
+                <a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=banny+sv+Novel+Drug+Delivery+Systems%22+&oq=bann" target="_blank" 
+                   class="flex items-center justify-center gap-2 py-3 rounded-xl bg-white text-black text-xs font-black hover:bg-gray-200 hover:-translate-y-0.5 transition-all shadow-lg">
+                   <i class="fas fa-graduation-cap text-sm"></i> SCHOLAR
+                </a>
+                <a href="https://www.researchgate.net/search.Search.html?query=banny+sv&type=researcher" target="_blank" 
+                   class="flex items-center justify-center gap-2 py-3 rounded-xl border border-white/20 bg-white/5 text-white text-xs font-black hover:bg-white/10 hover:border-white/40 hover:-translate-y-0.5 transition-all">
+                   <i class="fas fa-flask text-sm"></i> RESEARCHGATE
+                </a>
+            </div>
+
+            <!-- FOOTER FOR DOWNLOAD (Initially Hidden) -->
+            <div id="downloadFooter" class="hidden mt-6 pt-5 border-t border-white/10 text-center bg-[#020203]">
+                <p class="text-[10px] text-red-400 font-bold uppercase mb-2 tracking-widest flex items-center justify-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i> CAUTION: DO NOT MISUSE THIS CARD
+                </p>
+                <div class="text-[9px] text-gray-400 leading-relaxed">
+                    <p class="mb-1">Downloaded from the official portfolio of <b>Banny SV</b>.</p>
+                    <p class="mb-3 text-blue-400 font-medium">bannysv.netlify.app</p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 text-white/70 text-[9px] font-bold uppercase tracking-wide">
+                        <span class="flex items-center gap-1.5"><i class="fab fa-youtube text-red-500 text-xs"></i> Banny SV</span>
+                        <span class="flex items-center gap-1.5"><i class="fab fa-slideshare text-blue-400 text-xs"></i> SlideShare</span>
+                        <span class="flex items-center gap-1.5"><i class="fab fa-instagram text-pink-500 text-xs"></i> bannysv</span>
+                        <span class="flex items-center gap-1.5"><i class="fab fa-snapchat text-yellow-400 text-xs"></i> banny sv</span>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Short Content -->
-    <p class="opacity-85 mb-5 italic leading-relaxed">
-      “Banny SV is recognized for sharing educational pharmacy content online, particularly on SlideShare.
-      His work focuses on core B. Pharm subjects like Pharmacognosy, Pharmaceutics, Pharmaceutical Chemistry,
-      and Analytical Methods. He is also credited as an author of pharmaceutical research publications,
-      including a review on ‘Novel Drug Delivery Systems’ in WJPR.”
-    </p>
-
-    <!-- Trust Line -->
-    <div class="flex items-center justify-between">
-      <div class="flex text-amber-400">
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </div>
-      <span class="text-xs opacity-60">Based on real public search results</span>
+    <!-- Success Toast -->
+    <div id="downloadToast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-[#1a1a1c] border border-white/20 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-4 z-[999] opacity-0 pointer-events-none transition-all duration-500 translate-y-10">
+        <i class="fas fa-check text-green-400"></i>
+        <div class="text-xs font-bold">Card Saved Successfully!</div>
     </div>
 
   </div>
-</div>
 
-    
-       
+  <style>
+    @keyframes beam { 0% { transform: translateX(-100%) skewX(-15deg); } 100% { transform: translateX(100%) skewX(-15deg); } }
+    .animate-beam { width: 200%; height: 100%; animation: beam 3s infinite linear; }
+  </style>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <script>
+    // 1. ROBUST "READ MORE" LOGIC
+    // We check the style.maxHeight directly. This is the most reliable way.
+    function toggleGoogleText() {
+      const text = document.getElementById('googleText');
+      const fade = document.getElementById('textFade');
+      const label = document.getElementById('readMoreLabel');
+      const arrow = document.getElementById('readMoreArrow');
       
-    
+      // If the height is restricted (default), we open it.
+      if (text.style.maxHeight === '5.2em') {
+          // OPEN
+          text.style.maxHeight = '1000px';
+          fade.style.opacity = '0';
+          label.textContent = "Read Less"; // Using textContent is safer
+          arrow.style.transform = "rotate(180deg)";
+      } else {
+          // CLOSE
+          text.style.maxHeight = '5.2em';
+          fade.style.opacity = '1';
+          label.textContent = "Read More";
+          arrow.style.transform = "rotate(0deg)";
+      }
+    }
+
+    // 2. TOGGLE ARTICLES LIST
+    function toggleArticleList() {
+      const list = document.getElementById('hiddenArticles');
+      const label = document.getElementById('viewAllLabel');
+      const arrow = document.getElementById('viewAllArrow');
+      
+      const isClosed = list.style.maxHeight === '0px' || list.style.maxHeight === '';
+      
+      list.style.maxHeight = isClosed ? '1000px' : '0px';
+      list.style.opacity = isClosed ? '1' : '0';
+      label.textContent = isClosed ? "Show Less" : "View All Articles";
+      arrow.style.transform = isClosed ? "rotate(180deg)" : "rotate(0deg)";
+    }
+
+    // 3. FIXED IMAGE SAVE
+    function saveProfileCard() {
+      const cardElement = document.getElementById('profileCard_target');
+      const footer = document.getElementById('downloadFooter');
+      const downloadBtn = document.getElementById('downloadBtnContainer');
+      const toast = document.getElementById('downloadToast');
+      const btnText = document.getElementById('dlText');
+      const btnIcon = document.getElementById('dlIcon');
+
+      // LOADING STATE
+      btnText.textContent = "Saving...";
+      btnIcon.className = "fas fa-spinner fa-spin text-[10px]";
+      
+      // PREPARE: Hide button, Show Footer
+      downloadBtn.style.opacity = '0'; 
+      footer.classList.remove('hidden'); 
+
+      // CRITICAL FIX: 500ms delay to ensure the footer is fully rendered by the browser
+      setTimeout(() => {
+          html2canvas(cardElement, {
+              backgroundColor: '#020203', 
+              scale: 2, 
+              useCORS: true, // Necessary for cross-origin images
+              allowTaint: true,
+              logging: false
+          }).then(canvas => {
+              // RESET
+              footer.classList.add('hidden');
+              downloadBtn.style.opacity = '1';
+              btnText.textContent = "Save Card";
+              btnIcon.className = "fas fa-download text-[10px]";
+
+              // DOWNLOAD
+              const link = document.createElement('a');
+              link.download = 'BannySV_Official_Card.png';
+              link.href = canvas.toDataURL("image/png");
+              link.click();
+
+              // SHOW SUCCESS TOAST
+              toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-10');
+              setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-10'), 4000);
+          }).catch(err => {
+              console.error(err);
+              // Reset on error
+              footer.classList.add('hidden');
+              downloadBtn.style.opacity = '1';
+              btnText.textContent = "Save Card";
+              btnIcon.className = "fas fa-download text-[10px]";
+              alert("Error saving image. If testing locally, try running on a local server (e.g., VS Code Live Server).");
+          });
+      }, 500); // Increased to 500ms
+    }
+  </script>
+</section>
 
 
-    
-   </section>
   <!-- Blog Section -->
 <section id="blog" class="section">
   <div class="container mx-auto px-6 lg:px-12">
