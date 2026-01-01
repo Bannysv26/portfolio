@@ -4361,15 +4361,172 @@ premiumContact.addEventListener("click", () => {
             
             <div id="tab-feed" class="tab-content active space-y-6">
 
-                <div class="relative w-full aspect-video rounded-xl overflow-hidden border border-borderCol bg-black shadow-lg group">
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10">
-                        <div class="w-12 h-12 rounded-full bg-surfaceHighlight/50 border border-white/10 flex items-center justify-center mb-3 backdrop-blur-md animate-pulse">
-                            <i class="fas fa-play text-textMain"></i>
-                        </div>
-                        <h3 class="text-textMain font-bold text-sm">3D Mechanism Preview</h3>
-                        <p class="text-textSub text-[10px] mt-1">Rendering in progress...</p>
-                    </div>
-                </div>
+               <style>
+/* ---- LOCAL ONLY (won't affect rest of site) ---- */
+.video-scope .glass-panel{
+  background:rgba(10,10,10,.6);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.08)
+}
+.video-scope .controls-overlay{
+  opacity:0;
+  transform:translateY(10px);
+  transition:.4s cubic-bezier(.4,0,.2,1)
+}
+.video-scope:hover .controls-overlay,
+.video-scope.video-paused .controls-overlay{
+  opacity:1;
+  transform:translateY(0)
+}
+.video-scope .play-center-btn{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  transition:.3s;
+}
+.video-scope .play-center-btn:hover{
+  transform:scale(1.1);
+}
+.video-scope.video-playing .play-center-wrapper{
+  opacity:0;
+  pointer-events:none;
+  transform:scale(.9)
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.video-scope .animate-spin-custom{animation:spin 1s linear infinite}
+.video-scope .download-success{background:#10B981!important;color:#fff}
+</style>
+
+<div id="videoContainer" class="video-scope relative w-full max-w-4xl aspect-video rounded-3xl overflow-hidden group border border-white/10 bg-zinc-900 shadow-2xl video-paused">
+
+  <!-- VIDEO (silent, manual play) -->
+  <video
+    id="mechanismVideo"
+    class="absolute inset-0 w-full h-full object-cover"
+    muted
+    loop
+    playsinline
+    preload="metadata"
+  >
+    <source src="assets/3d-mechanism.mp4" type="video/mp4">
+  </video>
+
+  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none"></div>
+
+  <!-- CENTER PLAY -->
+  <div class="absolute inset-0 flex items-center justify-center play-center-wrapper transition-all z-10">
+    <button onclick="togglePlay()" class="play-center-btn rounded-full w-20 h-20 flex items-center justify-center text-white">
+      ▶
+    </button>
+  </div>
+
+  <!-- BADGE -->
+  <div class="absolute top-4 right-4 glass-panel text-white text-[10px] px-3 py-1.5 rounded-full">
+    4K HDR
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="absolute bottom-4 left-4 right-4 controls-overlay z-30">
+    <div class="glass-panel rounded-2xl p-4">
+
+      <div class="relative w-full h-1.5 bg-white/10 rounded-full cursor-pointer mb-4" onclick="seekVideo(event)">
+        <div id="progressBar" class="absolute h-full bg-blue-500 rounded-full w-0"></div>
+      </div>
+
+      <div class="flex justify-between items-end">
+        <div>
+          <h3 class="text-white font-semibold text-base">3D Mechanism 
+</h3>
+         <p class="text-gray-400 text-xs">Pharmaceutics Visualization • Verified Author (ResearchGate) — Banny S.V</p>
+
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="downloadBtn" onclick="handleDownload()"
+            class="glass-panel w-10 h-10 flex items-center justify-center rounded-xl">
+            <span id="icon-download">⬇</span>
+            <span id="icon-loading" class="hidden animate-spin-custom">⟳</span>
+            <span id="icon-success" class="hidden">✔</span>
+          </button>
+
+          <button onclick="togglePlay()" id="playBtn"
+            class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl text-sm">
+            Play
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const c = document.getElementById('videoContainer');
+  const v = document.getElementById('mechanismVideo');
+  const p = document.getElementById('progressBar');
+  const playBtn = document.getElementById('playBtn');
+
+  const dBtn = document.getElementById('downloadBtn');
+  const iD = document.getElementById('icon-download');
+  const iL = document.getElementById('icon-loading');
+  const iS = document.getElementById('icon-success');
+
+  function safePlay(){
+    const r = v.play();
+    if(r && r.catch) r.catch(()=>{});
+  }
+
+  window.togglePlay = function(){
+    if(v.paused){
+      safePlay();
+      playBtn.textContent = 'Pause';
+      c.classList.remove('video-paused');
+      c.classList.add('video-playing');
+    }else{
+      v.pause();
+      playBtn.textContent = 'Play';
+      c.classList.remove('video-playing');
+      c.classList.add('video-paused');
+    }
+  };
+
+  v.addEventListener('timeupdate',()=>{
+    if(v.duration) p.style.width = (v.currentTime/v.duration)*100 + '%';
+  });
+
+  window.seekVideo = function(e){
+    if(!v.duration) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    v.currentTime = ((e.clientX - r.left)/r.width) * v.duration;
+  };
+
+  window.handleDownload = function(){
+    if(dBtn.classList.contains('pointer-events-none')) return;
+    dBtn.classList.add('pointer-events-none');
+    iD.classList.add('hidden');
+    iL.classList.remove('hidden');
+
+    setTimeout(()=>{
+      iL.classList.add('hidden');
+      iS.classList.remove('hidden');
+      dBtn.classList.add('download-success');
+
+      const a = document.createElement('a');
+      a.href = v.querySelector('source').src;
+      a.download = 'Mechanism-Render-4K.mp4';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setTimeout(()=>{
+        dBtn.classList.remove('download-success','pointer-events-none');
+        iS.classList.add('hidden');
+        iD.classList.remove('hidden');
+      },2000);
+    },1500);
+  };
+})();
+</script>
+
 
                 <div class="p-5 rounded-xl bg-surface border border-borderCol hover-card">
                     <div class="flex justify-between items-center mb-3">
