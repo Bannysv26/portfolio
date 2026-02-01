@@ -1361,10 +1361,15 @@
     <i class="nav-icon fas fa-home"></i>
     <span class="nav-text">Home</span>
   </a>
+
   <a href="#about" class="nav-item" data-section="about">
     <i class="nav-icon fas fa-user"></i>
     <span class="nav-text">About</span>
   </a>
+  <a href="#major-announcement" class="nav-item" data-section="research">
+    <i class="nav-icon fas fa-gift"></i>
+    <span class="nav-text">Surprise</span>
+</a>
   <a href="#research" class="nav-item" data-section="research">
     <i class="nav-icon fas fa-flask"></i>
     <span class="nav-text">Research</span>
@@ -1559,7 +1564,214 @@
       </div>
      </div>
     </div>
-   </section><!-- Research Section -->
+   </section>
+   <!--  Books-->
+   <div id="major-announcement">
+    <style>
+        /* Smooth scrolling adjustment so the header isn't cut off */
+        #major-announcement {
+            scroll-margin-top: 80px; 
+            --bsv-purple: #9b59b6;
+            --bsv-dark-bg: #0d1117;
+            --bsv-gold-accent: #f1c40f;
+            --bsv-teal: #00838f;
+            width: 100%;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #major-announcement * { box-sizing: border-box; }
+
+        /* Highlight animation when coming from sidebar */
+        #major-announcement:target .mystery-card {
+            animation: bsvHighlight 2s ease-out;
+            border-color: var(--bsv-gold-accent);
+        }
+
+        @keyframes bsvHighlight {
+            0% { box-shadow: 0 0 0px transparent; }
+            50% { box-shadow: 0 0 50px var(--bsv-purple); }
+            100% { box-shadow: 0 0 40px rgba(0, 0, 0, 0.5); }
+        }
+
+        /* Heading */
+        #major-announcement .section-title {
+            color: var(--bsv-purple);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        #major-announcement .section-title::after {
+            content: '';
+            position: absolute; left: 0; bottom: -8px; width: 50px; height: 3px; background: #8e44ad;
+        }
+
+        /* THE MYSTERY CARD */
+        #major-announcement .mystery-card {
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transition: border-color 0.5s ease;
+        }
+
+        /* LEFT SIDE */
+        #major-announcement .hidden-side {
+            width: 40%;
+            background: #000;
+            display: flex; justify-content: center; align-items: center;
+            position: relative; overflow: hidden;
+            padding: 40px;
+        }
+
+        #major-announcement .mystery-box {
+            font-size: 5rem;
+            color: var(--bsv-gold-accent);
+            animation: bsvMysteryPulse 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 15px rgba(241, 196, 15, 0.5));
+            z-index: 2;
+        }
+
+        @keyframes bsvMysteryPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* RIGHT SIDE */
+        #major-announcement .content-side {
+            width: 60%;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #major-announcement h2 {
+            color: white; font-size: 1.6rem; font-weight: 800; margin: 0; line-height: 1.2;
+        }
+
+        #major-announcement .desc {
+            color: #b2bec3; margin: 15px 0 25px 0; font-size: 0.9rem; line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        #major-announcement .reveal-track { 
+            width: 100%; height: 8px; background: rgba(255,255,255,0.05); 
+            border-radius: 10px; overflow: hidden; margin-top: 8px;
+        }
+        #major-announcement .reveal-fill {
+            width: 88%; height: 100%; background: var(--bsv-purple);
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%);
+            background-size: 20px 20px;
+            animation: bsvStripeMove 1s linear infinite;
+        }
+        @keyframes bsvStripeMove { from { background-position: 0 0; } to { background-position: 20px 20px; } }
+
+        /* Button */
+        #major-announcement .notify-btn {
+            background: transparent;
+            border: 2px solid var(--bsv-gold-accent);
+            color: var(--bsv-gold-accent);
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            align-self: flex-start;
+        }
+
+        /* MODAL */
+        #bsv-msg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center; z-index: 10000;
+        }
+        #bsv-msg-overlay.active { display: flex; }
+        #bsv-msg-box {
+            background: white; width: 90%; max-width: 380px; padding: 40px 30px;
+            border-radius: 20px; text-align: center;
+        }
+        #bsv-msg-box .btn-close {
+            background: var(--bsv-teal); color: white; border: none;
+            width: 100%; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer;
+        }
+
+        @media (max-width: 650px) {
+            #major-announcement .mystery-card { flex-direction: column; }
+            #major-announcement .hidden-side, #major-announcement .content-side { width: 100%; }
+        }
+    </style>
+
+    <h2 class="section-title">Surprise</h2>
+
+    <div class="mystery-card">
+        <div class="hidden-side">
+            <div class="mystery-box">🎁</div>
+        </div>
+
+        <div class="content-side">
+            <div style="color: var(--bsv-gold-accent); font-weight: 900; letter-spacing: 3px; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px;">
+                Limited Edition Surprise
+            </div>
+            <h2>A Revolutionary Resource is Coming...</h2>
+            <p class="desc">Banny S.V. and the research team are putting the final touches on a project that will redefine academic excellence in Pharmacy.</p>
+
+            <div style="margin-bottom: 25px;">
+                <span style="color: var(--bsv-gold-accent); font-size: 0.65rem; font-weight: bold;">UNVEILING STATUS: FINAL STAGES</span>
+                <div class="reveal-track"><div class="reveal-fill"></div></div>
+            </div>
+
+            <button class="notify-btn" onclick="toggleBsvMsg()">Stay Tuned</button>
+        </div>
+    </div>
+
+    <div id="bsv-msg-overlay" onclick="toggleBsvMsg()">
+        <div id="bsv-msg-box" onclick="event.stopPropagation()">
+            <span style="font-size: 3.5rem; display: block; margin-bottom: 15px;">😊</span>
+            <h3 style="color: #2d3436; font-weight: 800; margin-bottom: 10px;">Thank You For Your Interest!</h3>
+            <p style="color: #607d8b; font-size: 0.9rem; line-height: 1.6; margin-bottom: 25px;">
+                The <b>Big Surprise</b> is currently in the final preparation phase. Please wait for the official announcement by Banny S.V.
+            </p>
+            <button class="btn-close" onclick="toggleBsvMsg()">OK, I'll Wait</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleBsvMsg() {
+            document.getElementById('bsv-msg-overlay').classList.toggle('active');
+        }
+    </script>
+</div>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <!-- Research Section -->
    <section id="research" class="section">
     <div class="container mx-auto px-6 lg:px-12">
      <div class="text-center mb-16">
