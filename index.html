@@ -1580,31 +1580,37 @@
         }
 
         /* Card */
-        .mystery-card {
-            background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
-            max-width: 720px;
-            display: flex;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-        }
+        /* FIX CARD SIZE */
+.mystery-card {
+    background: linear-gradient(145deg, #0b0f1a, #05070d);
+    max-width: 900px;
+    height: 360px;
+    display: flex;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
 
-        .left {
-            width: 40%;
-            background: radial-gradient(circle, #1a1a2e, #000);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
+/* FIX LEFT IMAGE CONTAINER */
+.left,
+.hidden-side {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #10162a, #05070d);
+}
 
-        .book-img {
-            width: 100%;
-            max-width: 220px;
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(241,196,15,0.45);
-            animation: pulse 2s infinite ease-in-out;
-        }
+/* FIX IMAGE FITTING */
+.book-img,
+.mystery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 25px;
+}
+
 
         @keyframes pulse {
             0%,100% { transform: scale(1); opacity: 0.85; }
@@ -1708,7 +1714,7 @@
     <div class="mystery-card">
         <div class="left">
             <!-- CHANGE IMAGE PATH -->
-            <img src="./Book cover page.png" class="book-img" alt="Nanoparticles & Nanocarriers">
+            <img src="./book advertisement.png" class="book-img" alt="Nanoparticles & Nanocarriers">
         </div>
 
         <div class="right">
@@ -1726,7 +1732,7 @@
     <div id="overlay" onclick="closePopup()">
         <div class="popup" onclick="event.stopPropagation()">
 
-            <img src="./Book cover page.png" alt="Book">
+            <img src="./book advertisement.png" alt="Book">
 
             <h3>Book Launching Soon</h3>
 
