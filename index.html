@@ -1238,106 +1238,6 @@
         .presentation-overlay:hover .play-button {
             transform: scale(1);
         }
-/* === ✨ Ultimate Premium Neon-Glass Store Link (Canva Pro Style) === */
-.store-premium {
-  position: relative;
-  background: radial-gradient(circle at 30% 20%, rgba(163, 132, 255, 0.25) 0%, rgba(255, 255, 255, 0.03) 100%);
-  border: none; /* 🟢 no visible border */
-  border-radius: 14px;
-  backdrop-filter: blur(20px) saturate(180%);
-  box-shadow:
-    0 0 20px rgba(163, 132, 255, 0.4),
-    inset 0 0 10px rgba(255, 255, 255, 0.08);
-  transition: all 0.45s ease;
-  overflow: hidden;
-  animation: subtleAura 6s ease-in-out infinite alternate;
-}
-
-/* 🩵 Subtle constant breathing glow */
-@keyframes subtleAura {
-  0% {
-    box-shadow:
-      0 0 20px rgba(163, 132, 255, 0.35),
-      0 0 35px rgba(255, 120, 120, 0.2),
-      inset 0 0 8px rgba(255, 255, 255, 0.05);
-  }
-  100% {
-    box-shadow:
-      0 0 30px rgba(163, 132, 255, 0.6),
-      0 0 60px rgba(255, 150, 150, 0.35),
-      inset 0 0 12px rgba(255, 255, 255, 0.08);
-  }
-}
-
-/* 💫 Hover: bright neon effect + slight movement */
-.store-premium:hover {
-  transform: translateX(8px) scale(1.06);
-  background: radial-gradient(circle at 30% 20%, rgba(163, 132, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 100%);
-  box-shadow:
-    0 0 35px rgba(163, 132, 255, 0.8),
-    0 0 60px rgba(255, 125, 125, 0.4);
-}
-
-/* 🌈 Animated reflective glass highlight */
-.glassy-shine {
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(120deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.45) 50%,
-      rgba(255, 255, 255, 0) 100%);
-  transform: skewX(-25deg);
-  animation: glassSweep 4.2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes glassSweep {
-  0% { left: -120%; opacity: 0; }
-  40% { opacity: 1; }
-  60% { left: 130%; opacity: 1; }
-  100% { left: 130%; opacity: 0; }
-}
-
-/* 🔮 Premium “NEW” badge shimmer effect */
-.new-badge {
-  background: linear-gradient(270deg, #a48bff, #ff6b6b, #ffb347);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 10px;
-  margin-left: 8px;
-  letter-spacing: 0.6px;
-  background-size: 250%;
-  animation: badgeFlow 3.5s linear infinite, badgePulse 2.2s ease-in-out infinite;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-  border: none;
-  box-shadow: 0 0 10px rgba(163, 132, 255, 0.6);
-}
-
-@keyframes badgeFlow {
-  0% { background-position: 0%; }
-  100% { background-position: 250%; }
-}
-
-@keyframes badgePulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.9; }
-}
-
-/* ✨ Icon glow effect */
-.store-premium .nav-icon {
-  transition: 0.4s ease;
-}
-
-.store-premium:hover .nav-icon {
-  color: #a48bff;
-  filter: drop-shadow(0 0 10px rgba(163, 132, 255, 0.9));
-}
-
 
 
     </style> <!-- Cosmic Background -->
@@ -1358,24 +1258,29 @@
     </div>
   <nav class="sidebar-nav">
   <a href="#home" class="nav-item active" data-section="home">
-    <i class="nav-icon fas fa-home"></i>
+   <i class="nav-icon fas fa-house-user"></i>
+
     <span class="nav-text">Home</span>
   </a>
 
   <a href="#about" class="nav-item" data-section="about">
-    <i class="nav-icon fas fa-user"></i>
+   <i class="nav-icon fas fa-address-card"></i>
+
     <span class="nav-text">About</span>
   </a>
-  <a href="#major-announcement" class="nav-item" data-section="research">
-    <i class="nav-icon fas fa-gift"></i>
-    <span class="nav-text">Surprise</span>
+  <a href="#major-announcement" class="nav-item" data-section="books">
+  <i class="nav-icon fas fa-book-open"></i>
+  <span class="nav-text">Books</span>
+</a>
+
 </a>
   <a href="#research" class="nav-item" data-section="research">
     <i class="nav-icon fas fa-flask"></i>
     <span class="nav-text">Research</span>
   </a>
   <a href="#skills" class="nav-item" data-section="skills">
-    <i class="nav-icon fas fa-cogs"></i>
+    <i class="nav-icon fas fa-lightbulb"></i>
+
     <span class="nav-text">Skills</span>
   </a>
   <a href="#presentations" class="nav-item" data-section="presentations">
@@ -1387,15 +1292,18 @@
     <span class="nav-text">Projects</span>
   </a>
   <a href="#testimonials" class="nav-item" data-section="testimonials">
-    <i class="nav-icon fas fa-quote-left"></i>
+    <i class="nav-icon fas fa-comments"></i>
+
     <span class="nav-text">Testimonials</span>
   </a>
   <a href="#blog" class="nav-item" data-section="blog">
-    <i class="nav-icon fas fa-blog"></i>
+   <i class="nav-icon fas fa-edit"></i>
+
     <span class="nav-text">Blog</span>
   </a>
   <a href="#contact" class="nav-item" data-section="contact">
-    <i class="nav-icon fas fa-envelope"></i>
+    <i class="nav-icon fas fa-user"></i>
+
     <span class="nav-text">Contact</span>
   </a>
 
@@ -1403,8 +1311,7 @@
   <a href="store.html" class="nav-item store-premium" id="store-link">
     <i class="nav-icon fas fa-mortar-pestle"></i>
     <span class="nav-text">Drug Database</span>
-    <span class="new-badge">NEW</span>
-  </a>
+      </a>
 </nav>
 
 
@@ -1568,205 +1475,223 @@
 
    <!--  Books-->
    <div id="major-announcement">
-    <style>
-        #major-announcement {
-            --purple: #9b59b6;
-            --gold: #f1c40f;
-            --green: #7fd3a4;
-            font-family: 'Montserrat', sans-serif;
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
 
-        /* Card */
-        /* FIX CARD SIZE */
-.mystery-card {
-    background: linear-gradient(145deg, #0b0f1a, #05070d);
-    max-width: 900px;
-    height: 360px;
-    display: flex;
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+<style>
+:root{
+  --gold:#f1c40f;
+  --green:#7fd3a4;
+  --bg:#05070d;
+  --muted:#b2bec3;
+}
+*{box-sizing:border-box}
+
+#major-announcement{
+  font-family:Montserrat,sans-serif;
+  max-width:1200px;
+  margin:60px auto;
+  padding:0 16px;
 }
 
-/* FIX LEFT IMAGE CONTAINER */
-.left,
-.hidden-side {
-    width: 45%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at center, #10162a, #05070d);
+/* MAIN CARD */
+.book-card{
+  background:var(--bg);
+  border-radius:26px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  display:flex;
+  overflow:hidden;
+  max-width:1050px;
+  margin:auto;
 }
 
-/* FIX IMAGE FITTING */
-.book-img,
-.mystery-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 25px;
+/* POSTER SIDE */
+.book-left{
+  flex:0 0 380px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+}
+
+.book-left img{
+  width:100%;
+  height:auto;              /* FULL POSTER */
+  display:block;
+}
+
+/* CONTENT SIDE */
+.book-right{
+  flex:1;
+  padding:40px;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.badge{
+  background:var(--gold);
+  color:#000;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:.75rem;
+  font-weight:800;
+  width:max-content;
+  margin-bottom:14px;
+}
+
+.book-right h2{
+  margin:0;
+  font-size:1.8rem;
+  font-weight:800;
+}
+
+.book-right p{
+  margin:16px 0 26px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:1rem;
+}
+
+.book-right button{
+  background:var(--gold);
+  border:none;
+  padding:15px 34px;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
+  width:max-content;
+}
+
+/* POPUP */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+#overlay.active{
+  display:flex;
+}
+
+.popup{
+  background:#fff;
+  width:100%;
+  max-width:420px;
+  padding:32px;
+  border-radius:22px;
+  text-align:center;
+}
+
+.popup img{
+  width:140px;
+  margin-bottom:15px;
+}
+
+.popup p{
+  color:#607d8b;
+  line-height:1.6;
+}
+
+.popup button{
+  margin-top:18px;
+  width:100%;
+  padding:14px;
+  background:var(--green);
+  border:none;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .book-card{
+    flex-direction:column;
+  }
+
+  .book-left{
+    width:100%;
+  }
+
+  .book-right{
+    text-align:center;
+  }
+
+  .book-right button{
+    margin:auto;
+  }
 }
 
 
-        @keyframes pulse {
-            0%,100% { transform: scale(1); opacity: 0.85; }
-            50% { transform: scale(1.08); opacity: 1; }
-        }
 
-        .right {
-            width: 60%;
-            padding: 40px 30px;
-            color: white;
-        }
 
-        .right h2 {
-            margin: 0;
-            font-size: 1.6rem;
-            font-weight: 800;
-        }
 
-        .desc {
-            margin: 15px 0 20px;
-            color: #b2bec3;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
+.icon-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
 
-        .buy-main-btn {
-            margin-top: 20px;
-            background: var(--gold);
-            color: #000;
-            border: none;
-            padding: 12px 25px;
-            font-weight: 800;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+.icon-btn svg{
+  width:18px;
+  height:18px;
+  fill:currentColor;
+}
 
-        /* POPUP */
-        #overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
+</style>
 
-        #overlay.active { display: flex; }
+<!-- CARD -->
+<div class="book-card">
+  <div class="book-left">
+    <!-- 🔹 GIF 1: MAIN POSTER -->
+    <img src="./book advertisement.gif" alt="Book Poster">
+  </div>
 
-        .popup {
-            background: #fff;
-            width: 90%;
-            max-width: 420px;
-            padding: 35px;
-            border-radius: 22px;
-            text-align: center;
-        }
+  <div class="book-right">
+    <span class="badge">COMING SOON</span>
+    <h2>Nanoparticles & Nanocarriers</h2>
+    <p>
+      A comprehensive, exam-oriented guide for B.Pharm, Pharm.D,
+      and Pharmacy students focused on modern drug delivery systems.
+    </p>
+    <button onclick="openPopup()" class="icon-btn">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 3h14a2 2 0 0 1 2 2v16a1 1 0 0 1-1.6.8L14 18H6a2 2 0 0 1-2-2V3z"/>
+  </svg>
+  View Book
+</button>
 
-        .popup img {
-            width: 120px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 0 20px rgba(155,89,182,0.4);
-        }
+  </div>
+</div>
 
-        .popup p {
-            color: #607d8b;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+<!-- POPUP -->
+<div id="overlay" onclick="closePopup()">
+  <div class="popup" onclick="event.stopPropagation()">
+    <!-- 🔹 GIF 2: POPUP IMAGE -->
+    <img src="./book advertisement.png" alt="Book Popup">
+    <h3>Book Launching Soon</h3>
+    <p>
+      This book is under final preparation.
+      Purchasing will be enabled after official release.
+    </p>
+    <button onclick="closePopup()">Okay</button>
+  </div>
+</div>
 
-        .buy-btn {
-            margin-top: 18px;
-            background: var(--green);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+<script>
+function openPopup(){
+  document.getElementById("overlay").classList.add("active");
+}
+function closePopup(){
+  document.getElementById("overlay").classList.remove("active");
+}
+</script>
 
-        .not-published {
-            display: none;
-            margin-top: 15px;
-            color: #e74c3c;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        @media (max-width: 650px) {
-            .mystery-card { flex-direction: column; }
-            .left, .right { width: 100%; }
-        }
-    </style>
-
-    <!-- CARD -->
-    <div class="mystery-card">
-        <div class="left">
-            <!-- CHANGE IMAGE PATH -->
-            <img src="./book advertisement.png" class="book-img" alt="Nanoparticles & Nanocarriers">
-        </div>
-
-        <div class="right">
-            <h2>Nanoparticles & Nanocarriers</h2>
-            <p class="desc">
-                A comprehensive, exam-oriented guide for Pharm.D and Pharmacy students,
-                focused on modern drug delivery systems.
-            </p>
-
-            <button class="buy-main-btn" onclick="openPopup()">🛒 Buy Now</button>
-        </div>
-    </div>
-
-    <!-- POPUP -->
-    <div id="overlay" onclick="closePopup()">
-        <div class="popup" onclick="event.stopPropagation()">
-
-            <img src="./book advertisement.png" alt="Book">
-
-            <h3>Book Launching Soon</h3>
-
-            <p>
-                This book is currently under final preparation.
-                Purchasing will be enabled once officially published.
-            </p>
-
-            <button class="buy-btn" onclick="showMsg()">
-                Buy Now (Coming Soon)
-            </button>
-
-            <div id="msg" class="not-published">
-                ❌ This book is not published yet.<br>
-                Please wait for the official launch.
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        function openPopup() {
-            document.getElementById("overlay").classList.add("active");
-            document.getElementById("msg").style.display = "none";
-        }
-
-        function closePopup() {
-            document.getElementById("overlay").classList.remove("active");
-        }
-
-        function showMsg() {
-            document.getElementById("msg").style.display = "block";
-        }
-    </script>
 </div>
 
    
