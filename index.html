@@ -1367,10 +1367,10 @@
         
         <div class="glass-card p-6 text-center hover-card">
          <div class="text-3xl font-bold gradient-text mb-2">
-          6+
+          1 Book
          </div>
          <div class="text-sm opacity-70">
-          Presentations
+          Authored by Banny S.V.
          </div>
         </div>
         <div class="glass-card p-6 text-center hover-card">
@@ -1382,7 +1382,15 @@
          </div>
          
         </div>
-       
+         <div class="glass-card p-6 text-center hover-card">
+         <div class="text-3xl font-bold gradient-text mb-2">
+         6+
+         </div>
+<div class="text-sm opacity-70">
+          Presentations
+         </div>
+         
+        </div>
        </div>
       </div>
      </div>
@@ -1473,8 +1481,8 @@
     </div>
    </section>
 
-   <!--  Books-->
-   <div id="major-announcement">
+<!--  Books-->
+<div id="major-announcement">
 
 <style>
 :root{
@@ -1509,12 +1517,11 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  background:transparent;
 }
 
 .book-left img{
   width:100%;
-  height:auto;              /* FULL POSTER */
+  height:auto;
   display:block;
 }
 
@@ -1562,50 +1569,15 @@
   width:max-content;
 }
 
-/* POPUP */
-#overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(8px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
-
-#overlay.active{
+/* BUTTON ROW */
+.button-row{
   display:flex;
+  gap:12px;
+  flex-wrap:wrap;
 }
 
-.popup{
-  background:#fff;
-  width:100%;
-  max-width:420px;
-  padding:32px;
-  border-radius:22px;
-  text-align:center;
-}
-
-.popup img{
-  width:140px;
-  margin-bottom:15px;
-}
-
-.popup p{
-  color:#607d8b;
-  line-height:1.6;
-}
-
-.popup button{
-  margin-top:18px;
-  width:100%;
-  padding:14px;
-  background:var(--green);
-  border:none;
-  border-radius:10px;
-  font-weight:800;
-  cursor:pointer;
+.button-row a{
+  text-decoration:none;
 }
 
 /* MOBILE */
@@ -1622,14 +1594,17 @@
     text-align:center;
   }
 
-  .book-right button{
-    margin:auto;
+  .button-row{
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+
+  .button-row button{
+    width:200px;
+    justify-content:center;
   }
 }
-
-
-
-
 
 .icon-btn{
   display:inline-flex;
@@ -1642,60 +1617,79 @@
   height:18px;
   fill:currentColor;
 }
+.author-line{
+  margin:10px 0 18px;
+}
+
+.author-label{
+  color:#f1c40f;
+  font-weight:700;
+}
+
+.author-name{
+  color:#fff;
+  font-weight:600;
+}
 
 </style>
 
 <!-- CARD -->
 <div class="book-card">
   <div class="book-left">
-    <!-- 🔹 GIF 1: MAIN POSTER -->
     <img src="./book advertisement.gif" alt="Book Poster">
   </div>
 
-  <div class="book-right">
-    <span class="badge">COMING SOON</span>
-    <h2>Nanoparticles & Nanocarriers</h2>
-    <p>
-      A comprehensive, exam-oriented guide for B.Pharm, Pharm.D,
-      and Pharmacy students focused on modern drug delivery systems.
-    </p>
-    <button onclick="openPopup()" class="icon-btn">
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 3h14a2 2 0 0 1 2 2v16a1 1 0 0 1-1.6.8L14 18H6a2 2 0 0 1-2-2V3z"/>
-  </svg>
-  View Book
+<div class="book-right">
+  <span class="badge">AVAILABLE NOW</span>
+
+  <strong>Book Title:</strong> <h2>Nanoparticles & Nanocarriers in Drug Delivery</h2>
+
+  
+    
+
+   <p class="author-line">
+  <span class="author-label">Author:</span>
+  <span class="author-name">Banny S.V.</span>
+</p>
+
+   <p style="text-align:justify;">
+  This book, authored and written by <strong>Banny S.V.</strong>, is a comprehensive,
+  exam-oriented guide designed to help B.Pharm, Pharm.D, and pharmacy students
+  understand modern drug delivery systems in a simple and practical way. It
+  explains nanoparticles and nanocarriers with clear concepts, student-friendly
+  language, and academically focused content to support learning, exams, and
+  research interest in advanced pharmaceutical sciences.
+</p>
+  
+
+    <!-- BUTTONS -->
+    <div class="button-row">
+
+      <!-- VIEW BOOK -->
+      <a href="https://www.amazon.in/dp/B0GN8QDM2R" target="_blank">
+        <button class="icon-btn">
+      <i class="fa-solid fa-book"></i>
+      View Book
+    </button>
+      </a>
+
+      <!-- READ SAMPLE -->
+      <a href="https://www.amazon.in/dp/B0GN8QDM2R?asin=B0GN8QDM2R&revisionId=cf59dfda&format=3&depth=1" target="_blank">
+       <button class="icon-btn">
+   <i class="fa-solid fa-book-open"></i>
+
+  Read Sample
 </button>
 
+      </a>
+
+    </div>
+
   </div>
 </div>
 
-<!-- POPUP -->
-<div id="overlay" onclick="closePopup()">
-  <div class="popup" onclick="event.stopPropagation()">
-    <!-- 🔹 GIF 2: POPUP IMAGE -->
-    <img src="./book advertisement.png" alt="Book Popup">
-    <h3>Book Launching Soon</h3>
-    <p>
-      This book is under final preparation.
-      Purchasing will be enabled after official release.
-    </p>
-    <button onclick="closePopup()">Okay</button>
-  </div>
 </div>
 
-<script>
-function openPopup(){
-  document.getElementById("overlay").classList.add("active");
-}
-function closePopup(){
-  document.getElementById("overlay").classList.remove("active");
-}
-</script>
-
-</div>
-
-   
-   
    
    
    
