@@ -1481,13 +1481,16 @@
     </div>
    </section>
 
-<!--  Books-->
+<!-- ================= BOOK SHOWCASE ================= -->
 <div id="major-announcement">
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
 :root{
   --gold:#f1c40f;
-  --green:#7fd3a4;
   --bg:#05070d;
   --muted:#b2bec3;
 }
@@ -1495,78 +1498,65 @@
 
 #major-announcement{
   font-family:Montserrat,sans-serif;
-  max-width:1200px;
-  margin:60px auto;
+  max-width:1100px;
+  margin:20px auto;
   padding:0 16px;
 }
 
-/* MAIN CARD */
+/* CARD */
 .book-card{
   background:var(--bg);
-  border-radius:26px;
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  border-radius:24px;
+  box-shadow:0 25px 60px rgba(0,0,0,.6);
   display:flex;
   overflow:hidden;
-  max-width:1050px;
-  margin:auto;
+  min-height:460px;
 }
 
-/* POSTER SIDE */
+/* LEFT IMAGE */
 .book-left{
-  flex:0 0 380px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  flex:0 0 360px;
 }
-
 .book-left img{
   width:100%;
-  height:auto;
+  height:100%;
+  object-fit:cover;
   display:block;
 }
 
-/* CONTENT SIDE */
+/* RIGHT CONTENT */
 .book-right{
   flex:1;
-  padding:40px;
+  padding:24px 35px;
   color:#fff;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:space-between;
 }
 
+/* BADGE */
 .badge{
   background:var(--gold);
   color:#000;
   padding:6px 14px;
   border-radius:999px;
-  font-size:.75rem;
   font-weight:800;
-  width:max-content;
+  font-size:.75rem;
+  display:inline-block;
   margin-bottom:14px;
 }
 
+/* TITLE */
 .book-right h2{
-  margin:0;
-  font-size:1.8rem;
+  margin:4px 0 10px;
+  font-size:1.9rem;
   font-weight:800;
 }
 
-.book-right p{
-  margin:16px 0 26px;
-  color:var(--muted);
-  line-height:1.7;
-  font-size:1rem;
-}
-
-.book-right button{
-  background:var(--gold);
-  border:none;
-  padding:15px 34px;
-  border-radius:10px;
-  font-weight:800;
-  cursor:pointer;
-  width:max-content;
+.author{
+  color:var(--gold);
+  font-weight:700;
+  margin-bottom:14px;
 }
 
 /* BUTTON ROW */
@@ -1574,115 +1564,141 @@
   display:flex;
   gap:12px;
   flex-wrap:wrap;
+  margin-top:25px;
+  align-items:center;
 }
 
-.button-row a{
-  text-decoration:none;
+/* NORMAL BUTTONS */
+.buy-btn{
+  padding:14px 24px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+  transition:.3s;
+}
+
+.buy-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(241,196,15,.35);
+}
+
+.paper{background:var(--gold);color:#000;}
+.hard{background:#111;border:2px solid var(--gold);color:var(--gold);}
+.kindle{background:#333;color:#fff;}
+
+/* ===== PREMIUM SAMPLE BUTTON (FIXED) ===== */
+.sample-btn{
+  height:52px;
+  padding:0 18px;
+  border:none;
+  border-radius:999px;
+  background:var(--gold);
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:.35s;
+  animation:pulseGlow 2.2s infinite;
+}
+
+.sample-btn i{
+  font-size:15px;
+}
+
+@keyframes pulseGlow{
+  0%{ box-shadow:0 0 0 0 rgba(241,196,15,.5);}
+  70%{ box-shadow:0 0 0 12px rgba(241,196,15,0);}
+  100%{ box-shadow:0 0 0 0 rgba(241,196,15,0);}
+}
+
+.sample-btn:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 10px 22px rgba(241,196,15,.4);
+}
+
+.sample-btn:hover i{
+  transform:rotate(-8deg);
+  transition:.3s;
+}
+
+/* LOADING */
+.loading{
+  pointer-events:none;
+  opacity:.7;
+}
+
+.spinner{
+  width:16px;
+  height:16px;
+  border:2px solid transparent;
+  border-top-color:currentColor;
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
 }
 
 /* MOBILE */
 @media(max-width:768px){
-  .book-card{
-    flex-direction:column;
-  }
-
-  .book-left{
-    width:100%;
-  }
-
-  .book-right{
-    text-align:center;
-  }
-
-  .button-row{
-    flex-direction:column;
-    align-items:center;
-    gap:14px;
-  }
-
-  .button-row button{
-    width:200px;
-    justify-content:center;
-  }
+  .book-card{flex-direction:column;}
+  .book-right{text-align:center;padding:22px;}
+  .button-row{justify-content:center;}
 }
-
-.icon-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-}
-
-.icon-btn svg{
-  width:18px;
-  height:18px;
-  fill:currentColor;
-}
-.author-line{
-  margin:10px 0 18px;
-}
-
-.author-label{
-  color:#f1c40f;
-  font-weight:700;
-}
-
-.author-name{
-  color:#fff;
-  font-weight:600;
-}
-
 </style>
 
-<!-- CARD -->
+
 <div class="book-card">
+
   <div class="book-left">
     <img src="./book advertisement.gif" alt="Book Poster">
   </div>
 
-<div class="book-right">
-  <span class="badge">AVAILABLE NOW</span>
+  <div class="book-right">
 
-  <strong>Book Title:</strong> <h2>Nanoparticles & Nanocarriers in Drug Delivery</h2>
+    <div>
+      <span class="badge">AVAILABLE NOW</span><br>
+      <strong>Book Title:</strong>
+      <h2>Nanoparticles & Nanocarriers in Drug Delivery</h2>
 
-  
-    
+      <div class="author">Author: Banny S.V.</div>
 
-   <p class="author-line">
-  <span class="author-label">Author:</span>
-  <span class="author-name">Banny S.V.</span>
-</p>
-
-   <p style="text-align:justify;">
-  This book, authored and written by <strong>Banny S.V.</strong>, is a comprehensive,
-  exam-oriented guide designed to help B.Pharm, Pharm.D, and pharmacy students
-  understand modern drug delivery systems in a simple and practical way. It
-  explains nanoparticles and nanocarriers with clear concepts, student-friendly
-  language, and academically focused content to support learning, exams, and
-  research interest in advanced pharmaceutical sciences.
-</p>
-  
+      <p style="text-align:justify;color:var(--muted);line-height:1.7;">
+        This book, authored and written by Banny S.V., is a comprehensive, exam-oriented guide designed to help B.Pharm, Pharm.D, and pharmacy students understand modern drug delivery systems in a simple and practical way. It explains nanoparticles and nanocarriers with clear concepts, student-friendly language, and academically focused content to support learning, exams, and research interest in advanced pharmaceutical sciences.
+      </p>
+    </div>
 
     <!-- BUTTONS -->
     <div class="button-row">
 
-      <!-- VIEW BOOK -->
-      <a href="https://www.amazon.in/dp/B0GN8QDM2R" target="_blank">
-  <button class="icon-btn">
-<i class="fa-solid fa-box-open"></i>
-    Buy on Amazon
-  </button>
-</a>
+      <button class="buy-btn paper"
+        onclick="buyNow(this,'https://www.amazon.com/dp/B0GNH4BGWY')">
+        Paperback
+      </button>
 
+      <button class="buy-btn hard"
+        onclick="buyNow(this,'https://www.amazon.com/dp/B0GNH4BGWY')">
+        Hardcover
+      </button>
 
-      <!-- READ SAMPLE -->
-      <a href="https://www.amazon.in/dp/B0GN8QDM2R?asin=B0GN8QDM2R&revisionId=cf59dfda&format=3&depth=1" target="_blank">
-       <button class="icon-btn">
-   <i class="fa-solid fa-book-open"></i>
+      <button class="buy-btn kindle"
+        onclick="buyNow(this,'https://www.amazon.in/dp/B0GN8QDM2R?format=3')">
+        Kindle Edition
+      </button>
 
-  Read Sample
-</button>
+      <!-- PREMIUM SAMPLE BUTTON -->
+      <button class="sample-btn"
+        onclick="buyNow(this,'https://www.amazon.in/dp/B0GN8QDM2R?asin=B0GN8QDM2R&format=3')">
 
-      </a>
+        <i class="fa-solid fa-book-open"></i>
+        Book Sample 
+
+      </button>
 
     </div>
 
@@ -1691,10 +1707,23 @@
 
 </div>
 
-   
-   
-   
-   
+<script>
+function buyNow(btn,link){
+
+  if(btn.classList.contains("loading")) return;
+
+  btn.classList.add("loading");
+  const oldText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span>';
+
+  setTimeout(()=>{
+    window.open(link,"_blank");
+    btn.classList.remove("loading");
+    btn.innerHTML = oldText;
+  },800);
+}
+</script>
+
    
    <!-- Research Section -->
    <section id="research" class="section">
